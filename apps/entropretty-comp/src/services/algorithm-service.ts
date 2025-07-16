@@ -8,6 +8,7 @@ import type { Seed } from "entropretty-utils"
 export class AlgorithmService {
   private artistWorker: Remote<ArtistWorkerType>
   private complianceWorker: Remote<ComplianceWorkerType>
+  private inventory: Set<number>
 
   constructor() {
     const artistInstance = new ArtistWorker()
@@ -15,14 +16,24 @@ export class AlgorithmService {
 
     this.artistWorker = wrap<ArtistWorkerType>(artistInstance)
     this.complianceWorker = wrap<ComplianceWorkerType>(complianceInstance)
+    this.inventory = new Set<number>()
   }
 
   async updateAlgorithm(algorithmId: number, algorithm: string) {
-    // Update both workers with the algorithm
-    return Promise.all([
+    await Promise.all([
       this.artistWorker.updateAlgorithm(algorithmId, algorithm),
       this.complianceWorker.updateAlgorithm(algorithmId, algorithm),
     ])
+    this.inventory.add(algorithmId)
+  }
+
+  async addAlgorithm(algorithmId: number, algorithm: string) {
+    if (this.inventory.has(algorithmId)) return
+    await Promise.all([
+      this.artistWorker.updateAlgorithm(algorithmId, algorithm),
+      this.complianceWorker.updateAlgorithm(algorithmId, algorithm),
+    ])
+    this.inventory.add(algorithmId)
   }
 
   async render(algorithmId: number, size: number, seed: Seed) {

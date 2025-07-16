@@ -35,7 +35,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
 
       const { error } = await supabase
         .from("likes")
-        .insert([{ algorithm_id: algorithm.id, user_id: user.id }])
+        .insert([{ algorithm_id: algorithm.id!, user_id: user.id }])
 
       if (error) {
         // Revert optimistic update on error
@@ -53,7 +53,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
       const { error } = await supabase
         .from("likes")
         .delete()
-        .eq("algorithm_id", algorithm.id)
+        .eq("algorithm_id", algorithm.id!)
         .eq("user_id", user.id)
 
       if (error) {

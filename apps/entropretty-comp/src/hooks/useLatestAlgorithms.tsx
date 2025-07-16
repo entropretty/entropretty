@@ -29,9 +29,9 @@ export function useLatestAlgorithms() {
 
       const { data, error } = await query.range(from, to)
 
-      if (data) {
+      if (data !== null) {
         for (const algorithm of data) {
-          algorithmService.updateAlgorithm(algorithm.id, algorithm.content)
+          algorithmService.addAlgorithm(algorithm.id!, algorithm.content!)
         }
       }
 

@@ -27,7 +27,7 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
       const { error } = await supabase
         .from("algorithms")
         .delete()
-        .eq("id", algorithm.id)
+        .eq("id", algorithm.id!)
         .eq("user_id", user.id)
 
       if (error) throw error

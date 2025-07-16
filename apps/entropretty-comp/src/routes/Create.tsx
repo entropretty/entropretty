@@ -30,7 +30,7 @@ function Create() {
       const { data, error } = await supabase
         .from("algorithms_with_user_profile")
         .select()
-        .eq("id", remixId)
+        .eq("id", Number(remixId))
         .single()
 
       if (error) throw error

@@ -1,11 +1,12 @@
+import { EntroprettyLogo } from "@/components/EntroprettyLogo"
 import { HelpMenu } from "@/components/HelpMenu"
 import { NewDialog } from "@/components/NewDialog"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
+import { useUserProfile } from "@/hooks/useUserProfile"
 import { cn } from "@/lib/utils"
 import { Helmet } from "react-helmet-async"
 import { Link, Outlet, useLocation, useNavigate } from "react-router"
-import { useUserProfile } from "../hooks/useUserProfile"
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
@@ -26,6 +27,9 @@ export default function HeaderLayout() {
       </Helmet>
       <nav className="relative flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-6 py-2">
         <div className="flex flex-1 flex-row items-center justify-start gap-2">
+          <Button asChild variant={"link"}>
+            <Link to="/explore">explore</Link>
+          </Button>
           <Button
             asChild
             variant={"link"}
@@ -68,12 +72,7 @@ export default function HeaderLayout() {
           <HelpMenu />
         </div>
 
-        <div className="flex flex-1 items-center justify-center">
-          <div className="font-jersey hidden flex-row gap-1 text-3xl lg:flex">
-            <div>Entropretty</div>
-            <div className="text-brand-blue text-sm">BETA</div>
-          </div>
-        </div>
+        <EntroprettyLogo className="hidden lg:flex" />
         <div className="flex flex-1 flex-row items-center justify-end gap-2">
           {!user && (
             <>
