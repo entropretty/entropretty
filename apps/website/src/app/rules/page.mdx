@@ -1,0 +1,109 @@
+- [Competition Rules](#competition-rules)
+- [Seed Details](#seed-details)
+- [Helper Functions](#helper-functions)
+- [Licensing](#licensing)
+
+
+# Competition Rules
+
+
+## 1. Tattoo Compatibility
+1. The output must be clearly recognizable at a **25x25 mm** size.
+2. Lines should be thick enough for tattooing and should not be overly detailed to prevent blurring over time.
+3. The use of colors should be limited; grayscale is allowed but should not compromise clarity.
+4. The entire **100x100 unit canvas** must be used; no margins are required.
+
+## 2. Determinism & Uniqueness
+1. Pick a Seed Type for your algorithm, see [Seed Details](#seed-details) section.
+2. The same input (`seed`) must always produce the exact same output—**the algorithm must be fully deterministic**.
+3. Each input (`seed`) must produce a unique and distinguishable result.
+4. Every bit of the input must be used in generating the algorithm's output.
+
+## 3. Visual Consistency & Recognizability
+1. All outputs from a single algorithm must be visually related—completely different styles for different parts of the seed space are not allowed.
+2. The algorithm's output must remain distinguishable even when rotated or mirrored.
+
+
+When creating variations, ensure they are easily distinguishable at a glance. The left example shows good practice where differences are clear, while the right example shows patterns that are too similar and hard to differentiate.
+
+### Examples
+
+#### Easy to Distinguish
+
+<img className="w-full md:w-3/4 mx-auto" src="/guidelines/TooSimilar.png" alt="Examples of good and bad distinguishability" />
+
+
+#### Possible to Tattoo
+
+<img className="w-full md:w-3/4 mx-auto" src="/guidelines/TooFineDetails.png" alt="Possible to Tattoo" />
+
+#### Clear Orientation
+
+<img className="w-full md:w-3/4 mx-auto" src="/guidelines/UnknownOrientation.png" alt="Unknown Orientation" />
+
+## 4. Technical Requirements
+1. The algorithm must render in a reasonable amount of time on consumer hardware, **~300 ms or less**,
+2. It must be **fully standalone**—no external assets, system- or platform-specific fonts, external resources, or APIs.
+3. If fonts are needed, they must be generated within the algorithm itself.
+
+## 5. Creativity & Remixing
+1. Remixing other algorithms is allowed, as long as the remix has **significant code & visual changes** that make it distinct from the original.
+2. AI assistance is allowed in creating the algorithm.
+
+## 6. Submission Guidelines
+1. Participants must submit a link and a screenshot of their published work in the Entropretty app to the competition system of the event host for judgment.
+
+# Seed Details
+
+We are looking for algorithms in 3 categories, each being uniquely defined by the seed set to your algorithm. The possible types of seeds are the following:
+
+## 1. Entropy
+1. The seed is an arbitrary 4 byte/32-bit quantity.
+2. e.g. `[64, 255, 0, 8]`
+3. Seed Samples - [Entropy-Seeds.txt](https://github.com/peetzweg/entropretty-tools/blob/main/playgrounds/bun-playground/Procedural-seeds.txt)
+
+## 2. Personal ID
+1. The seed to your algorithm will be an integer number expressed in Little Endian as 8-bytes.
+2. e.g. `[45, 0, 0, 0, 0, 0, 0, 0]` (integer 69)
+3. The integer represented by the seed is:
+   1. Min value: `0`
+   2. Max value: `10_000_000_000`
+   3. Heavily biased towards lower values
+
+4. You can convert the seed into a number using the `numeric(seed)` helper function.
+5. Seeds Samples - [Personal_Id-Seeds.txt](https://github.com/peetzweg/entropretty-tools/blob/main/playgrounds/bun-playground/ProceduralPersonal-seeds.txt)
+
+## 3. Account ID
+1. The seed is an arbitrary 32-byte/256-bit quantity.
+2. e.g. `[72, 178, 250, 161, 99, 11, 142, 176, 152, 101, 140, 230, 14, 190, 144, 148, 47, 155, 251, 45, 180, 193, 157, 5, 231, 6, 0, 233, 6, 35, 32, 81]`
+3. Seeds Samples - [Account_Id-Seeds.txt](https://github.com/peetzweg/entropretty-tools/blob/main/playgrounds/bun-playground/ProceduralAccount-seeds.txt)
+
+# Helper Functions
+
+There are several functions provided for operating on seeds:
+
+## bit(seed, n)
+Get the nth bit from the seed, indexed from 0. Returns either 0 or 1.
+
+## bits(seed, from, to)
+Get a number built from the bits of seed of the given span from and to.
+
+## bits(seed)
+Get a number built from all bits of the seed, somewhere between 0 and 2**32 - 1 inclusive.
+
+## split(seed, parts)
+Return an array of numbers, parts in length, each using approximately the same number of bits from the seed.
+
+## randomGenerator(seed)
+Return a function which itself takes no arguments and returns a stream of random numbers between 0 and 1. This uses the Prando algorithm. There is also `cheapRandomGenerator` (using SFC32) and `secureRandomGenerator` (using SHA-256).
+
+## numeric(seed)
+Returns a bigint representing the seed. Useful for transforming a *Procedural Personal* seed into a single integer number representation aka the Personal Id/Citizen Id.
+
+Can be extended if found useful
+
+# Licensing
+
+Participants agree that their submitted code will be licensed under CC BY-NC-SA 4.0 and thereby will be potentially used in the [Proof-of-Ink](https://www.youtube.com/watch?v=MrWioikibEI) project to generate tattoo designs for individuals. Usage is up to be determined by the Polkadot Open Governance platform.
+
+[https://creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/)
