@@ -24,7 +24,7 @@ importers:
         specifier: ^5.5.4
         version: 5.8.2
 
-  apps/entropretty-comp:
+  apps/app:
     dependencies:
       '@hcaptcha/react-hcaptcha':
         specifier: ^1.11.2
