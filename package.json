@@ -2,11 +2,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:entropretty-comp": "pnpm --filter entropretty-comp dev",
+    "dev:app": "pnpm --filter app dev",
     "dev:website": "pnpm --filter website dev",
     "watch": "pnpm run --r --filter \"./packages/**\" watch",
     "build": "pnpm run --r --filter \"./packages/**\" build",
-    "build:apps": "pnpm run --r --filter \"./apps/**\" build",
+    "build:app": "pnpm --filter app build",
     "build:website": "pnpm --filter website build",
     "lint": "pnpm run --r --filter \"./packages/**\" lint",
     "local-release": "pnpm build && changeset version && changeset publish",
