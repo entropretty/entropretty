@@ -110,7 +110,7 @@ export default function HeaderLayout() {
           )}
         </div>
       </nav>
-      <main className="flex h-full w-full flex-col items-center">
+      <main className="relative flex h-full w-full flex-col items-center">
         <Outlet />
       </main>
     </div>

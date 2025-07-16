@@ -37,13 +37,13 @@ export function WinterAssemblyPromotionCard() {
     <div className="mx-auto flex w-screen flex-col overflow-hidden border bg-black text-white sm:flex-col md:w-[682px]">
       <div className="relative aspect-video h-36 w-full sm:aspect-video sm:h-36">
         <img
-          src="/Assembly-Winter-25-bg.webp"
+          src="/assets/Assembly-Winter-25-bg.webp"
           alt="Assembly Winter 2025 Background"
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center">
           <img
-            src="/assembly-winter-2025-logo.png"
+            src="/assets/assembly-winter-2025-logo.png"
             alt="Assembly Winter 2025 Logo"
             className="max-h-32 w-auto max-w-[70%] sm:max-w-[60%]"
           />

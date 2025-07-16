@@ -1,9 +1,7 @@
 {
   "name": "entropretty-utils",
-  "version": "1.0.19",
+  "version": "1.1.0",
   "type": "module",
-  "main": "./dist/entropretty-editor.umd.cjs",
-  "module": "./dist/entropretty-editor.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

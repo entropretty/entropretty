@@ -1,5 +1,11 @@
 # entropretty-utils
 
+## 1.1.0
+
+### Minor Changes
+
+- 78c1720: exports new prelude script
+
 ## 1.0.19
 
 ### Patch Changes

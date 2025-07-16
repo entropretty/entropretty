@@ -6,7 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react"
+import useMeasure from "react-use-measure"
 
 interface DeleteButtonProps {
   algorithm: AlgorithmView
@@ -16,7 +17,7 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
   const { user } = useAuth()
   const queryClient = useQueryClient()
   const [isConfirming, setIsConfirming] = useState(false)
-
+  const [ref, bounds] = useMeasure()
   const canDelete = user?.id === algorithm.user_id
 
   const deleteMutation = useMutation({
@@ -67,28 +68,37 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
   if (!canDelete) return null
 
   return (
-    <Button
-      variant={isConfirming ? "destructive" : "ghost"}
-      onClick={handleClick}
-      disabled={deleteMutation.isPending}
-      className="gap-2"
+    <motion.div
+      className="overflow-hidden"
+      animate={{
+        width: bounds.width,
+      }}
+      transition={{ duration: 0.1, type: "spring" }}
     >
-      {deleteMutation.isPending ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <AnimatePresence mode="wait">
-          <motion.div
-            layout
-            key={isConfirming ? "confirm" : "delete"}
-            initial={{ opacity: 0, width: "100%" }}
-            animate={{ opacity: 1, width: "auto" }}
-            exit={{ opacity: 0, width: "100%" }}
-            transition={{ duration: 0.2 }}
-          >
-            {isConfirming ? "YES, DELETE!" : "DELETE"}
-          </motion.div>
-        </AnimatePresence>
-      )}
-    </Button>
+      <Button
+        variant={isConfirming ? "destructive" : "ghost"}
+        onMouseDown={handleClick}
+        ref={ref}
+        disabled={deleteMutation.isPending}
+        className="gap-2 transition-colors"
+      >
+        {deleteMutation.isPending ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              layout
+              key={isConfirming ? "confirm" : "delete"}
+              initial={{ opacity: 0, width: "100%" }}
+              animate={{ opacity: 1, width: "auto" }}
+              exit={{ opacity: 0, width: "100%" }}
+              transition={{ duration: 0.2 }}
+            >
+              {isConfirming ? "YES, DELETE!" : "DELETE"}
+            </motion.div>
+          </AnimatePresence>
+        )}
+      </Button>
+    </motion.div>
   )
 }

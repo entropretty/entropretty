@@ -46,7 +46,7 @@ function SeedTypeCard({ kind }: SeedTypeCardProps) {
       <button
         onClick={() => navigate(`/create?type=${kind}`)}
         className={cn(
-          "z-5 relative flex aspect-square w-full flex-col items-center justify-center gap-2 p-4 transition-colors hover:opacity-90",
+          "z-5 relative flex aspect-square w-full flex-col items-center justify-center gap-2 p-4 transition-colors",
           colorClass,
           isProceduralKind
             ? "text-primary-foreground"

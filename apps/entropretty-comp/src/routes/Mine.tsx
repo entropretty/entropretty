@@ -4,6 +4,7 @@ import { useUserIdAlgorithms } from "@/hooks/useUserIdAlgorithms"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
 import { Navigate } from "react-router"
+import { FeedbackDialog } from "../components/FeedbackDialog"
 
 export default function Mine() {
   const { user } = useAuth()
@@ -28,13 +29,16 @@ export default function Mine() {
   }
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-4 p-4">
-      <h1 className="text-2xl font-bold">My Algorithms</h1>
-      {data?.pages.map((page) =>
-        page.map((algorithm) => (
-          <AlgorithmRow key={algorithm.id} algorithm={algorithm} />
-        )),
-      )}
+    <>
+      {user && <FeedbackDialog className="fixed bottom-4 left-4 z-50" />}
+      <div className="flex w-full max-w-4xl flex-col gap-4 p-4">
+        <h1 className="text-2xl font-bold">My Algorithms</h1>
+        {data?.pages.map((page) =>
+          page.map((algorithm) => (
+            <AlgorithmRow key={algorithm.id} algorithm={algorithm} />
+          )),
+        )}
+      </div>
 
       {/* Loading indicator */}
       <div ref={ref} className="py-4 text-center">
@@ -50,6 +54,6 @@ export default function Mine() {
           <div>No more algorithms</div>
         )}
       </div>
-    </div>
+    </>
   )
 }

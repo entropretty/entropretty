@@ -5,9 +5,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { FeedbackDialog } from "@/components/FeedbackDialog"
 import { cn } from "@/lib/utils"
-import { useAuth } from "@/contexts/auth-context"
 import { Link } from "react-router"
 
 export const ListItem = ({
@@ -38,8 +36,6 @@ export const ListItem = ({
 }
 
 export function HelpMenu() {
-  const { user } = useAuth()
-
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -48,7 +44,6 @@ export function HelpMenu() {
           <NavigationMenuContent>
             <div className="grid gap-2 p-2 md:w-[300px] lg:w-[400px]">
               <div className="grid gap-1">
-                {user && <FeedbackDialog />}
                 <Link to="https://entropretty.com/rules" target="_blank">
                   <ListItem
                     title="Competition Rules"

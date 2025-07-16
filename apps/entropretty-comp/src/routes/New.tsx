@@ -1,10 +1,11 @@
 import { AlgorithmCard } from "@/components/AlgorithmCard"
 import { AlgorithmCardSkeleton } from "@/components/AlgorithmCard/AlgorithmCardSkeleton"
+import { FamilyKindFilter } from "@/components/FamilyKindFilter"
 import { useLatestAlgorithms } from "@/hooks/useLatestAlgorithms"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
-import { FamilyKindFilter } from "@/components/FamilyKindFilter"
-import { EntroprettyGeneralPromotionCard } from "@/components/EntroprettyGeneralPromotionCard"
+import { FeedbackDialog } from "../components/FeedbackDialog"
+import { useAuth } from "../contexts/auth-context"
 
 function Feed() {
   const { ref, inView } = useInView()
@@ -49,13 +50,16 @@ function Feed() {
 }
 
 export default function NewPage() {
+  const { user } = useAuth()
   return (
-    <div className="mx-auto my-4">
-      <div className="space-y-4">
-        <EntroprettyGeneralPromotionCard />
-        <FamilyKindFilter />
-        <Feed />
+    <>
+      {user && <FeedbackDialog className="fixed bottom-4 left-4 z-50" />}
+      <div className="mx-auto my-4">
+        <div className="space-y-4">
+          <FamilyKindFilter />
+          <Feed />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
