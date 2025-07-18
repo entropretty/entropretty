@@ -8,6 +8,7 @@ import DemoPage from "@/routes/Demo.tsx"
 import ExplorePage from "@/routes/Explore"
 import Login from "@/routes/Login.tsx"
 import MinePage from "@/routes/Mine.tsx"
+import CompetitionPage from "@/routes/Competition"
 import NewPage from "@/routes/New"
 import Profile from "@/routes/Profile.tsx"
 import SignUp from "@/routes/SignUp.tsx"
@@ -52,7 +53,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route element={<HeaderLayout />}>
                   {FEATURES.isCompetition && (
                     <>
-                      <Route path="/" element={<MinePage />} />
+                      <Route path="/" element={<CompetitionPage />} />
                     </>
                   )}
 

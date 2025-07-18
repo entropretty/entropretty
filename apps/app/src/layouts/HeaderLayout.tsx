@@ -10,6 +10,7 @@ import { Moon, Sun } from "lucide-react"
 import { Helmet } from "react-helmet-async"
 import { Link, Outlet, useLocation, useNavigate } from "react-router"
 import { FEATURES } from "../lib/features"
+import { features } from "process"
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
@@ -80,7 +81,16 @@ export default function HeaderLayout() {
           </Button>
         </div>
 
-        <EntroprettyLogo className="hidden lg:flex" />
+        {location.pathname !== "/" && FEATURES.isCompetition && (
+          <Link to={"/"}>
+            <EntroprettyLogo className="hidden lg:flex" />
+          </Link>
+        )}
+        {!FEATURES.isCompetition && (
+          <Link to={"/"}>
+            <EntroprettyLogo className="hidden lg:flex" />
+          </Link>
+        )}
         <div className="flex flex-1 flex-row items-center justify-end gap-2">
           {FEATURES.isCompetition && (
             <Button

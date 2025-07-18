@@ -20,7 +20,6 @@ interface SeedTypeCardProps {
 function SeedTypeCard({ kind }: SeedTypeCardProps) {
   const navigate = useNavigate()
   const isProceduralKind = kind === "Procedural"
-  const { theme } = useTheme()
   const colorClass = familyKindColor(kind)
 
   return (
