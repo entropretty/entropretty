@@ -3,14 +3,17 @@ import { HelpMenu } from "@/components/HelpMenu"
 import { NewDialog } from "@/components/NewDialog"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
+import { useTheme } from "@/contexts/theme-context"
 import { useUserProfile } from "@/hooks/useUserProfile"
 import { cn } from "@/lib/utils"
+import { Moon, Sun } from "lucide-react"
 import { Helmet } from "react-helmet-async"
 import { Link, Outlet, useLocation, useNavigate } from "react-router"
 import { FEATURES } from "../lib/features"
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
+  const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
   const { data: profile, isLoading: isLoadingProfile } = useUserProfile()
@@ -26,7 +29,7 @@ export default function HeaderLayout() {
           href={`/favicon/${randomFaviconNumber}.png`}
         />
       </Helmet>
-      <nav className="relative flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-6 py-2">
+      <nav className="border-background-200 relative flex flex-row items-center justify-between gap-2 border-b px-6 py-2">
         <div className="flex flex-1 flex-row items-center justify-start gap-2">
           {!FEATURES.isCompetition && (
             <>
@@ -79,6 +82,19 @@ export default function HeaderLayout() {
 
         <EntroprettyLogo className="hidden lg:flex" />
         <div className="flex flex-1 flex-row items-center justify-end gap-2">
+          {FEATURES.isCompetition && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            >
+              {theme === "light" ? (
+                <Moon className="h-4 w-4" />
+              ) : (
+                <Sun className="h-4 w-4" />
+              )}
+            </Button>
+          )}
           {!user && (
             <>
               <Button className="hidden md:block" asChild>

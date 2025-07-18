@@ -62,7 +62,7 @@ export function ExploreGallery() {
           </div>
         </div>
         <Link to="/hot">
-          <div className="bg-background fixed bottom-0 right-0 flex w-auto items-center justify-center gap-8 gap-y-2 border border-gray-200 px-8 py-4 sm:pb-4">
+          <div className="bg-background border-background-200 fixed bottom-0 right-0 flex w-auto items-center justify-center gap-8 gap-y-2 border px-8 py-4 sm:pb-4">
             <EntroprettyLogo />
           </div>
         </Link>
@@ -92,7 +92,7 @@ const GalleryAlgorithm = ({ algorithmId }: { algorithmId: number }) => {
         size={infinite * 1.5}
         scale={2}
       />
-      <div className="bg-background/80 absolute bottom-0 left-0 right-16 flex h-full w-full items-center justify-center gap-2 border border-gray-200 p-4 pb-8 text-xs text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pb-4 sm:text-sm">
+      <div className="bg-background/80 border-background-200 absolute bottom-0 left-0 right-16 flex h-full w-full items-center justify-center gap-2 border p-4 pb-8 text-xs text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pb-4 sm:text-sm">
         {`${algorithm?.name}`}
         <br /> {`by ${algorithm?.username}`}
       </div>

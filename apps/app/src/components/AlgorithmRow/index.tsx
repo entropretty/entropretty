@@ -22,7 +22,7 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="relative flex w-full items-center justify-between gap-4 border border-gray-200 bg-white p-2">
+    <div className="bg-background border-background-200 relative flex w-full items-center justify-between gap-4 border p-2">
       <FamilyKindBadge
         familyKind={algorithm.family_kind}
         className="absolute bottom-0 left-0 z-10"
@@ -44,12 +44,7 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
       <div className="flex items-center gap-2">
         {user && (
           <Button asChild variant="link">
-            <Link
-              to={`/create?remix=${algorithm.id}`}
-              className="text-gray-500 hover:text-gray-900"
-            >
-              {`REMIX`}
-            </Link>
+            <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
           </Button>
         )}
         <DeleteButton algorithm={algorithm} />

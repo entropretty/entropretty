@@ -11,6 +11,7 @@ import { cn, familyKindColor } from "@/lib/utils"
 import { FamilyKind } from "entropretty-utils"
 import { ArrowUpRight, PlusIcon } from "lucide-react"
 import { Link, useNavigate } from "react-router"
+import { useTheme } from "../../contexts/theme-context"
 
 interface SeedTypeCardProps {
   kind: FamilyKind
@@ -19,6 +20,7 @@ interface SeedTypeCardProps {
 function SeedTypeCard({ kind }: SeedTypeCardProps) {
   const navigate = useNavigate()
   const isProceduralKind = kind === "Procedural"
+  const { theme } = useTheme()
   const colorClass = familyKindColor(kind)
 
   return (
@@ -27,16 +29,16 @@ function SeedTypeCard({ kind }: SeedTypeCardProps) {
         <>
           <div
             className={cn(
-              "absolute inset-0 -m-2 border",
+              "absolute inset-0 -m-2 -mb-3 border",
               colorClass,
               "z-0 bg-transparent",
             )}
           ></div>
           <div
             className={cn(
-              "absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-4 px-4 py-0.5",
+              "absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-7 px-4 py-0.5",
               colorClass,
-              "text-primary-foreground font-jersey whitespace-nowrap text-xs",
+              "font-jersey whitespace-nowrap text-white",
             )}
           >
             START HERE
@@ -48,9 +50,7 @@ function SeedTypeCard({ kind }: SeedTypeCardProps) {
         className={cn(
           "z-5 relative flex aspect-square w-full flex-col items-center justify-center gap-2 p-4 transition-colors",
           colorClass,
-          isProceduralKind
-            ? "text-primary-foreground"
-            : "text-primary-background",
+          isProceduralKind ? "text-white" : "text-black",
         )}
       >
         <div className="font-jersey text-xl">

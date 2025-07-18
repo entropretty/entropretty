@@ -88,7 +88,7 @@ export function AlgorithmInfiniteGrid({
             <div ref={ref} className="h-4 w-full" />
           </div>
         </div>
-        <div className="bg-background fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border border-gray-200 p-4 pb-8 text-gray-600 sm:pb-4">
+        <div className="bg-background border-background-200 fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
           <FamilyKindBadge
             familyKind={algorithm.family_kind}
             className="absolute left-0 top-[-22px] z-10"
@@ -108,22 +108,12 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
     <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-auto">
       {user && (
         <Button asChild variant="link">
-          <Link
-            to={`/create?remix=${algorithm.id}`}
-            className="text-gray-500 hover:text-gray-900"
-          >
-            {`REMIX`}
-          </Link>
+          <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
         </Button>
       )}
 
       <Button asChild variant="link">
-        <Link
-          to={`/demo/${algorithm.id}`}
-          className="text-gray-500 hover:text-gray-900"
-        >
-          {`DEMO`}
-        </Link>
+        <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
       </Button>
 
       <LikeButton algorithm={algorithm} />

@@ -64,7 +64,7 @@ export const AlgorithmBitmap: React.FC<Props> = ({
   return (
     <canvas
       className={cn(
-        "transition-opacity",
+        "bg-white transition-opacity",
         {
           "opacity-0": !ready,
           "cursor-pointer": !!onClick,

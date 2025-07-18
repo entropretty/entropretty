@@ -24,7 +24,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="flex w-full flex-col border border-gray-200">
+    <div className="border-background-200 flex w-full flex-col border">
       <Link to={`/a/${algorithm.id}`}>
         <div className="relative flex flex-col items-center justify-center gap-4 p-4 md:flex-row">
           <div className={`flex aspect-square items-center justify-center`}>
@@ -56,7 +56,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
       </Link>
 
       {/* Bottom Part */}
-      <div className="relative flex flex-row items-center justify-between gap-y-2 border-t border-gray-200 p-4">
+      <div className="border-background-200 relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-[-22px]"
@@ -90,12 +90,7 @@ const AlgorithmActions = ({
 
       {user && (
         <Button asChild variant="link">
-          <Link
-            to={`/create?remix=${algorithm.id}`}
-            className="text-gray-500 hover:text-gray-900"
-          >
-            {`REMIX`}
-          </Link>
+          <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
         </Button>
       )}
 

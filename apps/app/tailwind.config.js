@@ -33,10 +33,10 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brand: {
-          blue: "#484DF7",
-          red: "#EB4B46",
-          green: "#46EB7E",
-          yellow: "#EBCB46",
+          blue: "hsl(var(--brand-blue))",
+          red: "hsl(var(--brand-red))",
+          green: "hsl(var(--brand-green))",
+          yellow: "hsl(var(--brand-yellow))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

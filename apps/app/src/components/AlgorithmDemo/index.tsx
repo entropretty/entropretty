@@ -99,7 +99,7 @@ export function AlgorithmDemo({ algorithm, className = "" }: Props) {
           </AnimatePresence>
         </div>
       </div>
-      <div className="relative flex w-full items-center justify-between gap-8 gap-y-2 border border-gray-200 p-4 pb-8 text-gray-600 sm:pb-4">
+      <div className="border-background-200 relative flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
         {/* <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-[-30px] z-10 text-xl"

@@ -12,10 +12,9 @@
     --infinite-algorithm: 130px; /* Mobile default */
     --demo-algorithm: 480px; /* Mobile default */
     /* Brand Colors */
-    --brand-blue: 239 69% 62%;    /* #484DF7 */
-    --brand-red: 2 81% 60%;       /* #EB4B46 */
-    --brand-green: 142 82% 60%;   /* #46EB7E */
-    --brand-yellow: 47 81% 60%;   /* #EBCB46 */
+    --brand-blue: 230, 18%, 13%;
+    --brand-yellow: 50, 100%, 50%;
+    --brand-green: 205, 100%, 54%;
 
     @media (min-width: 768px) {
       --single-algorithm: 300px; /* Desktop size */
@@ -51,13 +50,17 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    --procedural: 27 87% 67%;
-    --procedural-account: 173 58% 39%;
-    --procedural-personal: 12 76% 61%;
   }
 
   .dark {
+
+
+    --brand-blue: 230, 18%, 13%;
+    --brand-yellow: 50, 100%, 50%;
+    --brand-green: 205, 100%, 54%;
+
     --background: 0 0% 3.9%;
+    /* --background: 0, 0%, 11%; */
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;

@@ -2,6 +2,7 @@ import "@/globals.css"
 
 import { AuthProvider } from "@/contexts/auth-context.tsx"
 import { ServiceProvider } from "@/contexts/service-context.tsx"
+import { ThemeProvider } from "@/contexts/theme-context.tsx"
 import HeaderLayout from "@/layouts/HeaderLayout.tsx"
 import DemoPage from "@/routes/Demo.tsx"
 import ExplorePage from "@/routes/Explore"
@@ -39,57 +40,59 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <ServiceProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <Toaster />
-            <ScrollToTop />
-            <Routes>
-              <Route path="/demo/:algorithmId" element={<DemoPage />} />
+      <ThemeProvider>
+        <ServiceProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <Toaster />
+              <ScrollToTop />
+              <Routes>
+                <Route path="/demo/:algorithmId" element={<DemoPage />} />
 
-              <Route element={<HeaderLayout />}>
-                {FEATURES.isCompetition && (
-                  <>
-                    <Route path="/" element={<MinePage />} />
-                  </>
-                )}
+                <Route element={<HeaderLayout />}>
+                  {FEATURES.isCompetition && (
+                    <>
+                      <Route path="/" element={<MinePage />} />
+                    </>
+                  )}
 
-                {!FEATURES.isCompetition && (
-                  <>
-                    <Route path="/" element={<NewPage />} />
-                    <Route path="/new" element={<NewPage />} />
-                    <Route path="/hot" element={<HotPage />} />
-                    <Route path="/explore" element={<ExplorePage />} />
-                  </>
-                )}
+                  {!FEATURES.isCompetition && (
+                    <>
+                      <Route path="/" element={<NewPage />} />
+                      <Route path="/new" element={<NewPage />} />
+                      <Route path="/hot" element={<HotPage />} />
+                      <Route path="/explore" element={<ExplorePage />} />
+                    </>
+                  )}
 
-                <Route path="/a/:algorithmId" element={<AlgorithmPage />} />
-                <Route path="/u/:username" element={<UserPage />} />
-                <Route element={<RequireUser />}>
-                  <Route path="/mine" element={<MinePage />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route element={<RequireUsername />}>
-                    <Route
-                      path="/create"
-                      element={
-                        <Suspense
-                          fallback={
-                            <div className="p-8">Loading editor...</div>
-                          }
-                        >
-                          <Create />
-                        </Suspense>
-                      }
-                    />
+                  <Route path="/a/:algorithmId" element={<AlgorithmPage />} />
+                  <Route path="/u/:username" element={<UserPage />} />
+                  <Route element={<RequireUser />}>
+                    <Route path="/mine" element={<MinePage />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route element={<RequireUsername />}>
+                      <Route
+                        path="/create"
+                        element={
+                          <Suspense
+                            fallback={
+                              <div className="p-8">Loading editor...</div>
+                            }
+                          >
+                            <Create />
+                          </Suspense>
+                        }
+                      />
+                    </Route>
                   </Route>
                 </Route>
-              </Route>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-            </Routes>
-          </BrowserRouter>
-        </AuthProvider>
-      </ServiceProvider>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
+        </ServiceProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </HelmetProvider>,
 )
