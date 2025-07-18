@@ -7,6 +7,7 @@ import { useUserProfile } from "@/hooks/useUserProfile"
 import { cn } from "@/lib/utils"
 import { Helmet } from "react-helmet-async"
 import { Link, Outlet, useLocation, useNavigate } from "react-router"
+import { FEATURES } from "../lib/features"
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
@@ -27,27 +28,31 @@ export default function HeaderLayout() {
       </Helmet>
       <nav className="relative flex flex-row items-center justify-between gap-2 border-b border-gray-200 px-6 py-2">
         <div className="flex flex-1 flex-row items-center justify-start gap-2">
-          <Button asChild variant={"link"}>
-            <Link to="/explore">explore</Link>
-          </Button>
-          <Button
-            asChild
-            variant={"link"}
-            className={cn(
-              (location.pathname === "/new" || location.pathname === "/") &&
-                "underline",
-            )}
-          >
-            <Link to="/new">new</Link>
-          </Button>
+          {!FEATURES.isCompetition && (
+            <>
+              <Button asChild variant={"link"}>
+                <Link to="/explore">explore</Link>
+              </Button>
+              <Button
+                asChild
+                variant={"link"}
+                className={cn(
+                  (location.pathname === "/new" || location.pathname === "/") &&
+                    "underline",
+                )}
+              >
+                <Link to="/new">new</Link>
+              </Button>
 
-          <Button
-            asChild
-            variant={"link"}
-            className={cn(location.pathname === "/hot" && "underline")}
-          >
-            <Link to="/hot">hot</Link>
-          </Button>
+              <Button
+                asChild
+                variant={"link"}
+                className={cn(location.pathname === "/hot" && "underline")}
+              >
+                <Link to="/hot">hot</Link>
+              </Button>
+            </>
+          )}
 
           {user && (
             <Button
@@ -58,7 +63,8 @@ export default function HeaderLayout() {
               <Link to="/mine">mine</Link>
             </Button>
           )}
-          <Button asChild variant={"link"}>
+          <HelpMenu />
+          <Button asChild variant={"link"} className="h-5 w-5">
             <Link to="https://x.com/entropretty" target="_blank">
               <svg
                 viewBox="0 0 24 24"
@@ -69,7 +75,6 @@ export default function HeaderLayout() {
               </svg>
             </Link>
           </Button>
-          <HelpMenu />
         </div>
 
         <EntroprettyLogo className="hidden lg:flex" />

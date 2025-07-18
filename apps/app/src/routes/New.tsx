@@ -1,11 +1,11 @@
 import { AlgorithmCard } from "@/components/AlgorithmCard"
 import { AlgorithmCardSkeleton } from "@/components/AlgorithmCard/AlgorithmCardSkeleton"
 import { FamilyKindFilter } from "@/components/FamilyKindFilter"
+import { FeedbackDialog } from "@/components/FeedbackDialog"
+import { useAuth } from "@/contexts/auth-context"
 import { useLatestAlgorithms } from "@/hooks/useLatestAlgorithms"
 import { useEffect } from "react"
 import { useInView } from "react-intersection-observer"
-import { FeedbackDialog } from "../components/FeedbackDialog"
-import { useAuth } from "../contexts/auth-context"
 
 function Feed() {
   const { ref, inView } = useInView()

@@ -1,8 +1,10 @@
+import { FEATURES } from "@/lib/features"
 import Editor, { useMonaco } from "@monaco-editor/react"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
 import { editorCodeAtom } from "./atoms"
 import initialCode from "./initialCode"
+import poimandresTheme from "./PoimandresTheme"
 
 const MonacoEditor = () => {
   const monaco = useMonaco()
@@ -12,8 +14,10 @@ const MonacoEditor = () => {
   useEffect(() => {
     if (monaco) {
       // Define theme first
-      // monaco.editor.defineTheme("poimandres", poimandresTheme)
-      // monaco.editor.setTheme("poimandres")
+      if (FEATURES.isCompetition) {
+        monaco.editor.defineTheme("poimandres", poimandresTheme)
+        monaco.editor.setTheme("poimandres")
+      }
 
       // Then set up JavaScript environment
       monaco.languages.typescript.javascriptDefaults.addExtraLib(`
