@@ -9,8 +9,7 @@ import { cn } from "@/lib/utils"
 import { Moon, Sun } from "lucide-react"
 import { Helmet } from "react-helmet-async"
 import { Link, Outlet, useLocation, useNavigate } from "react-router"
-import { FEATURES } from "../lib/features"
-import { features } from "process"
+import { FEATURES } from "@/lib/features"
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
