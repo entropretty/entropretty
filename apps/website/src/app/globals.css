@@ -4,11 +4,6 @@
 
 html {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  background-color: black;
-}
-
-body {
-  background-color: black;
 }
 
 /* Apply monospace font to MDX content */
@@ -89,6 +84,7 @@ body {
   * {
     @apply border-border;
   }
+  html,
   body {
     @apply bg-background text-foreground;
   }

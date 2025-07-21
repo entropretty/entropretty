@@ -1,11 +1,13 @@
 export default function EntroprettyVideo() {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center">
-      <div className="w-full h-full flex flex-col items-center justify-center py-16 px-4">
-        <h1 className="text-4xl font-bold mb-8">Why Entropretty?</h1>
-        <div className="w-full max-w-[1200px] aspect-video">
+    <div className="dark:bg-background flex min-h-screen w-full flex-col items-center justify-center bg-white">
+      <div className="flex h-full w-full flex-col items-center justify-center px-4 py-16">
+        <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">
+          Why Entropretty?
+        </h1>
+        <div className="aspect-video w-full max-w-[1200px]">
           <iframe
-            className="w-full h-full"
+            className="h-full w-full"
             src="https://www.youtube.com/embed/xJKjGjiJytA?si=Hfh0QPLBF_44qX_p"
             title="YouTube video player"
             frameBorder="0"
@@ -14,26 +16,26 @@ export default function EntroprettyVideo() {
             allowFullScreen
           ></iframe>
         </div>
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 w-full max-w-[1000px]">
-          <h2 className="text-2xl font-bold">
+        <div className="mt-8 flex w-full max-w-[1000px] flex-col items-center justify-center gap-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Extended Content about Proof of Personhood
           </h2>
-          <ul className="w-1/2 list-none pl-6 space-y-4">
-            <li className="relative before:content-['×'] before:absolute before:-left-4 before:top-0">
+          <ul className="w-1/2 list-none space-y-4 pl-6">
+            <li className="relative before:absolute before:-left-4 before:top-0 before:text-gray-600 before:content-['×'] dark:before:text-gray-400">
               <a
                 href="https://www.youtube.com/watch?v=MrWioikibEI"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-blue-800 hover:underline"
+                className="text-gray-700 hover:text-blue-600 hover:underline dark:text-gray-300 dark:hover:text-blue-400"
               >
                 Web3 Citizenship - Gavin Wood - Web3 Summit 2024 Berlin
               </a>
             </li>
-            <li className="relative before:content-['×'] before:absolute before:-left-4 before:top-0">
+            <li className="relative before:absolute before:-left-4 before:top-0 before:text-gray-600 before:content-['×'] dark:before:text-gray-400">
               <a
                 href="https://www.youtube.com/watch?v=YRBgGEfelnk"
                 target="_blank"
-                className="hover:text-blue-800 hover:underline"
+                className="text-gray-700 hover:text-blue-600 hover:underline dark:text-gray-300 dark:hover:text-blue-400"
                 rel="noopener noreferrer"
               >
                 DE Proof of Personhood w/ Dr. Gavin Wood 👁️ Unlocking Web 3
@@ -44,5 +46,5 @@ export default function EntroprettyVideo() {
         </div>
       </div>
     </div>
-  );
+  )
 }

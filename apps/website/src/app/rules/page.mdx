@@ -1,10 +1,14 @@
-- [Competition Rules](#competition-rules)
+import CurrentCompetition from '../../components/CurrentCompetition'
+
+
+- [General Competition Rules](#general-competition-rules)
 - [Seed Details](#seed-details)
 - [Helper Functions](#helper-functions)
 - [Licensing](#licensing)
 
+<CurrentCompetition />
 
-# Competition Rules
+# General Competition Rules
 
 
 ## 1. Tattoo Compatibility
@@ -28,18 +32,32 @@ When creating variations, ensure they are easily distinguishable at a glance. Th
 
 ### Examples
 
-#### Easy to Distinguish
+___Black & White Designs___
+
+<img className="w-full mx-auto" src="/guidelines/BlackAndWhiteExamples.png" alt="Examples of good and bad distinguishability" />
+
+___Grayscale Designs___
+
+<img className="w-full mx-auto" src="/guidelines/GrayscaleExamples.png" alt="Examples of good and bad distinguishability" />
+
+___Color Designs___
+
+<img className="w-full mx-auto" src="/guidelines/ColorExamples.png" alt="Examples of good and bad distinguishability" />
+
+___Easy to Distinguish___
 
 <img className="w-full md:w-3/4 mx-auto" src="/guidelines/TooSimilar.png" alt="Examples of good and bad distinguishability" />
 
-
-#### Possible to Tattoo
+___Possible to Tattoo___
 
 <img className="w-full md:w-3/4 mx-auto" src="/guidelines/TooFineDetails.png" alt="Possible to Tattoo" />
 
-#### Clear Orientation
+___Clear Orientation___
 
 <img className="w-full md:w-3/4 mx-auto" src="/guidelines/UnknownOrientation.png" alt="Unknown Orientation" />
+
+
+
 
 ## 4. Technical Requirements
 1. The algorithm must render in a reasonable amount of time on consumer hardware, **~300 ms or less**,
@@ -52,6 +70,8 @@ When creating variations, ensure they are easily distinguishable at a glance. Th
 
 ## 6. Submission Guidelines
 1. Participants must submit a link and a screenshot of their published work in the Entropretty app to the competition system of the event host for judgment.
+
+Example Link: `https://app.entropretty.com/a/21`
 
 # Seed Details
 
@@ -100,7 +120,6 @@ Return a function which itself takes no arguments and returns a stream of random
 ## numeric(seed)
 Returns a bigint representing the seed. Useful for transforming a *Procedural Personal* seed into a single integer number representation aka the Personal Id/Citizen Id.
 
-Can be extended if found useful
 
 # Licensing
 
