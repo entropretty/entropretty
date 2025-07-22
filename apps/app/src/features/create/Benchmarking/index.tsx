@@ -41,7 +41,7 @@ export const Benchmarking = () => {
   return (
     <div className="space-y-6">
       <div className="flex gap-4">
-        <Button disabled={isBenchmarking} onClick={doBenchmark(300, 250)}>
+        <Button disabled={isBenchmarking} onClick={doBenchmark(300, 100)}>
           Small Benchmark
         </Button>
 
