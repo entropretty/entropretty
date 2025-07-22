@@ -16,7 +16,7 @@ import { preludeScript } from "./prelude"
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
-const BENCHMARK_REFERENCE_SIZE = 100
+const BENCHMARK_REFERENCE_SIZE = 300
 const BENCHMARK_DEFAULT_AMOUNT = 1000
 
 type Size = number

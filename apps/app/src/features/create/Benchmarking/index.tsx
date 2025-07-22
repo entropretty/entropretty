@@ -41,7 +41,7 @@ export const Benchmarking = () => {
   return (
     <div className="space-y-6">
       <div className="flex gap-4">
-        <Button disabled={isBenchmarking} onClick={doBenchmark(100, 500)}>
+        <Button disabled={isBenchmarking} onClick={doBenchmark(300, 250)}>
           Small Benchmark
         </Button>
 
@@ -52,17 +52,15 @@ export const Benchmarking = () => {
 
       {isBenchmarking && (
         <div className="border p-4">
-          <div className="mb-4 font-medium">Benchmarking in Progress</div>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Progress:</span>
-              <span>{Math.round(progress * 100)}%</span>
-            </div>
-            <div className="h-2 w-full border">
-              <div
-                className="h-2 bg-black transition-all duration-300"
-                style={{ width: `${progress * 100}%` }}
-              />
+          <div className="bg-background relative flex h-8 w-full items-center border">
+            <div
+              className="bg-foreground h-8 transition-all duration-100"
+              style={{ width: `${progress * 100}%` }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="bg-background text-foreground p-1 text-xs">
+                {Math.round(progress * 100)}%
+              </span>
             </div>
           </div>
         </div>
