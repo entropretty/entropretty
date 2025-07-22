@@ -67,14 +67,12 @@ export const CreateFeature = () => {
               <Separator orientation="vertical" />
               <TabsList>
                 <TabsTrigger value="code">Code</TabsTrigger>
-                <TabsTrigger value="seed">Seed</TabsTrigger>
                 <TabsTrigger value="check">Check</TabsTrigger>
+                <TabsTrigger value="seed">Seed</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="code" className="flex-1">
-              <Suspense
-                fallback={<div className="p-8">Loading Monaco editor...</div>}
-              >
+              <Suspense fallback={<div className="p-8">Loading editor...</div>}>
                 <MonacoEditor />
               </Suspense>
             </TabsContent>
@@ -82,7 +80,7 @@ export const CreateFeature = () => {
             <TabsContent value="seed" className="flex-1 overflow-y-scroll">
               <SeedTools />
             </TabsContent>
-            <TabsContent value="check" className="flex-1 overflow-y-scroll">
+            <TabsContent value="check" className="flex-1 overflow-y-scroll p-4">
               <Benchmarking />
             </TabsContent>
           </Tabs>

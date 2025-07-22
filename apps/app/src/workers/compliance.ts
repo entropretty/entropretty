@@ -1,3 +1,5 @@
+import { blake2b256 as blake2b256Hasher } from "@multiformats/blake2/blake2b"
+import { bytesToHex } from "@noble/hashes/utils"
 import * as Comlink from "comlink"
 import { expose } from "comlink"
 import type {
@@ -15,6 +17,7 @@ import { preludeScript } from "./prelude"
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
 const BENCHMARK_REFERENCE_SIZE = 100
+const BENCHMARK_DEFAULT_AMOUNT = 1000
 
 type Size = number
 export type AlgorithmId = number
@@ -29,6 +32,7 @@ type ComplianceJob = {
 }
 
 export interface ComplianceResult {
+  imageHash: string
   isCompliant: boolean
   issues: CheckMetadata[]
   issueOverlayImageData?: ImageData
@@ -39,6 +43,9 @@ export interface BenchmarkResult {
   amount: number
   algorithmId: AlgorithmId
   size: Size
+  failedTotal: number
+  collisionsTotal: number
+  warningDistribution: Record<number, number>
 }
 
 export interface ComplianceRequest {
@@ -107,31 +114,65 @@ const workerAPI = {
 
   async benchmark(
     algorithmId: AlgorithmId,
-    size: Size,
-    amount: number,
+    size: Size = BENCHMARK_REFERENCE_SIZE,
+    amount: number = BENCHMARK_DEFAULT_AMOUNT,
   ): Promise<BenchmarkResult> {
-    console.log("Benchmarking", algorithmId, size, amount)
     const seeds = getSeedFamily("Procedural", amount)
-    console.log("Seeds created", { seeds: seeds.length })
 
     const results: ComplianceResult[] = []
+    const hashes: Record<string, number[][]> = {}
+    const hashesSet: Set<string> = new Set()
     let checked = 0
     for (const seed of seeds) {
       const result = await this.checkCompliance(algorithmId, seed, {
         withOverlay: false,
-        referenceSize: BENCHMARK_REFERENCE_SIZE,
+        referenceSize: size,
       })
       results.push(result)
+
+      const dupeSeeds = hashes[result.imageHash]
+      if (dupeSeeds) {
+        hashes[result.imageHash] = [...dupeSeeds, [...seed]]
+      } else {
+        hashes[result.imageHash] = [[...seed]]
+      }
+      if (hashesSet.has(result.imageHash)) {
+        console.log("collision", seed, result.imageHash)
+      } else {
+        hashesSet.add(result.imageHash)
+      }
+
       checked++
       if (checked % 5 === 0) {
-        progressCallback?.(checked)
+        progressCallback?.(checked / amount)
       }
     }
+    // Post-process
     progressCallback?.(checked)
+
+    const failed = results.filter((r) => !r.isCompliant).length
+    const chartData: Record<number, number> = {}
+    for (const result of results) {
+      const amountOfIssues = result.issues.length
+      if (chartData[amountOfIssues]) {
+        chartData[amountOfIssues]++
+      } else {
+        chartData[amountOfIssues] = 1
+      }
+    }
+    console.log(chartData)
+
+    const collisions = Object.entries(hashes).filter(
+      ([, seeds]) => seeds.length > 1,
+    )
+    console.log({ collisions, l: collisions.length })
 
     console.log("Results", { results: results.length })
     console.log("Results Slice", { results: results.slice(0, 10) })
     return {
+      warningDistribution: chartData,
+      failedTotal: failed,
+      collisionsTotal: collisions.length,
       size,
       amount,
       algorithmId,
@@ -222,6 +263,9 @@ async function processQueue() {
       // Create a proper ArrayBuffer from the data
       const buffer = new ArrayBuffer(imageData.data.length)
       new Uint8Array(buffer).set(imageData.data)
+
+      const digest = await blake2b256Hasher.digest(new Uint8Array(buffer))
+      const imageHash = bytesToHex(digest.digest)
 
       // Run all compliance rules
       const ruleResults = await runAllComplianceRules(buffer)
@@ -321,6 +365,7 @@ async function processQueue() {
       }
 
       return {
+        imageHash,
         isCompliant,
         issues,
         issueOverlayImageData,

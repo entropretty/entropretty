@@ -5,7 +5,7 @@ export interface BaseRule {
 }
 
 // Different possible outcomes for a check
-export type CheckStatus = "pass" | "warn" | "error"
+export type CheckStatus = "pass" | "warn" | "error" | "info"
 
 // Metadata for warnings and errors
 export interface CheckMetadata {

@@ -1,8 +1,8 @@
 import { Remote, wrap, proxy } from "comlink"
-import ArtistWorker from "../workers/artist?worker"
-import ComplianceWorker from "../workers/compliance?worker"
-import type { ArtistWorker as ArtistWorkerType } from "../workers/artist"
-import type { ComplianceWorker as ComplianceWorkerType } from "../workers/compliance"
+import ArtistWorker from "@/workers/artist?worker"
+import ComplianceWorker from "@/workers/compliance?worker"
+import type { ArtistWorker as ArtistWorkerType } from "@/workers/artist"
+import type { ComplianceWorker as ComplianceWorkerType } from "@/workers/compliance"
 import type { Seed } from "entropretty-utils"
 
 export class AlgorithmService {
