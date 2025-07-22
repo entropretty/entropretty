@@ -34,6 +34,15 @@ export function seedToKey(seed: Seed): string {
   return Array.from(seed).join(",")
 }
 
+/**
+ * Generates a family of seeds for a given kind and size,
+ * all seeds are closely related by a few bit mutations
+ * Does not contain duplicate seeds.
+ *
+ * @param kind - The kind of seed to generate
+ * @param size - The size of the seed family to generate
+ * @returns An array of seeds, does not contain duplicates
+ */
 export function getSeedFamily(kind: FamilyKind, size: number = 16): Seed[] {
   const seed = getSeed(kind)
   return deriveSeedFamily(seed, { size, maxBits: 3, minBits: 1 })

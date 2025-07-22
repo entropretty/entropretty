@@ -1,25 +1,29 @@
+import * as Comlink from "comlink"
 import { expose } from "comlink"
-import { preludeScript } from "./prelude"
+import type {
+  CheckMetadata,
+  ComplianceResult as RuleComplianceResult,
+  SingleImageRule,
+} from "entropretty-compliance/browser"
 import {
   colorCountRule,
   colorIslandsRule,
 } from "entropretty-compliance/browser"
-import type {
-  SingleImageRule,
-  ComplianceResult as RuleComplianceResult,
-  CheckMetadata,
-} from "entropretty-compliance/browser"
-import type { Seed } from "entropretty-utils"
+import { getSeedFamily, type Seed } from "entropretty-utils"
+import { preludeScript } from "./prelude"
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
+const BENCHMARK_REFERENCE_SIZE = 100
 
 type Size = number
 export type AlgorithmId = number
 type ComplianceJob = {
   algorithmId: AlgorithmId
-  size: Size
   seed: Seed
+  referenceSize: Size
+  overlaySize?: Size
+  withOverlay?: boolean
   resolve: (result: ComplianceResult) => void
   reject: (error: Error) => void
 }
@@ -29,6 +33,12 @@ export interface ComplianceResult {
   issues: CheckMetadata[]
   issueOverlayImageData?: ImageData
   ruleTypesFailed: string[]
+}
+
+export interface BenchmarkResult {
+  amount: number
+  algorithmId: AlgorithmId
+  size: Size
 }
 
 export interface ComplianceRequest {
@@ -49,6 +59,7 @@ const complianceRules: SingleImageRule[] = [
 const algorithms: Map<AlgorithmId, string> = new Map()
 const complianceQueue: ComplianceJob[] = []
 let isProcessing = false
+let progressCallback: ((progress: number) => void) | undefined = undefined
 
 const workerAPI = {
   async updateAlgorithm(algorithmId: AlgorithmId, algorithm: string) {
@@ -63,14 +74,24 @@ const workerAPI = {
 
   async checkCompliance(
     algorithmId: AlgorithmId,
-    size: Size,
     seed: Seed,
+    options: {
+      referenceSize?: Size
+      overlaySize?: Size
+      withOverlay?: boolean
+    } = {
+      referenceSize: COMPLIANCE_REFERENCE_SIZE,
+      overlaySize: COMPLIANCE_REFERENCE_SIZE,
+      withOverlay: false,
+    },
   ): Promise<ComplianceResult> {
     return new Promise((resolve, reject) => {
       const seedCopy: Seed = [...seed]
       const job: ComplianceJob = {
         algorithmId,
-        size,
+        overlaySize: options.overlaySize,
+        referenceSize: options.referenceSize ?? COMPLIANCE_REFERENCE_SIZE,
+        withOverlay: options.withOverlay ?? false,
         seed: seedCopy,
         resolve,
         reject,
@@ -80,11 +101,48 @@ const workerAPI = {
     })
   },
 
+  onProgress: Comlink.proxy((cb: (progress: number) => void) => {
+    progressCallback = cb
+  }),
+
+  async benchmark(
+    algorithmId: AlgorithmId,
+    size: Size,
+    amount: number,
+  ): Promise<BenchmarkResult> {
+    console.log("Benchmarking", algorithmId, size, amount)
+    const seeds = getSeedFamily("Procedural", amount)
+    console.log("Seeds created", { seeds: seeds.length })
+
+    const results: ComplianceResult[] = []
+    let checked = 0
+    for (const seed of seeds) {
+      const result = await this.checkCompliance(algorithmId, seed, {
+        withOverlay: false,
+        referenceSize: BENCHMARK_REFERENCE_SIZE,
+      })
+      results.push(result)
+      checked++
+      if (checked % 5 === 0) {
+        progressCallback?.(checked)
+      }
+    }
+    progressCallback?.(checked)
+
+    console.log("Results", { results: results.length })
+    console.log("Results Slice", { results: results.slice(0, 10) })
+    return {
+      size,
+      amount,
+      algorithmId,
+    }
+  },
+
   cancelCheck(algorithmId: AlgorithmId, size: Size, seed: Seed) {
     const index = complianceQueue.findIndex(
       (job) =>
         job.algorithmId === algorithmId &&
-        job.size === size &&
+        job.overlaySize === size &&
         compareNumberArrays(job.seed, seed),
     )
 
@@ -99,7 +157,15 @@ async function processQueue() {
   if (isProcessing || complianceQueue.length === 0) return
 
   isProcessing = true
-  const { algorithmId, size, seed, resolve, reject } = complianceQueue.shift()!
+  const {
+    algorithmId,
+    referenceSize,
+    overlaySize,
+    withOverlay,
+    seed,
+    resolve,
+    reject,
+  } = complianceQueue.shift()!
 
   if (!algorithms.has(algorithmId)) {
     reject(new Error(`No script found for ${algorithmId}`))
@@ -109,10 +175,7 @@ async function processQueue() {
   }
 
   const script = algorithms.get(algorithmId)!
-  const canvas = new OffscreenCanvas(
-    COMPLIANCE_REFERENCE_SIZE,
-    COMPLIANCE_REFERENCE_SIZE,
-  )
+  const canvas = new OffscreenCanvas(referenceSize, referenceSize)
   const ctx = canvas.getContext("2d")
 
   if (!ctx) {
@@ -184,58 +247,76 @@ async function processQueue() {
 
       // Create issue overlay if there are issues with location data
       let issueOverlayImageData: ImageData | undefined = undefined
-      if (
-        !isCompliant &&
-        issues.length > 0 &&
-        issues.some((issue) => issue.location)
-      ) {
-        // Create a new canvas for the overlay with the target size
-        const overlayCanvas = new OffscreenCanvas(size, size)
-        const overlayCtx = overlayCanvas.getContext("2d")
+      if (withOverlay) {
+        if (!overlaySize) {
+          reject(new Error("Overlay size is required"))
+          isProcessing = false
+          processQueue()
+          return
+        }
+        if (
+          !isCompliant &&
+          issues.length > 0 &&
+          issues.some((issue) => issue.location)
+        ) {
+          // Create a new canvas for the overlay with the target size
+          const overlayCanvas = new OffscreenCanvas(overlaySize, overlaySize)
+          const overlayCtx = overlayCanvas.getContext("2d")
 
-        if (overlayCtx) {
-          // Set up the context for drawing red rectangles
-          overlayCtx.fillStyle = "rgba(0, 0, 0, 0)" // Transparent background
-          overlayCtx.fillRect(0, 0, size, size) // Clear the canvas
-          overlayCtx.strokeStyle = "rgba(255, 0, 0, 0.7)" // Red with some transparency
-          overlayCtx.lineWidth = 4
+          if (overlayCtx) {
+            // Set up the context for drawing red rectangles
+            overlayCtx.fillStyle = "rgba(0, 0, 0, 0)" // Transparent background
+            overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height) // Clear the canvas
+            overlayCtx.strokeStyle = "rgba(255, 0, 0, 0.7)" // Red with some transparency
+            overlayCtx.lineWidth = 4
 
-          // Calculate scaling factor from reference size to target size
-          const scaleFactor = size / COMPLIANCE_REFERENCE_SIZE
+            // Calculate scaling factor from reference size to target size
+            const scaleFactor = overlayCanvas.width / COMPLIANCE_REFERENCE_SIZE
 
-          // Add padding to make rectangles a bit bigger (in pixels)
-          const paddingPixels = 5
+            // Add padding to make rectangles a bit bigger (in pixels)
+            const paddingPixels = 5
 
-          // Draw each issue with location data
-          for (const issue of issues) {
-            if (issue.location) {
-              const { x, y, width, height } = issue.location
+            // Draw each issue with location data
+            for (const issue of issues) {
+              if (issue.location) {
+                const { x, y, width, height } = issue.location
 
-              // Scale the coordinates to the target size
-              const scaledX = x * scaleFactor
-              const scaledY = y * scaleFactor
-              const scaledWidth = width * scaleFactor
-              const scaledHeight = height * scaleFactor
+                // Scale the coordinates to the target size
+                const scaledX = x * scaleFactor
+                const scaledY = y * scaleFactor
+                const scaledWidth = width * scaleFactor
+                const scaledHeight = height * scaleFactor
 
-              // Apply padding to make the rectangle bigger
-              const paddedX = Math.max(0, scaledX - paddingPixels)
-              const paddedY = Math.max(0, scaledY - paddingPixels)
-              const paddedWidth = Math.min(
-                size - paddedX,
-                scaledWidth + paddingPixels * 2,
-              )
-              const paddedHeight = Math.min(
-                size - paddedY,
-                scaledHeight + paddingPixels * 2,
-              )
+                // Apply padding to make the rectangle bigger
+                const paddedX = Math.max(0, scaledX - paddingPixels)
+                const paddedY = Math.max(0, scaledY - paddingPixels)
+                const paddedWidth = Math.min(
+                  overlaySize - paddedX,
+                  scaledWidth + paddingPixels * 2,
+                )
+                const paddedHeight = Math.min(
+                  overlaySize - paddedY,
+                  scaledHeight + paddingPixels * 2,
+                )
 
-              // Draw the rectangle with padding
-              overlayCtx.strokeRect(paddedX, paddedY, paddedWidth, paddedHeight)
+                // Draw the rectangle with padding
+                overlayCtx.strokeRect(
+                  paddedX,
+                  paddedY,
+                  paddedWidth,
+                  paddedHeight,
+                )
+              }
             }
-          }
 
-          // Get the image data from the overlay canvas
-          issueOverlayImageData = overlayCtx.getImageData(0, 0, size, size)
+            // Get the image data from the overlay canvas
+            issueOverlayImageData = overlayCtx.getImageData(
+              0,
+              0,
+              overlaySize,
+              overlaySize,
+            )
+          }
         }
       }
 

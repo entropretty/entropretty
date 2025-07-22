@@ -1,4 +1,4 @@
-import { Remote, wrap } from "comlink"
+import { Remote, wrap, proxy } from "comlink"
 import ArtistWorker from "../workers/artist?worker"
 import ComplianceWorker from "../workers/compliance?worker"
 import type { ArtistWorker as ArtistWorkerType } from "../workers/artist"
@@ -41,7 +41,20 @@ export class AlgorithmService {
   }
 
   async checkCompliance(algorithmId: number, size: number, seed: Seed) {
-    return this.complianceWorker.checkCompliance(algorithmId, size, seed)
+    return this.complianceWorker.checkCompliance(algorithmId, seed, {
+      withOverlay: true,
+      overlaySize: size,
+    })
+  }
+
+  async benchmark(
+    algorithmId: number,
+    size: number,
+    amount: number,
+    onProgress: (progress: number) => void,
+  ) {
+    await this.complianceWorker.onProgress(proxy(onProgress))
+    return this.complianceWorker.benchmark(algorithmId, size, amount)
   }
 
   cancelRender(algorithmId: number, size: number, seed: Seed) {
