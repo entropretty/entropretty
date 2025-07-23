@@ -22,34 +22,37 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="bg-background border-background-200 relative flex w-full items-center justify-between gap-4 border p-2">
-      <FamilyKindBadge
-        familyKind={algorithm.family_kind}
-        className="absolute bottom-0 left-0 z-10"
-      />
-      <div className="relative flex items-center gap-4">
-        <div>
-          <AlgorithmBitmap
-            key={seedToKey(seed)}
-            algorithmId={algorithm.id}
-            seed={seed}
-            size={68}
-            scale={2}
-          />
+    <Link to={`/a/${algorithm.id}`}>
+      <div className="bg-background border-background-200 relative flex w-full items-center justify-between gap-4 border p-2">
+        <FamilyKindBadge
+          familyKind={algorithm.family_kind}
+          className="absolute bottom-0 left-0 z-10"
+        />
+
+        <div className="relative flex items-center gap-4">
+          <div>
+            <AlgorithmBitmap
+              key={seedToKey(seed)}
+              algorithmId={algorithm.id}
+              seed={seed}
+              size={68}
+              scale={2}
+            />
+          </div>
+
+          <AlgorithmInfo algorithm={algorithm} />
         </div>
 
-        <AlgorithmInfo algorithm={algorithm} />
+        <div className="flex items-center gap-2">
+          {user && (
+            <Button asChild variant="link">
+              <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
+            </Button>
+          )}
+          <DeleteButton algorithm={algorithm} />
+          {/* <LikeButton algorithm={algorithm} /> */}
+        </div>
       </div>
-
-      <div className="flex items-center gap-2">
-        {user && (
-          <Button asChild variant="link">
-            <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
-          </Button>
-        )}
-        <DeleteButton algorithm={algorithm} />
-        {/* <LikeButton algorithm={algorithm} /> */}
-      </div>
-    </div>
+    </Link>
   )
 }
