@@ -124,7 +124,7 @@ export const WarningDistribution = ({
             cursor={false}
             content={
               <ChartTooltipContent
-                formatter={(value, name, props) => {
+                formatter={(value, _name, props) => {
                   const warnings = props?.payload?.warnings
                   if (warnings === undefined) return [`${value} tests`, "Tests"]
 
