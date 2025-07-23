@@ -1,5 +1,24 @@
 import CurrentCompetition from '../../components/CurrentCompetition'
+import { EntroprettyLogo } from '../../components/EntroprettyLogo'
+import { RainbowButton } from '../../components/magicui/rainbow-button'
 
+<div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+  <div className="mx-auto max-w-4xl px-4 py-4">
+    <div className="flex items-center justify-between">
+      <a href="/" className="hover:opacity-80 transition-opacity">
+        <EntroprettyLogo />
+      </a>
+
+      <a href="https://app.entropretty.com/">
+        <RainbowButton className="text-sm px-6 py-2 h-10 flex items-center justify-center">
+          <span className='m-0 '>Launch App</span>
+        </RainbowButton>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div className="pt-10">
 
 - [General Competition Rules](#general-competition-rules)
 - [Seed Details](#seed-details)
@@ -126,3 +145,5 @@ Returns a bigint representing the seed. Useful for transforming a *Procedural Pe
 Participants agree that their submitted code will be licensed under CC BY-NC-SA 4.0 and thereby will be potentially used in the [Proof-of-Ink](https://www.youtube.com/watch?v=MrWioikibEI) project to generate tattoo designs for individuals. Usage is up to be determined by the Polkadot Open Governance platform.
 
 [https://creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+</div>
