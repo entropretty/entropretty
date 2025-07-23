@@ -1,12 +1,24 @@
+"use client"
+
+import { useCountdown } from "../hooks/use-countdown"
+
 export default function CurrentCompetition() {
+  const countdown = useCountdown(new Date("2025-08-02T13:00:00.000Z"))
+
   return (
     <div className="my-8">
       <h2 className="mb-4 text-2xl font-bold">Summer Assembly 2025</h2>
 
       <div className="mb-6">
         <p className="mb-4">
-          <strong>Submission Deadline:</strong> Saturday, August 2nd, 2025
+          <strong>Submission Deadline:</strong> Saturday, August 2nd, 2025 at
+          01:00:00 UTC.
         </p>
+        {countdown && (
+          <p className="mb-4">
+            <strong>Time left:</strong> <i>{countdown}</i>
+          </p>
+        )}
         <p>
           <strong>Submission Process:</strong> Submit to Assembly&apos;s
           Partyman system (link will be provided)
