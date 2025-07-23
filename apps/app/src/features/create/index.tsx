@@ -13,7 +13,6 @@ import { AlgorithmPreview } from "./AlgorithmPreview"
 import { editorSeedTypeAtom, scriptErrorAtom } from "./atoms"
 import { PostButton } from "./PostButton"
 import { SeedTools } from "./SeedTools"
-import { Benchmarking } from "./Benchmarking"
 
 const MonacoEditor = lazy(() => import("./MonacoEditor"))
 
@@ -81,7 +80,11 @@ export const CreateFeature = () => {
               <SeedTools />
             </TabsContent>
             <TabsContent value="check" className="flex-1 overflow-y-scroll p-4">
-              <Benchmarking />
+              <div className="flex h-full items-center justify-center">
+                <p className="text-muted-foreground">
+                  Coming soon. Check back later
+                </p>
+              </div>
             </TabsContent>
           </Tabs>
         </ResizablePanel>
