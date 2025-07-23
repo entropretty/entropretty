@@ -2,6 +2,7 @@ import { FEATURES } from "@/lib/features"
 import Editor, { useMonaco } from "@monaco-editor/react"
 import { useAtom } from "jotai"
 import { useCallback, useEffect } from "react"
+import { useTheme } from "@/contexts/theme-context"
 import { editorCodeAtom } from "./atoms"
 import initialCode from "./initialCode"
 import poimandresTheme from "./PoimandresTheme"
@@ -9,6 +10,7 @@ import poimandresTheme from "./PoimandresTheme"
 const MonacoEditor = () => {
   const monaco = useMonaco()
   const [code, setEditorCode] = useAtom(editorCodeAtom)
+  const { theme } = useTheme()
 
   // Set up Monaco configuration
   useEffect(() => {
@@ -16,7 +18,13 @@ const MonacoEditor = () => {
       // Define theme first
       if (FEATURES.isCompetition) {
         monaco.editor.defineTheme("poimandres", poimandresTheme)
-        monaco.editor.setTheme("poimandres")
+
+        // Set theme based on current theme context
+        if (theme === "dark") {
+          monaco.editor.setTheme("poimandres")
+        } else {
+          monaco.editor.setTheme("vs") // Monaco's default light theme
+        }
       }
 
       // Then set up JavaScript environment
@@ -38,7 +46,7 @@ const MonacoEditor = () => {
         declare function sfc32(a: number, b: number, c: number, d: number): () => number;
       `)
     }
-  }, [monaco])
+  }, [monaco, theme]) // Add theme to dependency array
 
   const onChange = (value: string | undefined) => {
     if (!value) return
@@ -52,11 +60,19 @@ const MonacoEditor = () => {
     }
   }, [code, setEditorCode])
 
+  // Determine which theme to use for the Editor component
+  const getEditorTheme = () => {
+    if (FEATURES.isCompetition && theme === "dark") {
+      return "poimandres"
+    }
+    return "vs" // Monaco's default light theme
+  }
+
   return (
     <Editor
       height="100%"
       defaultLanguage="javascript"
-      theme="poimandres"
+      theme={getEditorTheme()}
       defaultValue={initialCode}
       onChange={onChange}
       onMount={onMount}

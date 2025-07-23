@@ -66,14 +66,12 @@ export const CreateFeature = () => {
               <Separator orientation="vertical" />
               <TabsList>
                 <TabsTrigger value="code">Code</TabsTrigger>
+                <TabsTrigger value="check">Check</TabsTrigger>
                 <TabsTrigger value="seed">Seed</TabsTrigger>
-                {/* <TabsTrigger value="check">Check</TabsTrigger> */}
               </TabsList>
             </div>
             <TabsContent value="code" className="flex-1">
-              <Suspense
-                fallback={<div className="p-8">Loading Monaco editor...</div>}
-              >
+              <Suspense fallback={<div className="p-8">Loading editor...</div>}>
                 <MonacoEditor />
               </Suspense>
             </TabsContent>
@@ -81,9 +79,13 @@ export const CreateFeature = () => {
             <TabsContent value="seed" className="flex-1 overflow-y-scroll">
               <SeedTools />
             </TabsContent>
-            {/* <TabsContent value="check" className="flex-1 overflow-y-scroll">
-              <h1>Checking code</h1>
-            </TabsContent> */}
+            <TabsContent value="check" className="flex-1 overflow-y-scroll p-4">
+              <div className="flex h-full items-center justify-center">
+                <p className="text-muted-foreground">
+                  Coming soon. Check back later
+                </p>
+              </div>
+            </TabsContent>
           </Tabs>
         </ResizablePanel>
       </ResizablePanelGroup>

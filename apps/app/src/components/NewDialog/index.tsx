@@ -11,7 +11,6 @@ import { cn, familyKindColor } from "@/lib/utils"
 import { FamilyKind } from "entropretty-utils"
 import { ArrowUpRight, PlusIcon } from "lucide-react"
 import { Link, useNavigate } from "react-router"
-import { useTheme } from "../../contexts/theme-context"
 
 interface SeedTypeCardProps {
   kind: FamilyKind

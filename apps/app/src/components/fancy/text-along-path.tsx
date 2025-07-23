@@ -105,7 +105,7 @@ const AnimatedPathText = ({
 
   useEffect(() => {
     // Re-initialize scroll handler when container ref changes
-    const handleChange = (e: number) => {
+    const handleChange = () => {
       textPathRefs.current.forEach((textPath) => {
         if (textPath) {
           textPath.setAttribute("startOffset", `${t.get()}%`)

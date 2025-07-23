@@ -1,9 +1,11 @@
 "use client"
 
+import { useMemo } from "react"
 import { useCountdown } from "../hooks/use-countdown"
 
 export default function CurrentCompetition() {
-  const countdown = useCountdown(new Date("2025-08-02T13:00:00.000Z"))
+  const targetDate = useMemo(() => new Date("2025-08-02T13:00:00.000Z"), [])
+  const countdown = useCountdown(targetDate)
 
   return (
     <div className="my-8">
