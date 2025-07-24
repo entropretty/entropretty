@@ -57,27 +57,69 @@ export default function SignUpPage() {
     }
 
     try {
-      try {
-        await signUp(data.email, data.password, captchaToken)
-        captcha.current?.resetCaptcha()
-        toast.success("Account created successfully", {
-          // description: "Please confirm your email address in order to login.",
-          duration: Infinity,
-          dismissible: true,
-          action: {
-            label: "Dismiss",
-            onClick: () => toast.dismiss(),
-          },
-        })
-        setError(null)
-        navigate("/")
-      } catch (exception) {
-        captcha.current?.resetCaptcha()
-        toast.error("An error occurred")
-        console.error(exception)
-      }
+      await signUp(data.email, data.password, captchaToken)
+      captcha.current?.resetCaptcha()
+      toast.success("Account created successfully", {
+        // description: "Please confirm your email address in order to login.",
+        duration: Infinity,
+        dismissible: true,
+        action: {
+          label: "Dismiss",
+          onClick: () => toast.dismiss(),
+        },
+      })
+      setError(null)
+      navigate("/")
     } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred")
+      captcha.current?.resetCaptcha()
+
+      // Extract error message and provide helpful guidance
+      let errorMessage = "An error occurred while creating your account"
+      let toastDescription =
+        "Please try again or contact support if the problem persists."
+
+      if (error instanceof Error) {
+        const message = error.message.toLowerCase()
+
+        if (
+          message.includes("user already registered") ||
+          message.includes("already registered")
+        ) {
+          errorMessage = "Account already exists"
+          toastDescription =
+            "An account with this email already exists. Try signing in instead."
+        } else if (message.includes("invalid email")) {
+          errorMessage = "Invalid email address"
+          toastDescription = "Please enter a valid email address."
+        } else if (message.includes("password")) {
+          errorMessage = "Password requirements not met"
+          toastDescription = "Password must be at least 6 characters long."
+        } else if (message.includes("captcha")) {
+          errorMessage = "Captcha verification failed"
+          toastDescription = "Please complete the captcha verification again."
+        } else if (message.includes("rate limit")) {
+          errorMessage = "Too many attempts"
+          toastDescription = "Please wait a moment before trying again."
+        } else {
+          // Use the original error message if it's user-friendly
+          errorMessage = error.message
+        }
+      }
+
+      toast.error(errorMessage, {
+        description: toastDescription,
+        duration: 8000,
+        dismissible: true,
+        action:
+          errorMessage === "Account already exists"
+            ? {
+                label: "Sign In",
+                onClick: () => navigate("/login"),
+              }
+            : undefined,
+      })
+
+      console.error("Sign up error:", error)
     }
   }
 
