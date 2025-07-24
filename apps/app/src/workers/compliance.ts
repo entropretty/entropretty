@@ -58,7 +58,7 @@ export interface ComplianceRequest {
 
 // Centralized registry of all compliance rules
 const complianceRules: SingleImageRule[] = [
-  colorCountRule,
+  // colorCountRule,
   colorIslandsRule,
   // Add new rules here
 ]
