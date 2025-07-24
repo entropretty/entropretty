@@ -76,9 +76,7 @@ createRoot(document.getElementById("root")!).render(
                         path="/create"
                         element={
                           <Suspense
-                            fallback={
-                              <div className="p-8">Loading editor...</div>
-                            }
+                            fallback={<div className="p-8">Loading...</div>}
                           >
                             <Create />
                           </Suspense>

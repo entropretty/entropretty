@@ -71,7 +71,7 @@ export const CreateFeature = () => {
               </TabsList>
             </div>
             <TabsContent value="code" className="flex-1">
-              <Suspense fallback={<div className="p-8">Loading editor...</div>}>
+              <Suspense fallback={<div className="p-8">Loading code...</div>}>
                 <MonacoEditor />
               </Suspense>
             </TabsContent>

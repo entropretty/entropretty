@@ -1,16 +1,16 @@
-import { supabase } from "@/lib/supabase"
-import { useQuery } from "@tanstack/react-query"
-import { useAtom, useSetAtom } from "jotai"
-import { Suspense, lazy, useEffect, useState } from "react"
-import { useSearchParams } from "react-router"
 import {
   editorCodeAtom,
   editorSeedTypeAtom,
   generateNewSeedAtom,
   remixAtom,
-} from "../features/create/atoms"
-import { AlgorithmView } from "../lib/helper.types"
+} from "@/features/create/atoms"
+import { AlgorithmView } from "@/lib/helper.types"
+import { supabase } from "@/lib/supabase"
+import { useQuery } from "@tanstack/react-query"
 import { FamilyKind } from "entropretty-utils"
+import { useAtom, useSetAtom } from "jotai"
+import { Suspense, lazy, useEffect, useState } from "react"
+import { useSearchParams } from "react-router"
 
 const CreateFeature = lazy(() => import("../features/create"))
 
@@ -67,7 +67,7 @@ function Create() {
   return (
     <>
       {!isLoading && isReady && (
-        <Suspense fallback={<div className="p-8">Loading code editor...</div>}>
+        <Suspense fallback={<div className="p-8">Setting up editor...</div>}>
           <CreateFeature />
         </Suspense>
       )}
