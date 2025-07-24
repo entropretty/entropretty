@@ -7,10 +7,7 @@ import type {
   ComplianceResult as RuleComplianceResult,
   SingleImageRule,
 } from "entropretty-compliance/browser"
-import {
-  colorCountRule,
-  colorIslandsRule,
-} from "entropretty-compliance/browser"
+import { colorIslandsRule } from "entropretty-compliance/browser"
 import { getSeedFamily, type Seed } from "entropretty-utils"
 import { preludeScript } from "./prelude"
 
