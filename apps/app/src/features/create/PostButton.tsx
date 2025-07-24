@@ -87,8 +87,19 @@ export const PostButton = () => {
     onSuccess: (data) => {
       console.info("Successfully created algorithm", data)
       setAlgorithmName("")
-      queryClient.invalidateQueries({ queryKey: ["algorithms", "latest"] })
-      FEATURES.isCompetition ? navigate(`/mine`) : navigate(`/new`)
+      if (FEATURES.isCompetition) {
+        queryClient
+          .invalidateQueries({ queryKey: ["algorithms", "user-id"] })
+          .finally(() => {
+            navigate(`/mine`)
+          })
+      } else {
+        queryClient
+          .invalidateQueries({ queryKey: ["algorithms", "latest"] })
+          .finally(() => {
+            navigate(`/new`)
+          })
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message)

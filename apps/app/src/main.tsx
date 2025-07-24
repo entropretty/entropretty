@@ -25,7 +25,7 @@ import AlgorithmPage from "@/routes/Algorithm"
 import HotPage from "@/routes/Hot"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRoot } from "react-dom/client"
-import { BrowserRouter, Route, Routes } from "react-router"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router"
 
 const Create = lazy(() => import("@/routes/Create"))
 
@@ -89,6 +89,8 @@ createRoot(document.getElementById("root")!).render(
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
+                {/* Catch-all route - redirects any unmatched routes to root */}
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </BrowserRouter>
           </AuthProvider>
