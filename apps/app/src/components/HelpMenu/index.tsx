@@ -1,10 +1,9 @@
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Link } from "react-router"
 
@@ -37,40 +36,40 @@ export const ListItem = ({
 
 export function HelpMenu() {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>help</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <div className="grid gap-2 p-2 md:w-[300px] lg:w-[400px]">
-              <div className="grid gap-1">
-                <Link to="https://entropretty.com/rules" target="_blank">
-                  <ListItem
-                    title="Competition Rules"
-                    description="Learn about the rules of the competition"
-                  />
-                </Link>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" className="h-9 px-4 py-2 text-sm font-medium">
+          help
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[300px] p-2 md:w-[300px] lg:w-[400px]">
+        <div className="grid gap-2">
+          <div className="grid gap-1">
+            <Link to="https://entropretty.com/rules" target="_blank">
+              <ListItem
+                title="Competition Rules"
+                description="Learn about the rules of the competition"
+              />
+            </Link>
 
-                <Link
-                  to="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
-                  target="_blank"
-                >
-                  <ListItem
-                    title="Canvas API Reference"
-                    description="Documentation for the CanvasRenderingContext2D API used for drawing"
-                  />
-                </Link>
-              </div>
-              <Link to="https://entropretty.com/" target="_blank">
-                <ListItem
-                  title="What is this?"
-                  description="https://entropretty.com/"
-                />
-              </Link>
-            </div>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+            <Link
+              to="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
+              target="_blank"
+            >
+              <ListItem
+                title="Canvas API Reference"
+                description="Documentation for the CanvasRenderingContext2D API used for drawing"
+              />
+            </Link>
+          </div>
+          <Link to="https://entropretty.com/" target="_blank">
+            <ListItem
+              title="What is this?"
+              description="https://entropretty.com/"
+            />
+          </Link>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
