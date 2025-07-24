@@ -18,6 +18,7 @@ import {
   remixAtom,
   scriptErrorAtom,
 } from "./atoms"
+import { FEATURES } from "@/lib/features"
 
 const validateAlgorithmName = (
   name: string,
@@ -87,7 +88,7 @@ export const PostButton = () => {
       console.info("Successfully created algorithm", data)
       setAlgorithmName("")
       queryClient.invalidateQueries({ queryKey: ["algorithms", "latest"] })
-      navigate(`/new`)
+      FEATURES.isCompetition ? navigate(`/mine`) : navigate(`/new`)
     },
     onError: (error: Error) => {
       toast.error(error.message)
