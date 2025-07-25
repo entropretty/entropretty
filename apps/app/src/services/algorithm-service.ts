@@ -1,5 +1,3 @@
-import type { CollisionWorker as CollisionWorkerType } from "@/workers/collisions"
-import CollisionWorker from "@/workers/collisions?worker"
 import type { ComplianceWorker as ComplianceWorkerType } from "@/workers/compliance"
 import ComplianceWorker from "@/workers/compliance?worker"
 import type { RenderWorker as RenderWorkerType } from "@/workers/render"
@@ -10,16 +8,15 @@ import type { FamilyKind, Seed } from "entropretty-utils"
 export class AlgorithmService {
   private complianceWorker: Remote<ComplianceWorkerType>
   private renderWorker: Remote<RenderWorkerType>
-  private collisionWorker: Remote<CollisionWorkerType>
+
   private inventory: Set<number>
 
   constructor() {
     const complianceInstance = new ComplianceWorker()
     const renderInstance = new RenderWorker()
-    const collisionInstance = new CollisionWorker()
     this.complianceWorker = wrap<ComplianceWorkerType>(complianceInstance)
     this.renderWorker = wrap<RenderWorkerType>(renderInstance)
-    this.collisionWorker = wrap<CollisionWorkerType>(collisionInstance)
+
     this.inventory = new Set<number>()
   }
 
@@ -31,7 +28,6 @@ export class AlgorithmService {
     await Promise.all([
       this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
       this.renderWorker.updateAlgorithm(algorithmId, algorithm, kind),
-      this.collisionWorker.updateAlgorithm(algorithmId, algorithm, kind),
     ])
     this.inventory.add(algorithmId)
   }
@@ -45,7 +41,6 @@ export class AlgorithmService {
     await Promise.all([
       this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
       this.renderWorker.updateAlgorithm(algorithmId, algorithm, kind),
-      this.collisionWorker.updateAlgorithm(algorithmId, algorithm, kind),
     ])
     this.inventory.add(algorithmId)
   }
@@ -73,28 +68,16 @@ export class AlgorithmService {
     return this.complianceWorker.benchmark(algorithmId, size, amount)
   }
 
-  async checkCollisions(
-    algorithmId: number,
-    amount: number,
-    options?: { signal?: AbortSignal },
-  ) {
-    return this.collisionWorker.checkCollisions(algorithmId, amount, options)
-  }
-
   async cancelAllRenders() {
     return this.renderWorker.cancelPending()
   }
 
   cancelRender(algorithmId: number, size: number, seed: Seed) {
-    // console.log("cancelRender", algorithmId, size, seed)
+    console.log("cancelRender", algorithmId, size, seed)
     this.renderWorker.cancelPending()
   }
 
   cancelComplianceCheck(algorithmId: number, size: number, seed: Seed) {
     this.complianceWorker.cancelCheck(algorithmId, size, seed)
-  }
-
-  cancelCollisionCheck() {
-    this.collisionWorker.cancelCheck()
   }
 }

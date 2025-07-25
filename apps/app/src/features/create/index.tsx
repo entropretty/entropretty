@@ -14,6 +14,7 @@ import { Benchmarking } from "./Benchmarking"
 import { PostButton } from "./PostButton"
 import { SeedTools } from "./SeedTools"
 import { FeedbackDialog } from "@/components/FeedbackDialog"
+import { RerollBadge } from "./RerollBadge"
 
 const MonacoEditor = lazy(() => import("./MonacoEditor"))
 
@@ -35,10 +36,10 @@ export const CreateFeature = () => {
             <ResizablePanel defaultSize={90} className="h-full w-full">
               <div className="relative h-full w-full">
                 <AlgorithmPreview />
-                <FamilyKindBadge
-                  className="absolute bottom-0 left-0"
-                  familyKind={editorSeedType}
-                />
+                <div className="absolute bottom-0 left-0 flex w-full flex-row justify-between">
+                  <FamilyKindBadge familyKind={editorSeedType} />
+                  <RerollBadge />
+                </div>
 
                 {/* <CollisionIndicator
                   algorithmId={0}
