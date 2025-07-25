@@ -55,13 +55,13 @@ export const AlgorithmPreview = () => {
     setReady(false)
     algorithmService.cancelAllRenders().then(() =>
       algorithmService.updateAlgorithm(0, editorCode, seedType).then(() => {
+        setReady(true)
+        setAlgorithmVersion((v) => v + 1)
         algorithmService
           .testRender(0)
           .then(() => {
-            setReady(true)
             setScriptError(null)
             // Increment version to trigger redraws
-            setAlgorithmVersion((v) => v + 1)
           })
           .catch((e) => {
             setScriptError(e.message)
@@ -98,14 +98,16 @@ export const AlgorithmPreview = () => {
                 "blur-xs opacity-25": !ready,
               })}
             >
-              <AlgorithmCompliance
-                key={`compliance-${index}`}
-                algorithmId={0}
-                seed={seed}
-                scale={2}
-                size={PREVIEW_SIZE}
-                version={codeVersion}
-              />
+              {!!editorCode && (
+                <AlgorithmCompliance
+                  key={`compliance-${index}`}
+                  algorithmId={0}
+                  seed={seed}
+                  scale={2}
+                  size={PREVIEW_SIZE}
+                  version={codeVersion}
+                />
+              )}
             </div>
           </div>
         ))}

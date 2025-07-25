@@ -67,14 +67,6 @@ export const AlgorithmCompliance: React.FC<Props> = ({
     )
   }, [issues])
 
-  // Extract colors from colorCountIssue if they exist
-  const issueColors = useMemo(() => {
-    if (colorCountIssue?.details?.uniqueColors) {
-      return colorCountIssue.details.uniqueColors.map((color) => color.hex)
-    }
-    return []
-  }, [colorCountIssue])
-
   const anyIssues = useMemo(() => {
     if (colorCountIssue || colorIslandIssues.length > 0) {
       return true

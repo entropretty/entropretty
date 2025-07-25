@@ -95,9 +95,15 @@ export const WarningDistribution = ({
   }
 
   return (
-    <div className="pr-4">
-      <div className="mb-4 py-4 text-sm font-medium">Warning Distribution</div>
-      <ChartContainer config={chartConfig} className="">
+    <div className="flex h-full flex-col items-center justify-center pr-4">
+      <div className="mb-4 py-4 text-sm font-medium">
+        Distribution of Warnings
+      </div>
+
+      <ChartContainer
+        config={chartConfig}
+        className="max-h-[400px] min-h-[200px]"
+      >
         <BarChart
           data={chartData}
           margin={{

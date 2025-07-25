@@ -47,6 +47,7 @@ export interface BenchmarkResult {
   size: Size
   failedTotal: number
   collisionsTotal: number
+  errors: number
   warningDistribution: Record<number, number>
 }
 
@@ -126,25 +127,31 @@ const workerAPI = {
 
     const results: ComplianceResult[] = []
     const hashes: Record<string, number[][]> = {}
+
     const hashesSet: Set<string> = new Set()
     let checked = 0
+    let errors = 0
     for (const seed of seeds) {
-      const result = await this.checkCompliance(algorithmId, seed, {
-        withOverlay: false,
-        referenceSize: size,
-      })
-      results.push(result)
+      try {
+        const result = await this.checkCompliance(algorithmId, seed, {
+          withOverlay: false,
+          referenceSize: size,
+        })
+        results.push(result)
 
-      const dupeSeeds = hashes[result.imageHash]
-      if (dupeSeeds) {
-        hashes[result.imageHash] = [...dupeSeeds, [...seed]]
-      } else {
-        hashes[result.imageHash] = [[...seed]]
-      }
-      if (hashesSet.has(result.imageHash)) {
-        console.log("collision", seed, result.imageHash)
-      } else {
-        hashesSet.add(result.imageHash)
+        const dupeSeeds = hashes[result.imageHash]
+        if (dupeSeeds) {
+          hashes[result.imageHash] = [...dupeSeeds, [...seed]]
+        } else {
+          hashes[result.imageHash] = [[...seed]]
+        }
+        if (hashesSet.has(result.imageHash)) {
+          console.log("collision", seed, result.imageHash)
+        } else {
+          hashesSet.add(result.imageHash)
+        }
+      } catch {
+        errors++
       }
 
       checked++
@@ -179,6 +186,7 @@ const workerAPI = {
       collisionsTotal: collisions.length,
       size,
       amount,
+      errors,
       algorithmId,
     }
   },
