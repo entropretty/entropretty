@@ -16,7 +16,7 @@ const initialSeeds = [...getSeedFamily("Procedural").map((s) => [...s])]
 export const editorSeedFamilyAtom = atom<number[][]>(initialSeeds)
 export const generateNewSeedAtom = atom(null, (get, set) => {
   set(editorSeedFamilyAtom, [
-    ...getSeedFamily(get(editorSeedTypeAtom)).map((s) => [...s]),
+    ...getSeedFamily(get(editorSeedTypeAtom), 128).map((s) => [...s]),
   ])
 })
 
