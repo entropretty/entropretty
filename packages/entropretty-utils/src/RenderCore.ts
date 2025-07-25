@@ -56,12 +56,9 @@ export class RenderCore {
     const meta = this.algorithms.get(id)
     if (!meta) throw new Error(`No script found for algorithm ${id}`)
 
-    return this.drawWithTimeout(
-      meta.script,
-      size,
-      [...seed],
-      options.output,
-    ) as Promise<ImageData>
+    return this.queue.add(() =>
+      this.drawWithTimeout(meta.script, size, [...seed], options.output),
+    ) as Promise<ImageBitmap | ImageData>
   }
 
   async renderBitmap(id: AlgorithmId, size: number, seed: Seed) {

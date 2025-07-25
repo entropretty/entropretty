@@ -199,6 +199,11 @@ const workerAPI = {
       complianceQueue.splice(index, 1)
     }
   },
+  cancelAllChecks() {
+    renderCore.cancelPending()
+    complianceQueue.length = 0
+    isProcessing = false
+  },
 }
 
 async function processQueue() {

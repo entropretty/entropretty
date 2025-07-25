@@ -51,7 +51,8 @@ export const AlgorithmBitmap: React.FC<Props> = ({
     if (canvasRef.current === null) return
 
     setIsReady(false)
-    service.cancelRender(algorithmId, drawingSize, [...seed])
+    // TODO this does not work anymore
+    // service.cancelRender(algorithmId, drawingSize, [...seed])
     service.render(algorithmId, drawingSize, [...seed]).then((bitmap) => {
       const context = canvasRef.current!.getContext("2d")!
       context.clearRect(0, 0, drawingSize, drawingSize)

@@ -69,12 +69,10 @@ export class AlgorithmService {
   }
 
   async cancelAllRenders() {
-    return this.renderWorker.cancelPending()
-  }
-
-  cancelRender(algorithmId: number, size: number, seed: Seed) {
-    console.log("cancelRender", algorithmId, size, seed)
-    this.renderWorker.cancelPending()
+    return Promise.all([
+      this.renderWorker.cancelPending(),
+      this.complianceWorker.cancelAllChecks(),
+    ])
   }
 
   cancelComplianceCheck(algorithmId: number, size: number, seed: Seed) {
