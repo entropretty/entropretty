@@ -13,6 +13,10 @@ const api = {
     return transfer(image, [image]) // zero-copy back to main thread
   },
 
+  async testRender(id: number) {
+    return core.testRender(id)
+  },
+
   cancelPending() {
     core.cancelPending()
   },

@@ -3,6 +3,7 @@ import { bytesToHex } from "@noble/hashes/utils"
 import PQueue from "p-queue"
 import { preludeScriptString as preludeScript } from "./prelude/generatedScriptString"
 import type { FamilyKind, Seed } from "./types"
+import { getSeed } from "./seeds"
 
 /** Types **/
 
@@ -29,6 +30,14 @@ export class RenderCore {
    */
   updateAlgorithm(id: AlgorithmId, script: string, kind: FamilyKind): void {
     this.algorithms.set(id, { script, kind })
+  }
+
+  testRender(algorithmId: AlgorithmId) {
+    const meta = this.algorithms.get(algorithmId)
+    if (!meta) throw new Error(`No script found for algorithm ${algorithmId}`)
+
+    const seed = getSeed(meta.kind)
+    return this.render(algorithmId, 50, seed)
   }
 
   /**
@@ -111,28 +120,51 @@ export class RenderCore {
     )
 
     const renderPromise = (async () => {
-      // Setup drawing style
-      ctx.scale(canvas.width / 100, canvas.width / 100)
-      ctx.lineWidth = 1
-      ctx.lineCap = "butt"
-      ctx.lineJoin = "miter"
-      ctx.strokeStyle = "black"
-      ctx.fillStyle = "black"
-      ctx.textAlign = "center"
-      ctx.textBaseline = "bottom"
+      try {
+        // Setup canvas state
+        ctx.scale(canvas.width / 100, canvas.width / 100)
+        ctx.lineWidth = 1
+        ctx.lineCap = "butt"
+        ctx.lineJoin = "miter"
+        ctx.strokeStyle = "black"
+        ctx.fillStyle = "black"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "bottom"
 
-      // Execute algorithm code
-      const drawAlgorithm = new Function(
-        "ctx",
-        "seed",
-        `${preludeScript}\n${script}`,
-      )
-      drawAlgorithm(ctx, seed)
+        // Compile user script
+        let drawAlgorithm: (
+          ctx: OffscreenCanvasRenderingContext2D,
+          seed: number[],
+        ) => void
+        try {
+          drawAlgorithm = new Function(
+            "ctx",
+            "seed",
+            `${preludeScript}\n${script}`,
+          ) as typeof drawAlgorithm
+        } catch (syntaxError: unknown) {
+          if (syntaxError instanceof SyntaxError) {
+            throw new Error(`Syntax error: ${syntaxError.message}`)
+          } else {
+            throw new Error(`Syntax error: ${syntaxError}`)
+          }
+        }
 
-      if (output === "imagedata") {
-        return ctx.getImageData(0, 0, size, size) // CPU pixels for hashing
-      } else {
-        return canvas.transferToImageBitmap() // GPU-friendly
+        // Execute drawing
+        try {
+          drawAlgorithm(ctx, [...seed])
+        } catch (runtimeError: unknown) {
+          throw new Error(`Runtime error: ${runtimeError}`)
+        }
+
+        if (output === "imagedata") {
+          return ctx.getImageData(0, 0, size, size)
+        } else {
+          return canvas.transferToImageBitmap()
+        }
+      } catch (err) {
+        // All errors here are guaranteed to be caught and passed to caller
+        throw err
       }
     })()
 

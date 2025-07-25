@@ -36,6 +36,10 @@ export class AlgorithmService {
     this.inventory.add(algorithmId)
   }
 
+  async testRender(algorithmId: number) {
+    return this.renderWorker.testRender(algorithmId)
+  }
+
   async addAlgorithm(algorithmId: number, algorithm: string, kind: FamilyKind) {
     if (this.inventory.has(algorithmId)) return
     await Promise.all([
@@ -75,6 +79,10 @@ export class AlgorithmService {
     options?: { signal?: AbortSignal },
   ) {
     return this.collisionWorker.checkCollisions(algorithmId, amount, options)
+  }
+
+  async cancelAllRenders() {
+    return this.renderWorker.cancelPending()
   }
 
   cancelRender(algorithmId: number, size: number, seed: Seed) {
