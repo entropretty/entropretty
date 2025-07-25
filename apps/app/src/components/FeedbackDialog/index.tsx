@@ -99,7 +99,7 @@ export function FeedbackDialog({ className }: { className?: string }) {
             <motion.div
               layout
               key="feedback_form"
-              className="space-y-4 p-4 [box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)]"
+              className="space-y-4 p-4 [box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]"
               exit={{ opacity: 0, filter: "blur(10px)" }}
               animate={{ opacity: 1, filter: "blur(0px)" }}
               transition={{
@@ -204,7 +204,7 @@ export function FeedbackDialog({ className }: { className?: string }) {
             >
               <Button
                 variant={"secondary"}
-                className="[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)]"
+                className="[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]"
                 onClick={() => setOpen(true)}
               >
                 Feedback

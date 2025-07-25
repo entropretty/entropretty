@@ -39,7 +39,7 @@ export function ExploreGallery() {
       )
       return availableAlgorithmIds[randomIndex]
     })
-    console.log({ newSet })
+
     setAlgorithmIds((prev) => [...prev, ...newSet])
   }, [availableAlgorithmIds])
 

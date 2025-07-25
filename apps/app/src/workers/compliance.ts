@@ -145,9 +145,7 @@ const workerAPI = {
         } else {
           hashes[result.imageHash] = [[...seed]]
         }
-        if (hashesSet.has(result.imageHash)) {
-          console.log("collision", seed, result.imageHash)
-        } else {
+        if (!hashesSet.has(result.imageHash)) {
           hashesSet.add(result.imageHash)
         }
       } catch {
@@ -176,10 +174,7 @@ const workerAPI = {
     const collisions = Object.entries(hashes).filter(
       ([, seeds]) => seeds.length > 1,
     )
-    console.log({ collisions, l: collisions.length })
 
-    console.log("Results", { results: results.length })
-    console.log("Results Slice", { results: results.slice(0, 10) })
     return {
       warningDistribution: chartData,
       failedTotal: failed,
