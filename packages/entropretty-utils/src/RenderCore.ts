@@ -10,33 +10,36 @@ import { getSeed } from "./seeds"
 export type AlgorithmId = number
 
 export interface AlgorithmMeta {
-  script: string
   kind: FamilyKind
-  // Future-proof: add fields like `name`, `tags`, `author` later
 }
 
 export type OutputType = "bitmap" | "imagedata"
 
 export class RenderCore {
-  private algorithms = new Map<AlgorithmId, AlgorithmMeta>()
+  private algorithms = new Map<AlgorithmId, string>()
+  private metadata = new Map<AlgorithmId, FamilyKind>()
   private queue: PQueue
 
   constructor(private timeoutMs = 300) {
-    this.queue = new PQueue({ concurrency: 1 }) // serialize render jobs
+    this.queue = new PQueue({ concurrency: 4 }) // serialize render jobs
   }
 
   /**
    * Store or update an algorithm and its metadata
    */
   updateAlgorithm(id: AlgorithmId, script: string, kind: FamilyKind): void {
-    this.algorithms.set(id, { script, kind })
+    this.algorithms.set(id, script)
+    this.metadata.set(id, kind)
   }
 
   testRender(algorithmId: AlgorithmId) {
-    const meta = this.algorithms.get(algorithmId)
-    if (!meta) throw new Error(`No script found for algorithm ${algorithmId}`)
+    const script = this.algorithms.get(algorithmId)
+    if (!script) throw new Error(`No script found for algorithm ${algorithmId}`)
 
-    const seed = getSeed(meta.kind)
+    const kind = this.metadata.get(algorithmId)
+    if (!kind) throw new Error(`No kind found for algorithm ${algorithmId}`)
+
+    const seed = getSeed(kind)
     return this.render(algorithmId, 50, seed)
   }
 
@@ -53,11 +56,11 @@ export class RenderCore {
     seed: Seed,
     options: { output: OutputType } = { output: "bitmap" },
   ): Promise<ImageBitmap | ImageData> {
-    const meta = this.algorithms.get(id)
-    if (!meta) throw new Error(`No script found for algorithm ${id}`)
+    const script = this.algorithms.get(id)
+    if (!script) throw new Error(`No script found for algorithm ${id}`)
 
     return this.queue.add(() =>
-      this.drawWithTimeout(meta.script, size, [...seed], options.output),
+      this.drawWithTimeout(script, size, [...seed], options.output),
     ) as Promise<ImageBitmap | ImageData>
   }
 
@@ -93,7 +96,12 @@ export class RenderCore {
    * Get metadata (useful for UI or analysis)
    */
   getAlgorithmMeta(id: AlgorithmId): AlgorithmMeta | undefined {
-    return this.algorithms.get(id)
+    const kind = this.metadata.get(id)
+    if (!kind) return undefined
+
+    return {
+      kind,
+    }
   }
 
   /**

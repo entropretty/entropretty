@@ -11,7 +11,7 @@ export function RerollBadge() {
     <Badge
       onClick={generateNewSeed}
       className={cn(
-        "hover:bg-destructive text-destructive-foreground hover:text-destructive-foreground cursor-pointer select-none bg-transparent font-light text-black shadow-none",
+        "hover:bg-destructive text-foreground hover:text-destructive-foreground cursor-pointer select-none bg-transparent shadow-none",
         {},
       )}
     >

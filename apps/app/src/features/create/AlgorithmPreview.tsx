@@ -53,14 +53,16 @@ export const AlgorithmPreview = () => {
   // Update algorithm in worker when code changes
   useEffect(() => {
     setReady(false)
+
     algorithmService.cancelAllRenders().then(() =>
       algorithmService.updateAlgorithm(0, editorCode, seedType).then(() => {
-        setReady(true)
-        setAlgorithmVersion((v) => v + 1)
         algorithmService
           .testRender(0)
           .then(() => {
             setScriptError(null)
+
+            setReady(true)
+            setAlgorithmVersion((v) => v + 1)
             // Increment version to trigger redraws
           })
           .catch((e) => {
@@ -73,8 +75,8 @@ export const AlgorithmPreview = () => {
     algorithmService,
     editorCode,
     seedType,
-    setScriptError,
     setAlgorithmVersion,
+    setScriptError,
   ])
 
   // Get the number of seeds to show based on available space

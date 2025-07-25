@@ -74,7 +74,9 @@ export const CreateFeature = () => {
               {/* <Separator orientation="vertical" /> */}
               <TabsList>
                 <TabsTrigger value="code">Code</TabsTrigger>
-                <TabsTrigger value="check">Check</TabsTrigger>
+                <TabsTrigger className="border-foreground border" value="check">
+                  Check
+                </TabsTrigger>
                 <TabsTrigger value="seed">Seed</TabsTrigger>
               </TabsList>
             </div>

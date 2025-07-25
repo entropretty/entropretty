@@ -25,11 +25,10 @@ export class AlgorithmService {
     algorithm: string,
     kind: FamilyKind,
   ) {
-    await Promise.all([
-      this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
+    return await Promise.all([
       this.renderWorker.updateAlgorithm(algorithmId, algorithm, kind),
+      this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
     ])
-    this.inventory.add(algorithmId)
   }
 
   async testRender(algorithmId: number) {
