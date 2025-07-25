@@ -95,23 +95,30 @@ export const WarningDistribution = ({
   }
 
   return (
-    <div className="border p-4">
-      <div className="mb-4 font-medium">Warning Distribution</div>
-      <ChartContainer config={chartConfig} className="min-h-[300px]">
+    <div className="flex h-full flex-col items-center justify-center pr-4">
+      <div className="mb-4 py-4 text-sm font-medium">
+        Distribution of Warnings
+      </div>
+
+      <ChartContainer
+        config={chartConfig}
+        className="max-h-[400px] min-h-[200px]"
+      >
         <BarChart
           data={chartData}
           margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 20,
+            top: 4,
+            right: 4,
+            left: 4,
+            bottom: 4,
           }}
+          // barSize={10}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="label"
             tickLine={false}
-            tickMargin={10}
+            tickMargin={2}
             axisLine={false}
           />
           <YAxis
@@ -143,7 +150,7 @@ export const WarningDistribution = ({
               />
             }
           />
-          <Bar dataKey="count" radius={4}>
+          <Bar dataKey="count">
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}

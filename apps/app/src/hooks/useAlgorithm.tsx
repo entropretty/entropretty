@@ -18,7 +18,7 @@ export function useAlgorithm(algorithmId: number) {
       if (error) throw error
       if (!data) throw new Error("Algorithm not found")
 
-      algorithmService.addAlgorithm(data.id!, data.content!)
+      algorithmService.addAlgorithm(data.id!, data.content!, data.family_kind!)
 
       return data as AlgorithmView
     },

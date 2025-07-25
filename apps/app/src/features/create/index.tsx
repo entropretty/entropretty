@@ -3,7 +3,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
-import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAtom } from "jotai"
 import { Suspense, lazy } from "react"
@@ -11,8 +10,11 @@ import { FamilyKindBadge } from "../../components/FamilyKindBadge"
 import { AlgorithmNameInput } from "./AlgorithmNameInput"
 import { AlgorithmPreview } from "./AlgorithmPreview"
 import { editorSeedTypeAtom, scriptErrorAtom } from "./atoms"
+import { Benchmarking } from "./Benchmarking"
 import { PostButton } from "./PostButton"
 import { SeedTools } from "./SeedTools"
+import { FeedbackDialog } from "@/components/FeedbackDialog"
+import { RerollBadge } from "./RerollBadge"
 
 const MonacoEditor = lazy(() => import("./MonacoEditor"))
 
@@ -22,6 +24,7 @@ export const CreateFeature = () => {
 
   return (
     <>
+      <FeedbackDialog className="fixed bottom-4 right-4 z-50" />
       <ResizablePanelGroup
         direction="horizontal"
         className="h-screen w-screen"
@@ -33,10 +36,15 @@ export const CreateFeature = () => {
             <ResizablePanel defaultSize={90} className="h-full w-full">
               <div className="relative h-full w-full">
                 <AlgorithmPreview />
-                <FamilyKindBadge
-                  className="absolute bottom-0 left-0"
-                  familyKind={editorSeedType}
-                />
+                <div className="absolute bottom-0 left-0 flex w-full flex-row justify-between">
+                  <FamilyKindBadge familyKind={editorSeedType} />
+                  <RerollBadge />
+                </div>
+
+                {/* <CollisionIndicator
+                  algorithmId={0}
+                  className="absolute bottom-0 right-0"
+                /> */}
               </div>
             </ResizablePanel>
 
@@ -63,10 +71,12 @@ export const CreateFeature = () => {
                 <AlgorithmNameInput />
                 <PostButton />
               </div>
-              <Separator orientation="vertical" />
+              {/* <Separator orientation="vertical" /> */}
               <TabsList>
                 <TabsTrigger value="code">Code</TabsTrigger>
-                <TabsTrigger value="check">Check</TabsTrigger>
+                <TabsTrigger className="border-foreground border" value="check">
+                  Check
+                </TabsTrigger>
                 <TabsTrigger value="seed">Seed</TabsTrigger>
               </TabsList>
             </div>
@@ -80,11 +90,7 @@ export const CreateFeature = () => {
               <SeedTools />
             </TabsContent>
             <TabsContent value="check" className="flex-1 overflow-y-scroll p-4">
-              <div className="flex h-full items-center justify-center">
-                <p className="text-muted-foreground">
-                  Coming soon. Check back later
-                </p>
-              </div>
+              <Benchmarking />
             </TabsContent>
           </Tabs>
         </ResizablePanel>

@@ -25,7 +25,6 @@ export const Benchmarking = () => {
       algorithmService
         .benchmark(0, size, amount, (p) => setProgress(p))
         .then((r) => {
-          console.log(r)
           setBenchmarkResult(r)
         })
         .finally(() => {
@@ -40,13 +39,20 @@ export const Benchmarking = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-4">
-        <Button disabled={isBenchmarking} onClick={doBenchmark(300, 100)}>
-          Small Benchmark
+      <div className="border border-blue-500 bg-blue-50 p-4 dark:bg-blue-950">
+        <p className="text-xs text-blue-800 dark:text-blue-400">
+          This benchmark is meant to help you and us determine how well suited
+          your algorithm is for tattooing. Our automated checks are not flawless
+          and will improve over time.
+        </p>
+      </div>
+      <div className="flex w-full items-center justify-center gap-4">
+        <Button disabled={isBenchmarking} onClick={doBenchmark(250, 250)}>
+          Quick Benchmark
         </Button>
 
         <Button disabled={isBenchmarking} onClick={doBenchmark(250, 1000)}>
-          Full Benchmark
+          Big Benchmark
         </Button>
       </div>
 

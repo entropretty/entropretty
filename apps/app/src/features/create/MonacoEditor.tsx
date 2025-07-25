@@ -1,8 +1,9 @@
+import { useTheme } from "@/contexts/theme-context"
 import { FEATURES } from "@/lib/features"
 import Editor, { useMonaco } from "@monaco-editor/react"
 import { useAtom } from "jotai"
-import { useCallback, useEffect } from "react"
-import { useTheme } from "@/contexts/theme-context"
+import { useCallback, useEffect, useState } from "react"
+import { useDebouncedCallback } from "use-debounce"
 import { editorCodeAtom } from "./atoms"
 import initialCode from "./initialCode"
 import poimandresTheme from "./PoimandresTheme"
@@ -10,6 +11,15 @@ import poimandresTheme from "./PoimandresTheme"
 const MonacoEditor = () => {
   const monaco = useMonaco()
   const [code, setEditorCode] = useAtom(editorCodeAtom)
+  const [localCode, setLocalCode] = useState(code)
+  const debouncedSetEditorCode = useDebouncedCallback(
+    // function
+    (value) => {
+      setEditorCode(value)
+    },
+    // delay in ms
+    250,
+  )
   const { theme } = useTheme()
 
   // Set up Monaco configuration
@@ -50,12 +60,14 @@ const MonacoEditor = () => {
 
   const onChange = (value: string | undefined) => {
     if (!value) return
-    setEditorCode(value)
+    setLocalCode(value)
+    debouncedSetEditorCode(value)
   }
 
   const onMount = useCallback(() => {
     if (!code) {
       console.log("setting initial code as no code", code)
+      setLocalCode(initialCode)
       setEditorCode(initialCode)
     }
   }, [code, setEditorCode])
@@ -76,7 +88,7 @@ const MonacoEditor = () => {
       defaultValue={initialCode}
       onChange={onChange}
       onMount={onMount}
-      value={code}
+      value={localCode}
       options={{
         minimap: { enabled: false },
         lineNumbers: "on",

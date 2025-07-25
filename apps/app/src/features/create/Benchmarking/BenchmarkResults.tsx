@@ -1,5 +1,12 @@
 import { BenchmarkResult } from "@/workers/compliance"
 import { WarningDistribution } from "./WarningDistribution"
+import { CheckCircle, XCircle, AlertTriangle } from "lucide-react"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface BenchmarkResultsProps {
   benchmarkResult: BenchmarkResult
@@ -22,69 +29,102 @@ export const BenchmarkResults = ({
     }
   }
 
-  const getSuccessPercentage = (result: BenchmarkResult) => {
-    return ((result.amount - result.failedTotal) / result.amount) * 100
-  }
+  const warningPercentage = Math.round(
+    (benchmarkResult.failedTotal / benchmarkResult.amount) * 100,
+  )
+  const errorPercentage = Math.round(
+    (benchmarkResult.errors / benchmarkResult.amount) * 100,
+  )
 
   return (
-    <div className="border p-4">
-      <div className="mb-6 font-medium">Benchmark Results</div>
-      <div className="space-y-6">
-        {/* Main Results */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {getSuccessPercentage(benchmarkResult).toFixed(1)}%
-            </div>
-            <div className="text-sm">Success Rate</div>
-          </div>
+    <TooltipProvider>
+      <div className="border p-4">
+        <h3 className="mb-6 text-lg">Benchmark Results</h3>
 
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {benchmarkResult.failedTotal}
-            </div>
-            <div className="text-sm">Failed Tests</div>
-          </div>
+        {/* Status Overview */}
+        <div className="mb-6 space-y-1">
+          {/* Collisions */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="cursor-help">
+                {benchmarkResult.collisionsTotal === 0 ? (
+                  <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>no direct collision</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+                    <XCircle className="h-4 w-4" />
+                    <span>
+                      found {benchmarkResult.collisionsTotal} identical images *
+                    </span>
+                  </div>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              We check if different seeds result in the exact same image. This
+              is a critical issue and will lead to disqualification.
+            </TooltipContent>
+          </Tooltip>
 
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {benchmarkResult.amount - benchmarkResult.failedTotal}
-            </div>
-            <div className="text-sm">Passed Tests</div>
-          </div>
+          {/* Errors */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="cursor-help">
+                {benchmarkResult.errors === 0 ? (
+                  <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>0 errors</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+                    <XCircle className="h-4 w-4" />
+                    <span>{errorPercentage}% of seeds error out*</span>
+                  </div>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <div>
+                We check if your script throws no errors depending on the input
+                seed.
+              </div>
+            </TooltipContent>
+          </Tooltip>
+
+          {/* Warnings */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="cursor-help">
+                {benchmarkResult.failedTotal === 0 ? (
+                  <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>0 warnings</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span>{warningPercentage}% of seeds have warnings</span>
+                  </div>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              We do our best to analyze the tattooability of your design for
+              each image. This measure is by no means perfect. But best to have
+              no errors at all.
+            </TooltipContent>
+          </Tooltip>
         </div>
 
-        {/* Failed Percentage */}
-        <div className="border-t pt-4">
-          <div className="flex justify-between">
-            <span>Failed Percentage:</span>
-            <span className="font-medium">
-              {(
-                (benchmarkResult.failedTotal / benchmarkResult.amount) *
-                100
-              ).toFixed(2)}
-              %
-            </span>
+        {(benchmarkResult.errors > 0 ||
+          benchmarkResult.collisionsTotal > 0) && (
+          <div className="text-sm text-red-600 dark:text-red-400">
+            * Critical issues, please fix them before submitting. Otherwise this
+            could lead to disqualification for the ongoing competition.
           </div>
-        </div>
-
-        {/* Visual Success Rate Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm font-medium">
-            <span>Compliance Success Rate</span>
-            <span>{getSuccessPercentage(benchmarkResult).toFixed(1)}%</span>
-          </div>
-          <div className="h-3 w-full border">
-            <div
-              className="h-3 bg-black transition-all duration-500"
-              style={{ width: `${getSuccessPercentage(benchmarkResult)}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs">
-            <span>0%</span>
-            <span>100%</span>
-          </div>
-        </div>
+        )}
 
         {/* Warning Distribution Chart */}
         <WarningDistribution
@@ -120,6 +160,6 @@ export const BenchmarkResults = ({
           </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }
