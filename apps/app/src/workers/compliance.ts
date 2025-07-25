@@ -8,8 +8,13 @@ import type {
   SingleImageRule,
 } from "entropretty-compliance/browser"
 import { colorIslandsRule } from "entropretty-compliance/browser"
-import { getSeedFamily, type Seed } from "entropretty-utils"
-import { preludeScript } from "./prelude"
+import {
+  type FamilyKind,
+  type AlgorithmId,
+  getSeedFamily,
+  RenderCore,
+  type Seed,
+} from "entropretty-utils"
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
@@ -17,7 +22,7 @@ const BENCHMARK_REFERENCE_SIZE = 300
 const BENCHMARK_DEFAULT_AMOUNT = 1000
 
 type Size = number
-export type AlgorithmId = number
+
 type ComplianceJob = {
   algorithmId: AlgorithmId
   seed: Seed
@@ -60,20 +65,18 @@ const complianceRules: SingleImageRule[] = [
   // Add new rules here
 ]
 
-const algorithms: Map<AlgorithmId, string> = new Map()
+const renderCore = new RenderCore(COMPLIANCE_TIMEOUT_MS)
 const complianceQueue: ComplianceJob[] = []
 let isProcessing = false
 let progressCallback: ((progress: number) => void) | undefined = undefined
 
 const workerAPI = {
-  async updateAlgorithm(algorithmId: AlgorithmId, algorithm: string) {
-    if (algorithmId === 0) {
-      algorithms.set(algorithmId, algorithm)
-    } else {
-      if (!algorithms.has(algorithmId)) {
-        algorithms.set(algorithmId, algorithm)
-      }
-    }
+  async updateAlgorithm(
+    algorithmId: AlgorithmId,
+    algorithm: string,
+    kind: FamilyKind = "Procedural",
+  ) {
+    renderCore.updateAlgorithm(algorithmId, algorithm, kind)
   },
 
   async checkCompliance(
@@ -114,7 +117,12 @@ const workerAPI = {
     size: Size = BENCHMARK_REFERENCE_SIZE,
     amount: number = BENCHMARK_DEFAULT_AMOUNT,
   ): Promise<BenchmarkResult> {
-    const seeds = getSeedFamily("Procedural", amount)
+    const meta = renderCore.getAlgorithmMeta(algorithmId)
+    if (!meta) {
+      throw new Error(`No algorithm meta found for algorithm ${algorithmId}`)
+    }
+    const kind = meta.kind
+    const seeds = getSeedFamily(kind, amount)
 
     const results: ComplianceResult[] = []
     const hashes: Record<string, number[][]> = {}
@@ -157,7 +165,6 @@ const workerAPI = {
         chartData[amountOfIssues] = 1
       }
     }
-    console.log(chartData)
 
     const collisions = Object.entries(hashes).filter(
       ([, seeds]) => seeds.length > 1,
@@ -205,175 +212,120 @@ async function processQueue() {
     reject,
   } = complianceQueue.shift()!
 
-  if (!algorithms.has(algorithmId)) {
-    reject(new Error(`No script found for ${algorithmId}`))
-    isProcessing = false
-    processQueue()
-    return
-  }
-
-  const script = algorithms.get(algorithmId)!
-  const canvas = new OffscreenCanvas(referenceSize, referenceSize)
-  const ctx = canvas.getContext("2d")
-
-  if (!ctx) {
-    reject(new Error("Failed to get 2D rendering context"))
-    isProcessing = false
-    processQueue()
-    return
-  }
-
   try {
-    const timeoutPromise = new Promise((_, timeoutReject) => {
-      setTimeout(() => {
-        timeoutReject(
-          new Error(
-            `Compliance check timed out after ${COMPLIANCE_TIMEOUT_MS}ms`,
-          ),
-        )
-      }, COMPLIANCE_TIMEOUT_MS)
-    })
+    // Use RenderCore to render the image data for compliance checking
+    const imageData = await renderCore.renderImageData(
+      algorithmId,
+      referenceSize,
+      seed,
+    )
 
-    const checkPromise = (async () => {
-      ctx.scale(canvas.width / 100, canvas.width / 100)
-      ctx.lineWidth = 1
-      ctx.lineCap = "butt"
-      ctx.lineJoin = "miter"
-      ctx.strokeStyle = "black"
-      ctx.fillStyle = "black"
-      ctx.textAlign = "center"
-      ctx.textBaseline = "bottom"
+    // Create a proper ArrayBuffer from the image data
+    const buffer = new ArrayBuffer(imageData.data.length)
+    new Uint8Array(buffer).set(imageData.data)
 
-      // Execute the algorithm to check for compliance
-      const drawAlgorithm = new Function(
-        "ctx",
-        "seed",
-        `${preludeScript}\n${script}`,
-      )
+    const digest = await blake2b256Hasher.digest(new Uint8Array(buffer))
+    const imageHash = bytesToHex(digest.digest)
 
-      // Draw the algorithm first
-      drawAlgorithm(ctx, seed)
+    // Run all compliance rules
+    const ruleResults = await runAllComplianceRules(buffer)
 
-      // Get the raw pixel data directly from the original canvas
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    // Extract all issues from rule results
+    const issues: CheckMetadata[] = []
+    let isCompliant = true
 
-      // Create a proper ArrayBuffer from the data
-      const buffer = new ArrayBuffer(imageData.data.length)
-      new Uint8Array(buffer).set(imageData.data)
+    // Keep track of rule types with issues
+    const rulesWithIssues = new Set<string>()
 
-      const digest = await blake2b256Hasher.digest(new Uint8Array(buffer))
-      const imageHash = bytesToHex(digest.digest)
+    for (const result of ruleResults) {
+      if (result.status !== "pass" && result.metadata) {
+        issues.push(...result.metadata)
+        isCompliant = false
 
-      // Run all compliance rules
-      const ruleResults = await runAllComplianceRules(buffer)
-
-      // Extract all issues from rule results
-      const issues: CheckMetadata[] = []
-      let isCompliant = true
-
-      // Keep track of rule types with issues
-      const rulesWithIssues = new Set<string>()
-
-      for (const result of ruleResults) {
-        if (result.status !== "pass" && result.metadata) {
-          issues.push(...result.metadata)
-          isCompliant = false
-
-          // Record which rule type had issues
-          if (result.type) {
-            rulesWithIssues.add(result.type)
-          }
+        // Record which rule type had issues
+        if (result.type) {
+          rulesWithIssues.add(result.type)
         }
       }
+    }
 
-      // Create issue overlay if there are issues with location data
-      let issueOverlayImageData: ImageData | undefined = undefined
-      if (withOverlay) {
-        if (!overlaySize) {
-          reject(new Error("Overlay size is required"))
-          isProcessing = false
-          processQueue()
-          return
-        }
-        if (
-          !isCompliant &&
-          issues.length > 0 &&
-          issues.some((issue) => issue.location)
-        ) {
-          // Create a new canvas for the overlay with the target size
-          const overlayCanvas = new OffscreenCanvas(overlaySize, overlaySize)
-          const overlayCtx = overlayCanvas.getContext("2d")
+    // Create issue overlay if there are issues with location data
+    let issueOverlayImageData: ImageData | undefined = undefined
+    if (withOverlay) {
+      if (!overlaySize) {
+        reject(new Error("Overlay size is required"))
+        isProcessing = false
+        processQueue()
+        return
+      }
+      if (
+        !isCompliant &&
+        issues.length > 0 &&
+        issues.some((issue) => issue.location)
+      ) {
+        // Create a new canvas for the overlay with the target size
+        const overlayCanvas = new OffscreenCanvas(overlaySize, overlaySize)
+        const overlayCtx = overlayCanvas.getContext("2d")
 
-          if (overlayCtx) {
-            // Set up the context for drawing red rectangles
-            overlayCtx.fillStyle = "rgba(0, 0, 0, 0)" // Transparent background
-            overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height) // Clear the canvas
-            overlayCtx.strokeStyle = "rgba(255, 0, 0, 0.7)" // Red with some transparency
-            overlayCtx.lineWidth = 4
+        if (overlayCtx) {
+          // Set up the context for drawing red rectangles
+          overlayCtx.fillStyle = "rgba(0, 0, 0, 0)" // Transparent background
+          overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height) // Clear the canvas
+          overlayCtx.strokeStyle = "rgba(255, 0, 0, 0.7)" // Red with some transparency
+          overlayCtx.lineWidth = 4
 
-            // Calculate scaling factor from reference size to target size
-            const scaleFactor = overlayCanvas.width / COMPLIANCE_REFERENCE_SIZE
+          // Calculate scaling factor from reference size to target size
+          const scaleFactor = overlayCanvas.width / COMPLIANCE_REFERENCE_SIZE
 
-            // Add padding to make rectangles a bit bigger (in pixels)
-            const paddingPixels = 5
+          // Add padding to make rectangles a bit bigger (in pixels)
+          const paddingPixels = 5
 
-            // Draw each issue with location data
-            for (const issue of issues) {
-              if (issue.location) {
-                const { x, y, width, height } = issue.location
+          // Draw each issue with location data
+          for (const issue of issues) {
+            if (issue.location) {
+              const { x, y, width, height } = issue.location
 
-                // Scale the coordinates to the target size
-                const scaledX = x * scaleFactor
-                const scaledY = y * scaleFactor
-                const scaledWidth = width * scaleFactor
-                const scaledHeight = height * scaleFactor
+              // Scale the coordinates to the target size
+              const scaledX = x * scaleFactor
+              const scaledY = y * scaleFactor
+              const scaledWidth = width * scaleFactor
+              const scaledHeight = height * scaleFactor
 
-                // Apply padding to make the rectangle bigger
-                const paddedX = Math.max(0, scaledX - paddingPixels)
-                const paddedY = Math.max(0, scaledY - paddingPixels)
-                const paddedWidth = Math.min(
-                  overlaySize - paddedX,
-                  scaledWidth + paddingPixels * 2,
-                )
-                const paddedHeight = Math.min(
-                  overlaySize - paddedY,
-                  scaledHeight + paddingPixels * 2,
-                )
+              // Apply padding to make the rectangle bigger
+              const paddedX = Math.max(0, scaledX - paddingPixels)
+              const paddedY = Math.max(0, scaledY - paddingPixels)
+              const paddedWidth = Math.min(
+                overlaySize - paddedX,
+                scaledWidth + paddingPixels * 2,
+              )
+              const paddedHeight = Math.min(
+                overlaySize - paddedY,
+                scaledHeight + paddingPixels * 2,
+              )
 
-                // Draw the rectangle with padding
-                overlayCtx.strokeRect(
-                  paddedX,
-                  paddedY,
-                  paddedWidth,
-                  paddedHeight,
-                )
-              }
+              // Draw the rectangle with padding
+              overlayCtx.strokeRect(paddedX, paddedY, paddedWidth, paddedHeight)
             }
-
-            // Get the image data from the overlay canvas
-            issueOverlayImageData = overlayCtx.getImageData(
-              0,
-              0,
-              overlaySize,
-              overlaySize,
-            )
           }
+
+          // Get the image data from the overlay canvas
+          issueOverlayImageData = overlayCtx.getImageData(
+            0,
+            0,
+            overlaySize,
+            overlaySize,
+          )
         }
       }
+    }
 
-      return {
-        imageHash,
-        isCompliant,
-        issues,
-        issueOverlayImageData,
-        ruleTypesFailed: [...rulesWithIssues],
-      }
-    })()
-
-    const result = (await Promise.race([
-      checkPromise,
-      timeoutPromise,
-    ])) as ComplianceResult
+    const result: ComplianceResult = {
+      isCompliant,
+      imageHash,
+      issues,
+      issueOverlayImageData,
+      ruleTypesFailed: Array.from(rulesWithIssues),
+    }
 
     resolve(result)
   } catch (error) {

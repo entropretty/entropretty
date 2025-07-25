@@ -3,8 +3,9 @@
 // fails in this project
 
 declare module "prando" {
-    export default class Prando {
-        constructor(seed?: number | string)
+  export default class Prando {
+    constructor(seed?: number | string)
 
-        next(min?: number, max?: number): number
+    next(min?: number, max?: number): number
+  }
 }

@@ -22,67 +22,37 @@ export const BenchmarkResults = ({
     }
   }
 
-  const getSuccessPercentage = (result: BenchmarkResult) => {
-    return ((result.amount - result.failedTotal) / result.amount) * 100
-  }
-
   return (
     <div className="border p-4">
       <div className="mb-6 font-medium">Benchmark Results</div>
       <div className="space-y-6">
-        {/* Main Results */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {getSuccessPercentage(benchmarkResult).toFixed(1)}%
-            </div>
-            <div className="text-sm">Success Rate</div>
-          </div>
-
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {benchmarkResult.failedTotal}
-            </div>
-            <div className="text-sm">Failed Tests</div>
-          </div>
-
-          <div className="border p-4 text-center">
-            <div className="text-2xl font-bold">
-              {benchmarkResult.amount - benchmarkResult.failedTotal}
-            </div>
-            <div className="text-sm">Passed Tests</div>
-          </div>
-        </div>
-
-        {/* Failed Percentage */}
-        <div className="border-t pt-4">
+        {/* Test Results */}
+        <div className="space-y-1 text-sm">
           <div className="flex justify-between">
-            <span>Failed Percentage:</span>
-            <span className="font-medium">
-              {(
-                (benchmarkResult.failedTotal / benchmarkResult.amount) *
-                100
-              ).toFixed(2)}
-              %
+            <span>Total Tested:</span>
+            <span>{benchmarkResult.amount}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>0 Warnings:</span>
+            <span>{benchmarkResult.warningDistribution[0] || 0}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>At Least 1 Warning:</span>
+            <span>{benchmarkResult.failedTotal}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Total Warnings:</span>
+            <span>
+              {Object.entries(benchmarkResult.warningDistribution).reduce(
+                (total, [warnings, count]) =>
+                  total + parseInt(warnings) * count,
+                0,
+              )}
             </span>
           </div>
-        </div>
-
-        {/* Visual Success Rate Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm font-medium">
-            <span>Compliance Success Rate</span>
-            <span>{getSuccessPercentage(benchmarkResult).toFixed(1)}%</span>
-          </div>
-          <div className="h-3 w-full border">
-            <div
-              className="h-3 bg-black transition-all duration-500"
-              style={{ width: `${getSuccessPercentage(benchmarkResult)}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs">
-            <span>0%</span>
-            <span>100%</span>
+          <div className="flex justify-between">
+            <span>Collisions:</span>
+            <span>{benchmarkResult.collisionsTotal}</span>
           </div>
         </div>
 

@@ -1,43 +1,55 @@
-import { Remote, wrap, proxy } from "comlink"
-import ArtistWorker from "@/workers/artist?worker"
-import ComplianceWorker from "@/workers/compliance?worker"
-import type { ArtistWorker as ArtistWorkerType } from "@/workers/artist"
+import type { CollisionWorker as CollisionWorkerType } from "@/workers/collisions"
+import CollisionWorker from "@/workers/collisions?worker"
 import type { ComplianceWorker as ComplianceWorkerType } from "@/workers/compliance"
-import type { Seed } from "entropretty-utils"
+import ComplianceWorker from "@/workers/compliance?worker"
+import type { RenderWorker as RenderWorkerType } from "@/workers/render"
+import RenderWorker from "@/workers/render?worker"
+import { proxy, Remote, wrap } from "comlink"
+import type { FamilyKind, Seed } from "entropretty-utils"
 
 export class AlgorithmService {
-  private artistWorker: Remote<ArtistWorkerType>
   private complianceWorker: Remote<ComplianceWorkerType>
+  private renderWorker: Remote<RenderWorkerType>
+  private collisionWorker: Remote<CollisionWorkerType>
   private inventory: Set<number>
 
   constructor() {
-    const artistInstance = new ArtistWorker()
     const complianceInstance = new ComplianceWorker()
-
-    this.artistWorker = wrap<ArtistWorkerType>(artistInstance)
+    const renderInstance = new RenderWorker()
+    const collisionInstance = new CollisionWorker()
     this.complianceWorker = wrap<ComplianceWorkerType>(complianceInstance)
+    this.renderWorker = wrap<RenderWorkerType>(renderInstance)
+    this.collisionWorker = wrap<CollisionWorkerType>(collisionInstance)
     this.inventory = new Set<number>()
   }
 
-  async updateAlgorithm(algorithmId: number, algorithm: string) {
+  async updateAlgorithm(
+    algorithmId: number,
+    algorithm: string,
+    kind: FamilyKind,
+  ) {
     await Promise.all([
-      this.artistWorker.updateAlgorithm(algorithmId, algorithm),
-      this.complianceWorker.updateAlgorithm(algorithmId, algorithm),
+      this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
+      this.renderWorker.updateAlgorithm(algorithmId, algorithm, kind),
+      this.collisionWorker.updateAlgorithm(algorithmId, algorithm, kind),
     ])
     this.inventory.add(algorithmId)
   }
 
-  async addAlgorithm(algorithmId: number, algorithm: string) {
+  async addAlgorithm(algorithmId: number, algorithm: string, kind: FamilyKind) {
     if (this.inventory.has(algorithmId)) return
     await Promise.all([
-      this.artistWorker.updateAlgorithm(algorithmId, algorithm),
-      this.complianceWorker.updateAlgorithm(algorithmId, algorithm),
+      this.complianceWorker.updateAlgorithm(algorithmId, algorithm, kind),
+      this.renderWorker.updateAlgorithm(algorithmId, algorithm, kind),
+      this.collisionWorker.updateAlgorithm(algorithmId, algorithm, kind),
     ])
     this.inventory.add(algorithmId)
   }
 
   async render(algorithmId: number, size: number, seed: Seed) {
-    return this.artistWorker.render(algorithmId, size, seed)
+    return this.renderWorker.render(algorithmId, size, [
+      ...seed,
+    ]) as Promise<ImageBitmap>
   }
 
   async checkCompliance(algorithmId: number, size: number, seed: Seed) {
@@ -57,11 +69,24 @@ export class AlgorithmService {
     return this.complianceWorker.benchmark(algorithmId, size, amount)
   }
 
+  async checkCollisions(
+    algorithmId: number,
+    amount: number,
+    options?: { signal?: AbortSignal },
+  ) {
+    return this.collisionWorker.checkCollisions(algorithmId, amount, options)
+  }
+
   cancelRender(algorithmId: number, size: number, seed: Seed) {
-    this.artistWorker.cancelRender(algorithmId, size, seed)
+    // console.log("cancelRender", algorithmId, size, seed)
+    this.renderWorker.cancelPending()
   }
 
   cancelComplianceCheck(algorithmId: number, size: number, seed: Seed) {
     this.complianceWorker.cancelCheck(algorithmId, size, seed)
+  }
+
+  cancelCollisionCheck() {
+    this.collisionWorker.cancelCheck()
   }
 }

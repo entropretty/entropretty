@@ -28,21 +28,20 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
         className="absolute bottom-0 left-0 z-10"
       />
 
-      <Link to={`/a/${algorithm.id}`} className="w-full">
-        <div className="relative flex items-center gap-4">
-          <div>
-            <AlgorithmBitmap
-              key={seedToKey(seed)}
-              algorithmId={algorithm.id}
-              seed={seed}
-              size={68}
-              scale={2}
-            />
-          </div>
-
-          <AlgorithmInfo algorithm={algorithm} />
+      <div className="relative flex items-center gap-4">
+        <div>
+          <AlgorithmBitmap
+            key={seedToKey(seed)}
+            algorithmId={algorithm.id}
+            seed={seed}
+            size={68}
+            scale={2}
+          />
         </div>
-      </Link>
+
+        <AlgorithmInfo algorithm={algorithm} />
+      </div>
+
       <div className="flex items-center gap-2">
         {user && (
           <Button asChild variant="link">

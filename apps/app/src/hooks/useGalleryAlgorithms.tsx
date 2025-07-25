@@ -31,7 +31,11 @@ export function useGalleryAlgorithms() {
 
       if (data) {
         for (const algorithm of data) {
-          algorithmService.addAlgorithm(algorithm.id!, algorithm.content!)
+          algorithmService.addAlgorithm(
+            algorithm.id!,
+            algorithm.content!,
+            algorithm.family_kind!,
+          )
         }
       }
 
