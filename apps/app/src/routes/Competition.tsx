@@ -6,6 +6,8 @@ import { NewDialog } from "../components/NewDialog"
 import { useTheme } from "../contexts/theme-context"
 import { useAuth } from "../contexts/auth-context"
 import { cn } from "../lib/utils"
+import { XIcon } from "../components/icons/XIcon"
+import { DiscordIcon } from "../components/icons/DiscordIcon"
 
 export default function Competition() {
   const { theme } = useTheme()
@@ -106,6 +108,26 @@ export default function Competition() {
                   <Link to="/signup">Join competition</Link>
                 </Button>
               )}
+            </div>
+
+            {/* Social Media Links */}
+            <div className="flex items-center justify-center gap-2 pt-4">
+              <Button asChild variant={"link"} className="h-5 w-5">
+                <Link to="https://x.com/entropretty" target="_blank">
+                  <XIcon />
+                </Link>
+              </Button>
+              <Button asChild variant={"link"} className="h-5 w-5">
+                <Link
+                  to="https://discord.com/invite/x73PxY95BZ"
+                  target="_blank"
+                >
+                  <DiscordIcon />
+                </Link>
+              </Button>
+              <span className="text-muted-foreground -ml-1 hidden text-xs md:inline">
+                #entropretty-compo-2025
+              </span>
             </div>
           </div>
         </div>
