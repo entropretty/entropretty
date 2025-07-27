@@ -22,8 +22,23 @@ export default function CurrentCompetition() {
           </p>
         )}
         <p>
-          <strong>Submission Process:</strong> Submit to Assembly&apos;s
-          Partyman system (link will be provided)
+          <strong>Submission Process:</strong> Submit a link and screenshot of
+          your published work in the Entropretty app to Assembly&apos;s Partyman
+          system at{" "}
+          <a
+            href="https://scene.assembly.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
+            https://scene.assembly.org
+          </a>
+        </p>
+        <p className="text-sm text-gray-600">
+          <strong>Example Link:</strong>{" "}
+          <code className="rounded bg-gray-100 px-1 text-xs">
+            https://app.entropretty.com/a/21
+          </code>
         </p>
       </div>
 
