@@ -85,6 +85,23 @@ export default function Competition() {
             </a>
 
             <Countdown targetDate={submissionDeadline} className="mt-6" />
+
+            <div className="mt-4 text-center">
+              <p className="text-muted-foreground mb-2 text-xs uppercase tracking-wide">
+                Submit THE LINK TO YOUR ENTRY TO
+              </p>
+              <p className="text-foreground text-sm font-medium">
+                <a
+                  href="https://scene.assembly.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:no-underline"
+                >
+                  scene.assembly.org
+                </a>
+              </p>
+            </div>
+
             <div className="flex justify-center gap-3 pt-2">
               {user ? (
                 // Show buttons for logged in users
