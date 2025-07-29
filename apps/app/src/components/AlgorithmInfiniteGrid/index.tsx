@@ -10,6 +10,7 @@ import { LikeButton } from "../AlgorithmCard/LikeButton"
 import { AlgorithmInfo } from "../AlgorithmInfo"
 import { FamilyKindBadge } from "../FamilyKindBadge"
 import { useDisplaySizes } from "@/hooks/useDisplaySizes"
+import { AutoScrollButton } from "../AutoScrollButton"
 interface AlgorithmInfiniteGridProps {
   algorithm: AlgorithmView
   className?: string
@@ -106,17 +107,17 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
 
   return (
     <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-auto">
+      <AutoScrollButton />
+      <Button asChild variant="link">
+        <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
+      </Button>
       {user && (
         <Button asChild variant="link">
           <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
         </Button>
       )}
 
-      <Button asChild variant="link">
-        <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
-      </Button>
-
-      <LikeButton algorithm={algorithm} />
+      {user && <LikeButton algorithm={algorithm} />}
     </div>
   )
 }
