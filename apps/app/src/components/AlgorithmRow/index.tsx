@@ -43,6 +43,9 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
       </div>
 
       <div className="flex items-center gap-2">
+        <Button asChild variant="link">
+          <Link to={`/a/${algorithm.id}`}>{`VIEW`}</Link>
+        </Button>
         {user && (
           <Button asChild variant="link">
             <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
