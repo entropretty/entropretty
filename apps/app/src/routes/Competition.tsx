@@ -22,7 +22,7 @@ export default function Competition() {
     <div className="relative flex h-full w-full items-center justify-center">
       <AnimatedPathText
         path={rectPath}
-        svgClassName="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-2 sm:py-8"
+        svgClassName="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-2 sm:py-8"
         viewBox="-20 10 240 180"
         text="COMPETITION IN PROGRESS — COMPETITION IN PROGRESS — COMPETITION IN PROGRESS — COMPETITION IN PROGRESS — COMPETITION IN PROGRESS —"
         textClassName="text-[12.71px] font-jersey text-foreground"
@@ -86,7 +86,7 @@ export default function Competition() {
 
             <Countdown targetDate={submissionDeadline} className="mt-6" />
 
-            <div className="mt-4 text-center">
+            <div className="mt-4 hidden text-center md:block">
               <p className="text-muted-foreground mb-2 text-xs uppercase tracking-wide">
                 Submit THE LINK TO YOUR ENTRY TO
               </p>
