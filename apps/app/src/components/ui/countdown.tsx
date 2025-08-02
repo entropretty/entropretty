@@ -55,8 +55,8 @@ export function Countdown({ targetDate, className }: CountdownProps) {
   if (isExpired) {
     return (
       <div className={cn("text-center", className)}>
-        <p className="text-muted-foreground text-sm font-medium">
-          Submission deadline has passed
+        <p className="text-destructive text-xl font-medium uppercase">
+          Entries are closed
         </p>
       </div>
     )
