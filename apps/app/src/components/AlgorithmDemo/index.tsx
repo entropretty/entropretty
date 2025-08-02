@@ -5,23 +5,31 @@ import { deriveSeedFamily, getSeed, seedToKey } from "entropretty-utils"
 import { AnimatePresence, motion } from "motion/react"
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router"
+import { cn } from "../../lib/utils"
 
 interface Props {
   algorithm: AlgorithmView
   className?: string
+  info?: boolean
+  startDelay?: number // delay in milliseconds before starting the cycling
 }
 
-export function AlgorithmDemo({ algorithm, className = "" }: Props) {
+export function AlgorithmDemo({
+  algorithm,
+  className = "",
+  startDelay = 0,
+}: Props) {
   const [seeds, setSeeds] = useState<number[][]>([])
   const [index, setIndex] = useState(0)
+  const [shouldStartCycling, setShouldStartCycling] = useState(false)
 
   const { demo } = useDisplaySizes()
 
   const loadMore = useCallback(() => {
     if (seeds.length === 0) return
 
-    const lastSeed = new Uint8Array(seeds[seeds.length - 1])
-    const newFamily = deriveSeedFamily(lastSeed, {
+    const newSeed = getSeed(algorithm.family_kind!)
+    const newFamily = deriveSeedFamily(newSeed, {
       size: 24,
       minBits: 1,
       maxBits: 1,
@@ -34,22 +42,39 @@ export function AlgorithmDemo({ algorithm, className = "" }: Props) {
     )
 
     setSeeds((prev) => [...prev, ...uniqueNewSeeds.map((s) => [...s])])
-  }, [seeds])
+  }, [algorithm.family_kind, seeds])
 
+  // Handle start delay
   useEffect(() => {
+    if (startDelay === 0) {
+      setShouldStartCycling(true)
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      setShouldStartCycling(true)
+    }, startDelay)
+
+    return () => clearTimeout(timeout)
+  }, [startDelay])
+
+  // Handle cycling through seeds
+  useEffect(() => {
+    if (!shouldStartCycling || seeds.length === 0) return
+
     const interval = setInterval(() => {
       if (index + 1 === seeds.length) {
         loadMore()
       }
       setIndex((prev) => (prev + 1) % seeds.length)
-    }, 2000)
+    }, 1800)
     return () => clearInterval(interval)
-  }, [index, loadMore, seeds])
+  }, [index, loadMore, seeds, shouldStartCycling])
 
   useEffect(() => {
     const initial = getSeed(algorithm.family_kind!)
     const family = deriveSeedFamily(initial, {
-      size: 48,
+      size: 3,
       minBits: 1,
       maxBits: 1,
     })
@@ -72,15 +97,23 @@ export function AlgorithmDemo({ algorithm, className = "" }: Props) {
     <div
       className={`flex flex-col items-center justify-center bg-white p-10 ${className}`}
     >
-      <div className="flex w-full flex-col items-center justify-center border border-b-0">
+      <div className={cn("flex w-full flex-col items-center justify-center")}>
         <div className="relative aspect-square h-[70vh] overflow-hidden">
           <AnimatePresence mode="sync">
             <motion.div
               key={seedToKey(seeds[index])}
-              initial={{ opacity: 0, scale: 1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1 }}
-              transition={{ duration: 0.5, ease: "circInOut" }}
+              initial={{
+                opacity: 0.0,
+                // scale: 0.95,
+                filter: "blur(2px)",
+              }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              exit={{
+                opacity: 0.0,
+                // scale: 1.05,
+                filter: "blur(2px)",
+              }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
               className="absolute inset-0 flex items-center justify-center p-8"
             >
               <AlgorithmBitmap
@@ -98,13 +131,6 @@ export function AlgorithmDemo({ algorithm, className = "" }: Props) {
             </motion.div>
           </AnimatePresence>
         </div>
-      </div>
-      <div className="border-background-200 relative flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
-        {/* <FamilyKindBadge
-          familyKind={algorithm.family_kind}
-          className="absolute left-0 top-[-30px] z-10 text-xl"
-        /> */}
-        <AlgorithmInfo algorithm={algorithm} />
       </div>
     </div>
   )
