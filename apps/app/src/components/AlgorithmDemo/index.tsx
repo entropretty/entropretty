@@ -30,7 +30,7 @@ export function AlgorithmDemo({
 
     const newSeed = getSeed(algorithm.family_kind!)
     const newFamily = deriveSeedFamily(newSeed, {
-      size: 24,
+      size: 3,
       minBits: 1,
       maxBits: 1,
     })
