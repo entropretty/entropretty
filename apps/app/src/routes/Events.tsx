@@ -62,7 +62,7 @@ export default function EventsPage() {
                     className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    Official Website
+                    Event Website
                     <svg
                       className="h-3 w-3"
                       fill="none"

@@ -125,9 +125,9 @@ export function EventGallery({
               href={website}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              Visit Official Website
+              Event Website
               <svg
                 className="h-4 w-4"
                 fill="none"
