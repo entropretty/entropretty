@@ -75,24 +75,32 @@ export const AlgorithmCompliance: React.FC<Props> = ({
   }, [colorCountIssue, colorIslandIssues])
 
   useEffect(() => {
-    service.cancelComplianceCheck(algorithmId, drawingSize, [...seed])
+    const abortController = new AbortController()
     service
-      .checkCompliance(algorithmId, drawingSize, [...seed])
+      .checkCompliance(algorithmId, drawingSize, [...seed], {
+        signal: abortController.signal,
+      })
       .then((result) => {
-        // Always set issues, even if there's no overlay image data
-        setIssues(result.issues as ExtendedCheckMetadata[])
-
-        if (result.issueOverlayImageData) {
-          setOverlayImageData(result.issueOverlayImageData)
+        if (result) {
+          setIssues(result.issues as ExtendedCheckMetadata[])
+          if (result.issueOverlayImageData) {
+            setOverlayImageData(result.issueOverlayImageData)
+          } else {
+            setOverlayImageData(null)
+          }
         } else {
+          setIssues([])
           setOverlayImageData(null)
         }
       })
       .catch((error) => {
         console.error(error)
-        setOverlayImageData(null)
         setIssues([])
+        setOverlayImageData(null)
       })
+    return () => {
+      abortController.abort()
+    }
   }, [seed, algorithmId, size, service, version, scale, drawingSize])
 
   // Draw overlay on canvas when overlayImageData changes

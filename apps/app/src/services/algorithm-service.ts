@@ -4,12 +4,12 @@ import type { RenderWorker as RenderWorkerType } from "@/workers/render"
 import RenderWorker from "@/workers/render?worker"
 import { proxy, Remote, wrap } from "comlink"
 import type { FamilyKind, Seed } from "entropretty-utils"
-
+import PQueue from "p-queue"
 export class AlgorithmService {
   private complianceWorker: Remote<ComplianceWorkerType>
   private renderWorker: Remote<RenderWorkerType>
-
   private inventory: Set<number>
+  private queue = new PQueue()
 
   constructor() {
     const complianceInstance = new ComplianceWorker()
@@ -50,11 +50,59 @@ export class AlgorithmService {
     ]) as Promise<ImageBitmap>
   }
 
-  async checkCompliance(algorithmId: number, size: number, seed: Seed) {
-    return this.complianceWorker.checkCompliance(algorithmId, seed, {
-      withOverlay: true,
-      overlaySize: size,
-    })
+  async renderWithQueue(
+    algorithmId: number,
+    size: number,
+    seed: Seed,
+    { signal }: { signal: AbortSignal },
+  ) {
+    return this.queue
+      .add(
+        () => {
+          return this.renderWorker.renderBitmap(algorithmId, size, [
+            ...seed,
+          ]) as Promise<ImageBitmap>
+        },
+        {
+          priority: 100,
+          signal,
+        },
+      )
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          return null
+        }
+
+        throw error
+      })
+  }
+
+  async checkCompliance(
+    algorithmId: number,
+    size: number,
+    seed: Seed,
+    { signal }: { signal: AbortSignal },
+  ) {
+    return this.queue
+      .add(
+        () => {
+          return this.complianceWorker.checkCompliance(algorithmId, seed, {
+            withOverlay: true,
+            overlaySize: size,
+          })
+        },
+        {
+          priority: 0,
+          signal,
+        },
+      )
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          return null
+        }
+
+        throw error
+      })
   }
 
   async benchmark(
@@ -76,5 +124,6 @@ export class AlgorithmService {
 
   cancelComplianceCheck(algorithmId: number, size: number, seed: Seed) {
     this.complianceWorker.cancelCheck(algorithmId, size, seed)
+    // this.complianceWorker.cancelAllChecks()
   }
 }

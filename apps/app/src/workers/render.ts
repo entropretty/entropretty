@@ -13,6 +13,11 @@ const api = {
     return transfer(image, [image]) // zero-copy back to main thread
   },
 
+  async renderBitmap(id: number, size: number, seed: number[]) {
+    const image = await core.renderBitmap(id, size, seed)
+    return transfer(image, [image]) // zero-copy back to main thread
+  },
+
   async testRender(id: number) {
     return core.testRender(id)
   },

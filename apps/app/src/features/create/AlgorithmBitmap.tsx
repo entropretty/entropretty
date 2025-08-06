@@ -51,14 +51,27 @@ export const AlgorithmBitmap: React.FC<Props> = ({
     if (canvasRef.current === null) return
 
     setIsReady(false)
-    // TODO this does not work anymore
-    // service.cancelRender(algorithmId, drawingSize, [...seed])
-    service.render(algorithmId, drawingSize, [...seed]).then((bitmap) => {
-      const context = canvasRef.current!.getContext("2d")!
-      context.clearRect(0, 0, drawingSize, drawingSize)
-      context.drawImage(bitmap, 0, 0, drawingSize, drawingSize)
-      setIsReady(true)
-    })
+
+    const abortController = new AbortController()
+    service
+      .renderWithQueue(algorithmId, drawingSize, [...seed], {
+        signal: abortController.signal,
+      })
+      .then((bitmap) => {
+        if (!bitmap) return
+        const context = canvasRef.current!.getContext("2d")!
+        context.clearRect(0, 0, drawingSize, drawingSize)
+        context.drawImage(bitmap, 0, 0, drawingSize, drawingSize)
+        setIsReady(true)
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          console.log("abort error")
+        }
+      })
+    return () => {
+      abortController.abort()
+    }
   }, [seed, algorithmId, size, drawingSize, service, version])
 
   return (
