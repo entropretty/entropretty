@@ -13,6 +13,8 @@ import NewPage from "@/routes/New"
 import Profile from "@/routes/Profile.tsx"
 import SignUp from "@/routes/SignUp.tsx"
 import UserPage from "@/routes/User.tsx"
+import EventPage from "@/routes/Event.tsx"
+import EventsPage from "@/routes/Events.tsx"
 import { Suspense, lazy } from "react"
 import { HelmetProvider } from "react-helmet-async"
 
@@ -68,6 +70,9 @@ createRoot(document.getElementById("root")!).render(
 
                   <Route path="/a/:algorithmId" element={<AlgorithmPage />} />
                   <Route path="/u/:username" element={<UserPage />} />
+                  <Route path="/events" element={<EventsPage />} />
+                  <Route path="/event/:eventId" element={<EventPage />} />
+
                   <Route element={<RequireUser />}>
                     <Route path="/mine" element={<MinePage />} />
                     <Route path="/profile" element={<Profile />} />
