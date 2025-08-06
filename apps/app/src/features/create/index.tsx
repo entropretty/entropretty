@@ -6,10 +6,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAtom } from "jotai"
 import { Suspense, lazy } from "react"
+import { useNavigationProtection } from "@/hooks/useNavigationProtection"
 import { FamilyKindBadge } from "../../components/FamilyKindBadge"
 import { AlgorithmNameInput } from "./AlgorithmNameInput"
 import { AlgorithmPreview } from "./AlgorithmPreview"
-import { editorSeedTypeAtom, scriptErrorAtom } from "./atoms"
+import {
+  editorSeedTypeAtom,
+  scriptErrorAtom,
+  editorCodeAtom,
+  algorithmNameAtom,
+} from "./atoms"
+import initialCode from "./initialCode"
 import { Benchmarking } from "./Benchmarking"
 import { PostButton } from "./PostButton"
 import { SeedTools } from "./SeedTools"
@@ -21,6 +28,16 @@ const MonacoEditor = lazy(() => import("./MonacoEditor"))
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
+  const [editorCode] = useAtom(editorCodeAtom)
+  const [algorithmName] = useAtom(algorithmNameAtom)
+
+  // Only protect when user has made changes
+  const hasChanges = editorCode !== initialCode || algorithmName.trim() !== ""
+
+  // Protect against accidental navigation
+  useNavigationProtection({
+    when: hasChanges,
+  })
 
   return (
     <>
