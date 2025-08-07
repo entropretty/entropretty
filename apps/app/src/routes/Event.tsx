@@ -193,7 +193,7 @@ export const eventConfig = {
   "revision-2025": {
     title: "Revision 2025",
     // Query dates for algorithm filtering (extended period)
-    queryStartDate: "2025-02-04T00:00:00Z",
+    queryStartDate: "2025-02-24T00:00:00Z",
     queryEndDate: "2025-04-21T23:59:59Z",
     // Actual event dates for display
     eventStartDate: "2025-04-18T00:00:00Z",
