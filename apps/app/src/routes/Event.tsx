@@ -148,7 +148,7 @@ export function EventGallery({
 
       <div className={`relative flex w-full flex-col`}>
         <div className="h-full w-full p-4">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-4 sm:gap-10">
+          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-2">
             {displayedIds.map((id, index) => (
               <GalleryAlgorithm key={`${id}-${index}`} algorithmId={id} />
             ))}
@@ -171,9 +171,12 @@ export function EventGallery({
 const GalleryAlgorithm = ({ algorithmId }: { algorithmId: number }) => {
   const { data: algorithm, isLoading } = useAlgorithm(algorithmId)
   const { infinite } = useDisplaySizes()
-  const seed = useMemo(() => {
+  const seeds = useMemo(() => {
     if (!algorithm) return []
-    return getSeed(algorithm.family_kind!)
+    const family = Array.from({ length: 4 }, () =>
+      getSeed(algorithm.family_kind!),
+    )
+    return family as number[][]
   }, [algorithm])
 
   if (isLoading) {
@@ -181,19 +184,26 @@ const GalleryAlgorithm = ({ algorithmId }: { algorithmId: number }) => {
   }
 
   return (
-    <Link to={`/a/${algorithmId}`} className="group relative">
-      <AlgorithmBitmap
-        key={seedToKey(seed)}
-        algorithmId={algorithmId}
-        seed={seed as number[]}
-        size={infinite * 1.5}
-        scale={2}
-      />
-      <div className="bg-background/80 border-background-200 absolute bottom-0 left-0 right-16 flex h-full w-full items-center justify-center gap-2 border p-4 pb-8 text-xs text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pb-4 sm:text-sm">
-        {`${algorithm?.name}`}
-        <br /> {`by ${algorithm?.username}`}
-      </div>
-    </Link>
+    <>
+      {seeds.map((seed) => (
+        <Link
+          to={`/a/${algorithmId}`}
+          className="group relative group-hover:border"
+        >
+          <AlgorithmBitmap
+            key={seedToKey(seed)}
+            algorithmId={algorithmId}
+            seed={seed as number[]}
+            size={infinite}
+            scale={2}
+          />
+          <div className="absolute bottom-[-16px] left-0 right-16 z-50 flex w-full items-center justify-center gap-2 border bg-white px-3 py-2 text-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {`${algorithm?.name}`}
+            <br /> {`by ${algorithm?.username}`}
+          </div>
+        </Link>
+      ))}
+    </>
   )
 }
 
