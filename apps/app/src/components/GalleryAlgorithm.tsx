@@ -32,25 +32,22 @@ export const GalleryAlgorithm = ({
   }
 
   return (
-    <>
-      {seeds.map((seed) => (
-        <Link
-          key={seedToKey(seed)}
-          to={`/a/${algorithmId}`}
-          className="group relative group-hover:border"
-        >
+    <Link to={`/a/${algorithmId}`} className="group relative">
+      <div className="hover:border-border group relative grid grid-cols-2 gap-4 border border-transparent p-4 group-hover:border">
+        {seeds.map((seed) => (
           <AlgorithmBitmap
+            key={seedToKey(seed)}
             algorithmId={algorithmId}
             seed={seed as number[]}
             size={infinite}
             scale={2}
           />
-          <div className="absolute bottom-[-16px] left-0 right-16 z-50 flex w-full items-center justify-center gap-2 border bg-white px-3 py-2 text-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            {`${algorithm?.name}`}
-            <br /> {`by ${algorithm?.username}`}
-          </div>
-        </Link>
-      ))}
-    </>
+        ))}
+      </div>
+      <div className="bottom bg-background text-foreground absolute bottom-0 left-0 right-16 z-50 flex w-full items-center gap-2 border px-3 py-2 text-xs opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        {`${algorithm?.name}`}
+        <br /> {`by ${algorithm?.username}`}
+      </div>
+    </Link>
   )
 }
