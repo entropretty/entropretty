@@ -1,12 +1,8 @@
 import { EntroprettyLogo } from "@/components/EntroprettyLogo"
-import { getSeed, seedToKey } from "entropretty-utils"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { GalleryAlgorithm } from "@/components/GalleryAlgorithm"
+import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link } from "react-router"
-import { Skeleton } from "../components/ui/skeleton"
-import { AlgorithmBitmap } from "../features/create/AlgorithmBitmap"
-import { useAlgorithm } from "../hooks/useAlgorithm"
-import { useDisplaySizes } from "../hooks/useDisplaySizes"
 import { useQueryAlgorithmIds } from "../hooks/useQueryAlgorithmIds"
 
 export function ExploreGallery() {
@@ -53,9 +49,9 @@ export function ExploreGallery() {
     <div className="relative flex flex-col">
       <div className={`relative flex w-full flex-col`}>
         <div className="h-full w-full p-4">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-4 sm:gap-10">
-            {algorithmIds.map((id) => (
-              <GalleryAlgorithm algorithmId={id} />
+          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-2">
+            {algorithmIds.map((id, index) => (
+              <GalleryAlgorithm key={`${id}-${index}`} algorithmId={id} />
             ))}
             {/* Loading trigger */}
             <div ref={ref} className="h-4 w-full" />
@@ -68,35 +64,6 @@ export function ExploreGallery() {
         </Link>
       </div>
     </div>
-  )
-}
-
-const GalleryAlgorithm = ({ algorithmId }: { algorithmId: number }) => {
-  const { data: algorithm, isLoading } = useAlgorithm(algorithmId)
-  const { infinite } = useDisplaySizes()
-  const seed = useMemo(() => {
-    if (!algorithm) return []
-    return getSeed(algorithm.family_kind!)
-  }, [algorithm])
-
-  if (isLoading) {
-    return <Skeleton className="h-full w-full" />
-  }
-
-  return (
-    <Link to={`/a/${algorithmId}`} className="group relative">
-      <AlgorithmBitmap
-        key={seedToKey(seed)}
-        algorithmId={algorithmId}
-        seed={seed as number[]}
-        size={infinite * 1.5}
-        scale={2}
-      />
-      <div className="bg-background/80 border-background-200 absolute bottom-0 left-0 right-16 flex h-full w-full items-center justify-center gap-2 border p-4 pb-8 text-xs text-gray-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:pb-4 sm:text-sm">
-        {`${algorithm?.name}`}
-        <br /> {`by ${algorithm?.username}`}
-      </div>
-    </Link>
   )
 }
 
