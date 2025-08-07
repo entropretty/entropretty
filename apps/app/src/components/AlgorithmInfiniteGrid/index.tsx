@@ -1,19 +1,34 @@
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
 import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
+import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AlgorithmView } from "@/lib/helper.types"
-import { deriveSeedFamily, getSeed, seedToKey } from "entropretty-utils"
+import {
+  deriveSeedFamily,
+  FamilyKind,
+  getSeed,
+  seedToKey,
+} from "entropretty-utils"
 import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link } from "react-router"
 import { LikeButton } from "../AlgorithmCard/LikeButton"
 import { AlgorithmInfo } from "../AlgorithmInfo"
-import { FamilyKindBadge } from "../FamilyKindBadge"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AutoScrollButton } from "../AutoScrollButton"
+import { FamilyKindBadge } from "../FamilyKindBadge"
 interface AlgorithmInfiniteGridProps {
   algorithm: AlgorithmView
   className?: string
+}
+
+const getSeedFamily = (kind: FamilyKind, amount: number) => {
+  const initial = getSeed(kind)
+  const family = deriveSeedFamily(initial, {
+    size: amount,
+    minBits: 1,
+    maxBits: 1,
+  })
+  return family as number[][]
 }
 
 export function AlgorithmInfiniteGrid({
@@ -29,41 +44,23 @@ export function AlgorithmInfiniteGrid({
   const { infinite } = useDisplaySizes()
 
   useEffect(() => {
-    const initial = getSeed(algorithm.family_kind!)
-    const family = deriveSeedFamily(initial, {
-      size: 48,
-      minBits: 1,
-      maxBits: 1,
-    })
-
-    // Convert to array of unique seeds
-    const uniqueSeeds = Array.from(
-      new Set(family.map((seed) => seedToKey(seed))),
+    const families = Array.from({ length: 8 }, () =>
+      getSeedFamily(algorithm.family_kind!, 8),
     )
-      .map((key) => family.find((seed) => seedToKey(seed) === key)!)
-      .map((s) => [...s])
-
-    setSeeds(uniqueSeeds)
+    const combinedFamily = families.reduce((acc, curr) => acc.concat(curr), [])
+    setSeeds(combinedFamily)
   }, [algorithm.family_kind])
 
   const loadMore = useCallback(() => {
     if (seeds.length === 0) return
 
-    const lastSeed = new Uint8Array(seeds[seeds.length - 1])
-    const newFamily = deriveSeedFamily(lastSeed, {
-      size: 24,
-      minBits: 1,
-      maxBits: 1,
-    })
-
-    // Filter out any duplicates by converting to string for comparison
-    const existingKeys = new Set(seeds.map((seed) => seedToKey(seed)))
-    const uniqueNewSeeds = newFamily.filter(
-      (seed) => !existingKeys.has(seedToKey([...seed])),
+    const families = Array.from({ length: 3 }, () =>
+      getSeedFamily(algorithm.family_kind!, 8),
     )
+    const combinedFamily = families.reduce((acc, curr) => acc.concat(curr), [])
 
-    setSeeds((prev) => [...prev, ...uniqueNewSeeds.map((s) => [...s])])
-  }, [seeds])
+    setSeeds((prev) => [...prev, ...combinedFamily.map((s) => [...s])])
+  }, [algorithm.family_kind, seeds.length])
 
   useEffect(() => {
     if (inView) {
