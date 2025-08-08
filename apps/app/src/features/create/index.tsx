@@ -1,3 +1,4 @@
+import { FeedbackDialog } from "@/components/FeedbackDialog"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -6,37 +7,25 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAtom } from "jotai"
 import { Suspense, lazy } from "react"
-import { useNavigationProtection } from "@/hooks/useNavigationProtection"
+import { unstable_usePrompt } from "react-router"
 import { FamilyKindBadge } from "../../components/FamilyKindBadge"
 import { AlgorithmNameInput } from "./AlgorithmNameInput"
 import { AlgorithmPreview } from "./AlgorithmPreview"
-import {
-  editorSeedTypeAtom,
-  scriptErrorAtom,
-  editorCodeAtom,
-  algorithmNameAtom,
-} from "./atoms"
-import initialCode from "./initialCode"
+import { editorSeedTypeAtom, scriptErrorAtom } from "./atoms"
 import { Benchmarking } from "./Benchmarking"
 import { PostButton } from "./PostButton"
-import { SeedTools } from "./SeedTools"
-import { FeedbackDialog } from "@/components/FeedbackDialog"
 import { RerollBadge } from "./RerollBadge"
+import { SeedTools } from "./SeedTools"
 
 const MonacoEditor = lazy(() => import("./MonacoEditor"))
 
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
-  const [editorCode] = useAtom(editorCodeAtom)
-  const [algorithmName] = useAtom(algorithmNameAtom)
 
-  // Only protect when user has made changes
-  const hasChanges = editorCode !== initialCode || algorithmName.trim() !== ""
-
-  // Protect against accidental navigation
-  useNavigationProtection({
-    when: hasChanges,
+  unstable_usePrompt({
+    message: "Your code will be lost if you leaves this page.",
+    when: true,
   })
 
   return (

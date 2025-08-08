@@ -20,6 +20,7 @@ import { HelmetProvider } from "react-helmet-async"
 
 import ScrollToTop from "@/components/ScrollToTop"
 import { Toaster } from "@/components/ui/sonner"
+import { Outlet } from "react-router"
 import RequireUser from "@/layouts/RequireUser"
 import RequireUsername from "@/layouts/RequireUsername"
 import { FEATURES } from "@/lib/features"
@@ -27,9 +28,20 @@ import AlgorithmPage from "@/routes/Algorithm"
 import HotPage from "@/routes/Hot"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createRoot } from "react-dom/client"
-import { BrowserRouter, Navigate, Route, Routes } from "react-router"
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router"
 
 const Create = lazy(() => import("@/routes/Create"))
+
+// Root layout component that includes global UI elements
+function RootLayout() {
+  return (
+    <>
+      <Toaster />
+      <ScrollToTop />
+      <Outlet />
+    </>
+  )
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,62 +52,115 @@ const queryClient = new QueryClient({
   },
 })
 
+// Create the router configuration
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        path: "demo/:algorithmId",
+        element: <DemoPage />,
+      },
+      {
+        path: "/",
+        element: <HeaderLayout />,
+        children: [
+          // Conditional routes based on competition feature
+          ...(FEATURES.isCompetition
+            ? [
+                {
+                  index: true,
+                  element: <CompetitionPage />,
+                },
+              ]
+            : [
+                {
+                  index: true,
+                  element: <NewPage />,
+                },
+                {
+                  path: "new",
+                  element: <NewPage />,
+                },
+                {
+                  path: "hot",
+                  element: <HotPage />,
+                },
+                {
+                  path: "explore",
+                  element: <ExplorePage />,
+                },
+              ]),
+          {
+            path: "a/:algorithmId",
+            element: <AlgorithmPage />,
+          },
+          {
+            path: "u/:username",
+            element: <UserPage />,
+          },
+          {
+            path: "events",
+            element: <EventsPage />,
+          },
+          {
+            path: "event/:eventId",
+            element: <EventPage />,
+          },
+          {
+            element: <RequireUser />,
+            children: [
+              {
+                path: "mine",
+                element: <MinePage />,
+              },
+              {
+                path: "profile",
+                element: <Profile />,
+              },
+              {
+                element: <RequireUsername />,
+                children: [
+                  {
+                    path: "create",
+                    element: (
+                      <Suspense
+                        fallback={<div className="p-8">Loading...</div>}
+                      >
+                        <Create />
+                      </Suspense>
+                    ),
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
+      },
+      {
+        path: "*",
+        element: <Navigate to="/" replace />,
+      },
+    ],
+  },
+])
+
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <ServiceProvider>
           <AuthProvider>
-            <BrowserRouter>
-              <Toaster />
-              <ScrollToTop />
-              <Routes>
-                <Route path="/demo/:algorithmId" element={<DemoPage />} />
-
-                <Route element={<HeaderLayout />}>
-                  {FEATURES.isCompetition && (
-                    <>
-                      <Route path="/" element={<CompetitionPage />} />
-                    </>
-                  )}
-
-                  {!FEATURES.isCompetition && (
-                    <>
-                      <Route path="/" element={<NewPage />} />
-                      <Route path="/new" element={<NewPage />} />
-                      <Route path="/hot" element={<HotPage />} />
-                      <Route path="/explore" element={<ExplorePage />} />
-                    </>
-                  )}
-
-                  <Route path="/a/:algorithmId" element={<AlgorithmPage />} />
-                  <Route path="/u/:username" element={<UserPage />} />
-                  <Route path="/events" element={<EventsPage />} />
-                  <Route path="/event/:eventId" element={<EventPage />} />
-
-                  <Route element={<RequireUser />}>
-                    <Route path="/mine" element={<MinePage />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route element={<RequireUsername />}>
-                      <Route
-                        path="/create"
-                        element={
-                          <Suspense
-                            fallback={<div className="p-8">Loading...</div>}
-                          >
-                            <Create />
-                          </Suspense>
-                        }
-                      />
-                    </Route>
-                  </Route>
-                </Route>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                {/* Catch-all route - redirects any unmatched routes to root */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </BrowserRouter>
+            <RouterProvider router={router} />
           </AuthProvider>
         </ServiceProvider>
       </ThemeProvider>
