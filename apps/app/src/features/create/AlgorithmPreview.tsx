@@ -54,7 +54,9 @@ export const AlgorithmPreview = () => {
   useEffect(() => {
     setReady(false)
 
-    algorithmService.cancelAllRenders().then(() =>
+    algorithmService.cancelAllRenderRequests()
+
+    try {
       algorithmService.updateAlgorithm(0, editorCode, seedType).then(() => {
         algorithmService
           .testRender(0)
@@ -62,15 +64,18 @@ export const AlgorithmPreview = () => {
             setScriptError(null)
 
             setReady(true)
-            setAlgorithmVersion((v) => v + 1)
+
             // Increment version to trigger redraws
+            setAlgorithmVersion((v) => v + 1)
           })
           .catch((e) => {
-            setScriptError(e.message)
             console.info("TestRenderError:", e)
+            setScriptError(e.message)
           })
-      }),
-    )
+      })
+    } catch (e) {
+      console.error("UpdateAlgorithmError:", e)
+    }
   }, [
     algorithmService,
     editorCode,

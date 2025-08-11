@@ -5,11 +5,12 @@ import RenderWorker from "@/workers/render?worker"
 import { proxy, Remote, wrap } from "comlink"
 import type { FamilyKind, Seed } from "entropretty-utils"
 import PQueue from "p-queue"
+
 export class AlgorithmService {
   private complianceWorker: Remote<ComplianceWorkerType>
   private renderWorker: Remote<RenderWorkerType>
   private inventory: Set<number>
-  private queue = new PQueue()
+  private queue = new PQueue({ concurrency: 2 })
 
   constructor() {
     const complianceInstance = new ComplianceWorker()
@@ -31,10 +32,6 @@ export class AlgorithmService {
     ])
   }
 
-  async testRender(algorithmId: number) {
-    return this.renderWorker.testRender(algorithmId)
-  }
-
   async addAlgorithm(algorithmId: number, algorithm: string, kind: FamilyKind) {
     if (this.inventory.has(algorithmId)) return
     await Promise.all([
@@ -44,10 +41,8 @@ export class AlgorithmService {
     this.inventory.add(algorithmId)
   }
 
-  async render(algorithmId: number, size: number, seed: Seed) {
-    return this.renderWorker.render(algorithmId, size, [
-      ...seed,
-    ]) as Promise<ImageBitmap>
+  async testRender(algorithmId: number) {
+    return this.renderWorker.testRender(algorithmId)
   }
 
   async renderWithQueue(
@@ -115,15 +110,7 @@ export class AlgorithmService {
     return this.complianceWorker.benchmark(algorithmId, size, amount)
   }
 
-  async cancelAllRenders() {
-    return Promise.all([
-      this.renderWorker.cancelPending(),
-      this.complianceWorker.cancelAllChecks(),
-    ])
-  }
-
-  cancelComplianceCheck(algorithmId: number, size: number, seed: Seed) {
-    this.complianceWorker.cancelCheck(algorithmId, size, seed)
-    // this.complianceWorker.cancelAllChecks()
+  cancelAllRenderRequests() {
+    this.queue.clear()
   }
 }

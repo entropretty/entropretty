@@ -32,7 +32,12 @@ export class RenderCore {
     this.metadata.set(id, kind)
   }
 
-  testRender(algorithmId: AlgorithmId) {
+  /**
+   * Quick sanity render to get potential Errors thrown by the algorithm
+   * @param algorithmId Algorithm identifier
+   * @returns Promise that resolves on success, rejects with error on failure
+   */
+  async testRender(algorithmId: AlgorithmId): Promise<void> {
     const script = this.algorithms.get(algorithmId)
     if (!script) throw new Error(`No script found for algorithm ${algorithmId}`)
 
@@ -40,7 +45,8 @@ export class RenderCore {
     if (!kind) throw new Error(`No kind found for algorithm ${algorithmId}`)
 
     const seed = getSeed(kind)
-    return this.render(algorithmId, 50, seed)
+    await this.render(algorithmId, 50, seed)
+    return
   }
 
   /**
