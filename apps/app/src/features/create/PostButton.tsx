@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { Loader2 } from "lucide-react"
-import { useNavigate } from "react-router"
+import { unstable_usePrompt, useNavigate } from "react-router"
 import { toast } from "sonner"
 import {
   algorithmNameAtom,
@@ -19,6 +19,7 @@ import {
   scriptErrorAtom,
 } from "./atoms"
 import { FEATURES } from "@/lib/features"
+import { useState } from "react"
 
 const validateAlgorithmName = (
   name: string,
@@ -46,6 +47,7 @@ export const PostButton = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [remix] = useAtom(remixAtom)
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)
+  const [hasPosted, setHasPosted] = useState(false)
 
   const nameValidation = validateAlgorithmName(algorithmName)
 
@@ -86,6 +88,7 @@ export const PostButton = () => {
     },
     onSuccess: (data) => {
       console.info("Successfully created algorithm", data)
+
       setAlgorithmName("")
       if (FEATURES.isCompetition) {
         queryClient
@@ -106,13 +109,23 @@ export const PostButton = () => {
     },
   })
 
+  unstable_usePrompt({
+    message: "Your code will be lost if you leave this page.",
+    when: !hasPosted,
+  })
+
   return (
     <div className="flex flex-col gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => createAlgorithm.mutate()}
+              onClick={() => {
+                setHasPosted(true)
+                setTimeout(() => {
+                  createAlgorithm.mutate()
+                }, 0)
+              }}
               disabled={
                 createAlgorithm.isPending ||
                 !nameValidation.isValid ||

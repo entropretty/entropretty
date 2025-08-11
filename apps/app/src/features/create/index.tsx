@@ -7,7 +7,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAtom } from "jotai"
 import { Suspense, lazy } from "react"
-import { unstable_usePrompt } from "react-router"
 import { FamilyKindBadge } from "../../components/FamilyKindBadge"
 import { AlgorithmNameInput } from "./AlgorithmNameInput"
 import { AlgorithmPreview } from "./AlgorithmPreview"
@@ -22,11 +21,6 @@ const MonacoEditor = lazy(() => import("./MonacoEditor"))
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
-
-  unstable_usePrompt({
-    message: "Your code will be lost if you leaves this page.",
-    when: true,
-  })
 
   return (
     <>
