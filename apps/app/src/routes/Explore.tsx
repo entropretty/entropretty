@@ -1,8 +1,6 @@
-import { EntroprettyLogo } from "@/components/EntroprettyLogo"
 import { GalleryAlgorithm } from "@/components/GalleryAlgorithm"
 import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
-import { Link } from "react-router"
 import { useQueryAlgorithmIds } from "../hooks/useQueryAlgorithmIds"
 
 export function ExploreGallery() {

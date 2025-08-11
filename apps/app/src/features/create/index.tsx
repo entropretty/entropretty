@@ -36,6 +36,7 @@ export const CreateFeature = () => {
             <ResizablePanel defaultSize={90} className="h-full w-full">
               <div className="relative h-full w-full">
                 <AlgorithmPreview />
+
                 <div className="absolute bottom-0 left-0 flex w-full flex-row justify-between">
                   <FamilyKindBadge familyKind={editorSeedType} />
                   <RerollBadge />

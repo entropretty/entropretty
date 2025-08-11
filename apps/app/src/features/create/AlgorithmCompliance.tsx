@@ -1,7 +1,7 @@
 import { useAlgorithmService } from "@/contexts/service-context"
 import { cn } from "@/lib/utils"
-import { CheckMetadata } from "entropretty-compliance/browser"
-import { AlgorithmId } from "entropretty-utils"
+import { CheckMetadata } from "@entropretty/compliance/browser"
+import { AlgorithmId } from "@entropretty/utils"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { AlgorithmBitmap } from "./AlgorithmBitmap"
 
@@ -46,6 +46,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
     null,
   )
   const [issues, setIssues] = useState<ExtendedCheckMetadata[]>([])
+
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawingSize = useMemo(() => size * scale, [size, scale])
 

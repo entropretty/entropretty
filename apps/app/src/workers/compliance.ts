@@ -6,15 +6,15 @@ import type {
   CheckMetadata,
   ComplianceResult as RuleComplianceResult,
   SingleImageRule,
-} from "entropretty-compliance/browser"
-import { colorIslandsRule } from "entropretty-compliance/browser"
+} from "@entropretty/compliance/browser"
+import { colorIslandsRule } from "@entropretty/compliance/browser"
 import {
   type FamilyKind,
   type AlgorithmId,
   getSeedFamily,
   RenderCore,
   type Seed,
-} from "entropretty-utils"
+} from "@entropretty/utils"
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300

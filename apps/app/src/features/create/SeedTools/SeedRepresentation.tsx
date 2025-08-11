@@ -9,7 +9,7 @@ interface SeedRepresentationProps {
 export const SeedRepresentation = ({ seed }: SeedRepresentationProps) => {
   const seedType = useAtomValue(editorSeedTypeAtom)
 
-  const numericValue = numeric(new Uint8Array(seed)).toString()
+  const numericValue = numeric(seed).toString()
   const hexValues = seed
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("")

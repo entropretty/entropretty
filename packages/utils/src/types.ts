@@ -1,4 +1,4 @@
-export type Seed = number[] | Uint8Array
+export type Seed = number[]
 /**
  * Random entropy of 32 bits represented in bytes.
  *

@@ -5,16 +5,7 @@ export const rng = sfc32(1, 2, 3, 4)
 export function getSeed(kind: FamilyKind): Seed {
   return {
     Procedural: getRandomBytes(4, rng),
-    ProceduralPersonal: Uint8Array.from([
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      ...getRandomBytes(1, rng),
-    ]),
+    ProceduralPersonal: [0, 0, 0, 0, 0, 0, 0, ...getRandomBytes(1, rng)],
     ProceduralAccount: getRandomBytes(32, rng),
   }[kind]
 }
@@ -108,7 +99,7 @@ export function deriveSeedFamily(
 }
 
 function getRandomBytes(bytes: number, rng: () => number): Seed {
-  const result = new Uint8Array(bytes)
+  const result = Array(bytes).fill(0)
   for (let i = 0; i < bytes; i++) {
     result[i] = Math.floor(rng() * 255)
   }
