@@ -18,7 +18,9 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   const { single, grid } = useDisplaySizes()
 
   const [seedFamily, setSeedFamily] = useState<number[][]>([
-    ...getSeedFamily(algorithm.family_kind!).map((s) => [...s]),
+    ...getSeedFamily(algorithm.family_kind!, 4),
+    ...getSeedFamily(algorithm.family_kind!, 3),
+    ...getSeedFamily(algorithm.family_kind!, 3),
   ])
 
   if (!algorithm.id) return null
@@ -39,7 +41,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
 
           <div className={`flex h-full w-full items-center justify-center`}>
             <div className="grid grid-cols-3 items-center justify-center gap-4">
-              {seedFamily.slice(0, 9).map((seed) => (
+              {seedFamily.slice(1, 10).map((seed) => (
                 <AlgorithmBitmap
                   key={seedToKey(seed)}
                   algorithmId={algorithm.id!}
