@@ -28,10 +28,10 @@ importers:
     dependencies:
       '@entropretty/compliance':
         specifier: workspace:*
-        version: link:../../packages/entropretty-compliance
+        version: link:../../packages/compliance
       '@entropretty/utils':
         specifier: workspace:*
-        version: link:../../packages/entropretty-utils
+        version: link:../../packages/utils
       '@hcaptcha/react-hcaptcha':
         specifier: ^1.12.1
         version: 1.12.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -323,7 +323,7 @@ importers:
         specifier: ^5
         version: 5.8.2
 
-  packages/entropretty-compliance:
+  packages/compliance:
     dependencies:
       pixelmatch:
         specifier: ^7.1.0
@@ -337,12 +337,12 @@ importers:
         version: 0.31.1
       tsup:
         specifier: ^8.0.2
-        version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@1.21.7)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.1)
+        version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.2)(yaml@2.7.1)
       typescript:
         specifier: ^5.3.3
-        version: 5.8.2
+        version: 5.9.2
 
-  packages/entropretty-utils:
+  packages/utils:
     dependencies:
       '@multiformats/blake2':
         specifier: ^2.0.2
@@ -362,7 +362,7 @@ importers:
         version: 22.13.16
       eslint:
         specifier: ^9.23.0
-        version: 9.23.0(jiti@1.21.7)
+        version: 9.32.0(jiti@1.21.7)
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.2)(yaml@2.7.1)
@@ -3222,14 +3222,6 @@ packages:
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
-  fdir@6.4.3:
-    resolution: {integrity: sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   fdir@6.4.6:
     resolution: {integrity: sha512-hiFoqpyZcfNm1yc4u8oWCf9A2c4D3QjCrks3zmoVKVxpQRzmPNar1hUJcBG2RQHvEVGDN+Jm81ZheVLAQMK6+w==}
     peerDependencies:
@@ -5071,10 +5063,6 @@ packages:
 
   tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
-
-  tinyglobby@0.2.12:
-    resolution: {integrity: sha512-qkf4trmKSIiMTs/E63cxH+ojC2unam7rJ0WrauAzpT3ECNTxGRMlaXxVbfxMUC/w0LaYk6jQ4y/nGR9uBO3tww==}
-    engines: {node: '>=12.0.0'}
 
   tinyglobby@0.2.14:
     resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
@@ -8645,10 +8633,6 @@ snapshots:
     dependencies:
       reusify: 1.1.0
 
-  fdir@6.4.3(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
-
   fdir@6.4.6(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
@@ -10896,11 +10880,6 @@ snapshots:
 
   tinyexec@0.3.2: {}
 
-  tinyglobby@0.2.12:
-    dependencies:
-      fdir: 6.4.3(picomatch@4.0.2)
-      picomatch: 4.0.2
-
   tinyglobby@0.2.14:
     dependencies:
       fdir: 6.4.6(picomatch@4.0.2)
@@ -10951,35 +10930,6 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@1.21.7)(postcss@8.5.6)(typescript@5.8.2)(yaml@2.7.1):
-    dependencies:
-      bundle-require: 5.1.0(esbuild@0.25.2)
-      cac: 6.7.14
-      chokidar: 4.0.3
-      consola: 3.4.2
-      debug: 4.4.0
-      esbuild: 0.25.2
-      joycon: 3.1.1
-      picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.6)(yaml@2.7.1)
-      resolve-from: 5.0.0
-      rollup: 4.38.0
-      source-map: 0.8.0-beta.0
-      sucrase: 3.35.0
-      tinyexec: 0.3.2
-      tinyglobby: 0.2.12
-      tree-kill: 1.2.2
-    optionalDependencies:
-      '@microsoft/api-extractor': 7.52.2(@types/node@22.13.16)
-      '@swc/core': 1.11.16(@swc/helpers@0.5.15)
-      postcss: 8.5.6
-      typescript: 5.8.2
-    transitivePeerDependencies:
-      - jiti
-      - supports-color
-      - tsx
-      - yaml
-
   tsup@8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.2)(yaml@2.7.1):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.2)
@@ -10996,7 +10946,7 @@ snapshots:
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tinyexec: 0.3.2
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.14
       tree-kill: 1.2.2
     optionalDependencies:
       '@microsoft/api-extractor': 7.52.2(@types/node@22.13.16)
