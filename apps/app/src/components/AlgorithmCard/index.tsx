@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
 import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AlgorithmView } from "@/lib/helper.types"
-import { getSeedFamily, seedToKey } from "entropretty-utils"
+import { getSeedFamily, seedToKey } from "@entropretty/utils"
 import { Dispatch, SetStateAction, useCallback, useState } from "react"
 import { Link } from "react-router"
 

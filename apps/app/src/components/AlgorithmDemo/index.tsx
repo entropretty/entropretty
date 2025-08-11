@@ -1,7 +1,7 @@
 import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
 import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AlgorithmView } from "@/lib/helper.types"
-import { deriveSeedFamily, getSeed, seedToKey } from "entropretty-utils"
+import { deriveSeedFamily, getSeed, seedToKey } from "@entropretty/utils"
 import { AnimatePresence, motion } from "motion/react"
 import { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router"

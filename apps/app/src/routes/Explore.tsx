@@ -46,22 +46,13 @@ export function ExploreGallery() {
   }, [inView, loadMore])
 
   return (
-    <div className="relative flex flex-col">
-      <div className={`relative flex w-full flex-col`}>
-        <div className="h-full w-full p-4">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-2">
-            {algorithmIds.map((id, index) => (
-              <GalleryAlgorithm key={`${id}-${index}`} algorithmId={id} />
-            ))}
-            {/* Loading trigger */}
-            <div ref={ref} className="h-4 w-full" />
-          </div>
-        </div>
-        <Link to="/hot">
-          <div className="bg-background border-background-200 fixed bottom-0 right-0 flex w-auto items-center justify-center gap-8 gap-y-2 border px-8 py-4 sm:pb-4">
-            <EntroprettyLogo />
-          </div>
-        </Link>
+    <div className="mx-auto my-4">
+      <div className="grid grid-cols-1 justify-center gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {algorithmIds.map((id, index) => (
+          <GalleryAlgorithm key={`${id}-${index}`} algorithmId={id} />
+        ))}
+        {/* Loading trigger */}
+        <div ref={ref} className="h-4 w-full" />
       </div>
     </div>
   )
