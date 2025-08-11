@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn, familyKindColor } from "@/lib/utils"
-import { FamilyKind } from "entropretty-utils"
+import { FamilyKind } from "@entropretty/utils"
 import { useAtom } from "jotai"
 
 interface FamilyKindFilterProps {

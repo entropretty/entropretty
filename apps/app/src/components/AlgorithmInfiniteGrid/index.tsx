@@ -8,7 +8,7 @@ import {
   FamilyKind,
   getSeed,
   seedToKey,
-} from "entropretty-utils"
+} from "@entropretty/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link } from "react-router"

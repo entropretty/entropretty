@@ -1,5 +1,5 @@
 {
-  "name": "entropretty-compliance",
+  "name": "@entropretty/compliance",
   "version": "1.0.0",
   "type": "module",
   "description": "Image compliance checking library",

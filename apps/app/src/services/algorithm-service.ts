@@ -3,7 +3,7 @@ import ComplianceWorker from "@/workers/compliance?worker"
 import type { RenderWorker as RenderWorkerType } from "@/workers/render"
 import RenderWorker from "@/workers/render?worker"
 import { proxy, Remote, wrap } from "comlink"
-import type { FamilyKind, Seed } from "entropretty-utils"
+import type { FamilyKind, Seed } from "@entropretty/utils"
 import PQueue from "p-queue"
 
 export class AlgorithmService {

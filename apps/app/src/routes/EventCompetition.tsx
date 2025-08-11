@@ -8,7 +8,7 @@
  */
 
 import { EntroprettyLogo } from "@/components/EntroprettyLogo"
-import { getSeed, seedToKey } from "entropretty-utils"
+import { getSeed, seedToKey } from "@entropretty/utils"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Link, useParams } from "react-router"

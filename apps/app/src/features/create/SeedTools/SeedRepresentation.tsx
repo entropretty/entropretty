@@ -1,5 +1,5 @@
 import { editorSeedTypeAtom } from "@/features/create/atoms"
-import { numeric } from "entropretty-utils"
+import { numeric } from "@entropretty/utils"
 import { useAtomValue } from "jotai"
 
 interface SeedRepresentationProps {

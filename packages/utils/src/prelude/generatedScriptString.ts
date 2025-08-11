@@ -93,4 +93,37 @@ export const preludeScriptString=`
     return (t >>> 0) / 4294967296;
   };
 }
+  function bytesToBits(bytes) {
+  const bits = new Array(bytes.length * 8);
+  for (let i = 0;i < bytes.length; i++) {
+    const byte = getByte(bytes, i);
+    bits[i * 8] = byte >> 7 & 1;
+    bits[i * 8 + 1] = byte >> 6 & 1;
+    bits[i * 8 + 2] = byte >> 5 & 1;
+    bits[i * 8 + 3] = byte >> 4 & 1;
+    bits[i * 8 + 4] = byte >> 3 & 1;
+    bits[i * 8 + 5] = byte >> 2 & 1;
+    bits[i * 8 + 6] = byte >> 1 & 1;
+    bits[i * 8 + 7] = byte & 1;
+  }
+  return bits;
+}
+  function bytesToQuarterBytes(bytes) {
+  const quarterBytes = new Array(bytes.length * 4);
+  for (let i = 0;i < bytes.length; i++) {
+    const byte = getByte(bytes, i);
+    quarterBytes[i * 4] = byte >> 6 & 3;
+    quarterBytes[i * 4 + 1] = byte >> 4 & 3;
+    quarterBytes[i * 4 + 2] = byte >> 2 & 3;
+    quarterBytes[i * 4 + 3] = byte & 3;
+  }
+  return quarterBytes;
+}
+  function map(value, inputStart, inputStop, outputStart, outputStop, withinBounds = !0) {
+  const result = outputStart + (outputStop - outputStart) * ((value - inputStart) / (inputStop - inputStart));
+  if (!withinBounds)
+    return result;
+  const minOutput = Math.min(outputStart, outputStop), maxOutput = Math.max(outputStart, outputStop);
+  return Math.max(minOutput, Math.min(maxOutput, result));
+}
 `

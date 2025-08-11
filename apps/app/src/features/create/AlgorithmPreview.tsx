@@ -1,5 +1,5 @@
 import { useAlgorithmService } from "@/contexts/service-context"
-import { seedToKey } from "entropretty-utils"
+import { seedToKey } from "@entropretty/utils"
 import { useAtom } from "jotai"
 import { useEffect, useState, useMemo } from "react"
 import useMeasure from "react-use-measure"

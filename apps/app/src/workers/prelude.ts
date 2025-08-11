@@ -1,6 +1,3 @@
-import {
-  preludeScriptString
-} from "entropretty-utils"
-
+import { preludeScriptString } from "@entropretty/utils"
 
 export const preludeScript = preludeScriptString

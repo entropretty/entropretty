@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { seedToKey, type AlgorithmId } from "entropretty-utils"
+import { seedToKey, type AlgorithmId } from "@entropretty/utils"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useAlgorithmService } from "@/contexts/service-context"
 

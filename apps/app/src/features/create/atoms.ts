@@ -1,5 +1,5 @@
 import { AlgorithmView } from "@/lib/helper.types"
-import { FamilyKind, getSeed, getSeedFamily } from "entropretty-utils"
+import { FamilyKind, getSeed, getSeedFamily } from "@entropretty/utils"
 import { atom } from "jotai"
 
 export type SeedType = FamilyKind

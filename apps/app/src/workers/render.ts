@@ -1,5 +1,5 @@
 import { expose, transfer } from "comlink"
-import { FamilyKind, RenderCore } from "entropretty-utils"
+import { FamilyKind, RenderCore } from "@entropretty/utils"
 
 const core = new RenderCore(300) // 300ms timeout by default
 

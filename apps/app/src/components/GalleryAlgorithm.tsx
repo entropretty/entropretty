@@ -1,4 +1,4 @@
-import { getSeed, seedToKey } from "entropretty-utils"
+import { getSeed, seedToKey } from "@entropretty/utils"
 import { useMemo } from "react"
 import { Link } from "react-router"
 import { Skeleton } from "./ui/skeleton"
@@ -14,10 +14,10 @@ interface GalleryAlgorithmProps {
 
 export const GalleryAlgorithm = ({
   algorithmId,
-  seedCount = 4,
+  seedCount = 9,
 }: GalleryAlgorithmProps) => {
   const { data: algorithm, isLoading } = useAlgorithm(algorithmId)
-  const { infinite } = useDisplaySizes()
+  const { grid } = useDisplaySizes()
 
   const seeds = useMemo(() => {
     if (!algorithm) return []
@@ -32,14 +32,17 @@ export const GalleryAlgorithm = ({
   }
 
   return (
-    <Link to={`/a/${algorithmId}`} className="group relative">
-      <div className="hover:border-border group relative grid grid-cols-2 gap-4 border border-transparent p-4 group-hover:border">
+    <Link
+      to={`/a/${algorithmId}`}
+      className="hover:border-border group relative border border-transparent"
+    >
+      <div className="relative grid grid-cols-3 gap-4 p-4">
         {seeds.map((seed) => (
           <AlgorithmBitmap
             key={seedToKey(seed)}
             algorithmId={algorithmId}
             seed={seed as number[]}
-            size={infinite}
+            size={grid}
             scale={2}
           />
         ))}

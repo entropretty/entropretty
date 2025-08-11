@@ -7,7 +7,7 @@ import {
 import { AlgorithmView } from "@/lib/helper.types"
 import { supabase } from "@/lib/supabase"
 import { useQuery } from "@tanstack/react-query"
-import { FamilyKind } from "entropretty-utils"
+import { FamilyKind } from "@entropretty/utils"
 import { useAtom, useSetAtom } from "jotai"
 import { Suspense, lazy, useEffect, useState } from "react"
 import { useSearchParams } from "react-router"

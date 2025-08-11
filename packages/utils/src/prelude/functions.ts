@@ -43,6 +43,44 @@ export function bytesToNibbles(bytes: Seed): number[] {
 }
 
 /**
+ * Converts a Seed into an array of quarter-bytes (2-bit values)
+ * @param {Seed} bytes - Seed to convert
+ * @returns {number[]} Array of quarter-bytes (values 0-3)
+ */
+export function bytesToQuarterBytes(bytes: Seed): number[] {
+  const quarterBytes = new Array(bytes.length * 4)
+  for (let i = 0; i < bytes.length; i++) {
+    const byte = getByte(bytes, i)
+    quarterBytes[i * 4] = (byte >> 6) & 3 // bits 7-6
+    quarterBytes[i * 4 + 1] = (byte >> 4) & 3 // bits 5-4
+    quarterBytes[i * 4 + 2] = (byte >> 2) & 3 // bits 3-2
+    quarterBytes[i * 4 + 3] = byte & 3 // bits 1-0
+  }
+  return quarterBytes
+}
+
+/**
+ * Converts a Seed into an array of bits (1-bit values)
+ * @param {Seed} bytes - Seed to convert
+ * @returns {number[]} Array of bits (values 0-1)
+ */
+export function bytesToBits(bytes: Seed): number[] {
+  const bits = new Array(bytes.length * 8)
+  for (let i = 0; i < bytes.length; i++) {
+    const byte = getByte(bytes, i)
+    bits[i * 8] = (byte >> 7) & 1 // bit 7
+    bits[i * 8 + 1] = (byte >> 6) & 1 // bit 6
+    bits[i * 8 + 2] = (byte >> 5) & 1 // bit 5
+    bits[i * 8 + 3] = (byte >> 4) & 1 // bit 4
+    bits[i * 8 + 4] = (byte >> 3) & 1 // bit 3
+    bits[i * 8 + 5] = (byte >> 2) & 1 // bit 2
+    bits[i * 8 + 6] = (byte >> 1) & 1 // bit 1
+    bits[i * 8 + 7] = byte & 1 // bit 0
+  }
+  return bits
+}
+
+/**
  * Gets a specific bit from a seed at a given position
  * @param {Seed} seed - The seed to extract bit from
  * @param {number} i - Bit position
@@ -192,4 +230,37 @@ export function sfc32(
     c = (c + t) | 0
     return (t >>> 0) / 4294967296
   }
+}
+
+/**
+ * Re-maps a number from one range to another
+ * @param {number} value - The value to be remapped
+ * @param {number} inputStart - Lower bound of the value's current range
+ * @param {number} inputStop - Upper bound of the value's current range
+ * @param {number} outputStart - Lower bound of the value's target range
+ * @param {number} outputStop - Upper bound of the value's target range
+ * @param {boolean} [withinBounds=false] - Constrain the value to the newly mapped range
+ * @returns {number} The remapped number
+ */
+export function map(
+  value: number,
+  inputStart: number,
+  inputStop: number,
+  outputStart: number,
+  outputStop: number,
+  withinBounds: boolean = true,
+): number {
+  const result =
+    outputStart +
+    (outputStop - outputStart) *
+      ((value - inputStart) / (inputStop - inputStart))
+
+  if (!withinBounds) {
+    return result
+  }
+
+  // Constrain within bounds
+  const minOutput = Math.min(outputStart, outputStop)
+  const maxOutput = Math.max(outputStart, outputStop)
+  return Math.max(minOutput, Math.min(maxOutput, result))
 }

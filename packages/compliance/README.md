@@ -1,15 +1,15 @@
-# entropretty-compliance
+# @entropretty/compliance
 
 Core library for checking image compliance against various rules.
 
 ## Installation
 
 ```bash
-npm install entropretty-compliance
+npm install @entropretty/compliance
 # or
-yarn add entropretty-compliance
+yarn add @entropretty/compliance
 # or
-pnpm add entropretty-compliance
+pnpm add @entropretty/compliance
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import {
   colorIslandsRule,
   colorContrastRule,
   imageHashRule
-} from 'entropretty-compliance';
+} from '@entropretty/compliance';
 
 // Create a checker with desired rules
 const checker = new ComplianceChecker([
@@ -59,7 +59,7 @@ const singleRuleResult = await checker.checkSingleRule('colorCount', imageBuffer
 You can configure rule behavior through a configuration object:
 
 ```typescript
-import { updateConfig } from 'entropretty-compliance';
+import { updateConfig } from '@entropretty/compliance';
 
 updateConfig({
   rules: {
@@ -84,7 +84,7 @@ updateConfig({
 The library includes image preprocessing utilities:
 
 ```typescript
-import { mergeColors } from 'entropretty-compliance';
+import { mergeColors } from '@entropretty/compliance';
 
 // Merge similar colors
 const processedImage = await mergeColors(imageBuffer, { tolerance: 25 });

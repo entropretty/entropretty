@@ -1,6 +1,6 @@
 ---
-description: 
-globs: packages/entropretty-compliance/*
+description:
+globs: packages/@entropretty/compliance/*
 alwaysApply: false
 ---
  # Entropretty Compliance Rules
@@ -23,7 +23,7 @@ This rule provides guidelines for implementing browser-compatible compliance rul
    - Return informative error messages when dimensions can't be determined
 
 4. **Use efficient pixel data access patterns**
-   - Access pixel data directly: `[data[idx], data[idx + 1], data[idx + 2]]` 
+   - Access pixel data directly: `[data[idx], data[idx + 1], data[idx + 2]]`
    - Avoid unnecessary Array.from() and mapping operations
    - Remember RGBA channel order with 4 bytes per pixel
 
@@ -71,9 +71,9 @@ export const exampleRule: SingleImageRule = {
     try {
       const config = defaultConfig.rules.exampleRule;
       const data = new Uint8ClampedArray(buffer);
-      
+
       // Processing logic here
-      
+
       return {
         status: "pass", // or "warn" or "error"
         metadata: [
