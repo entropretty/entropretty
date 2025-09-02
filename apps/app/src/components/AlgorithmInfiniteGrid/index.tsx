@@ -104,8 +104,8 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
 
   return (
     <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-auto">
-      <AutoScrollButton />
-      <Button asChild variant="link">
+      <AutoScrollButton className="hidden md:block" />
+      <Button className="hidden md:block" asChild variant="link">
         <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
       </Button>
       {user && (
