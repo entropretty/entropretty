@@ -1,0 +1,58 @@
+{
+  "name": "entropretty-cli",
+  "version": "1.0.26",
+  "type": "module",
+  "bin": {
+    "entropretty": "./dist/cli.js"
+  },
+  "description": "Command line tool for Entropretty",
+  "license": "MIT",
+  "keywords": [
+    "entropretty",
+    "typescript",
+    "cli"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/lib.js"
+    }
+  },
+  "homepage": "https://github.com/peetzweg/entropretty-tools",
+  "bugs": {
+    "url": "https://github.com/peetzweg/entropretty-tools/issues"
+  },
+  "author": "peetzweg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peetzweg/entropretty-tools.git"
+  },
+  "files": [
+    "dist",
+    "tests"
+  ],
+  "scripts": {
+    "watch:lib": "tsup-node --watch --config ./tsup.config.lib.ts",
+    "watch": "pnpm run watch:lib",
+    "build:cli": "tsup-node --config ./tsup.config.cli.ts",
+    "build:lib": "tsup-node --config ./tsup.config.lib.ts",
+    "build": "pnpm run build:cli && pnpm run build:lib",
+    "lint": "tsc && eslint ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "eslint": "^9.18.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react-swc": "^3.7.2",
+    "cac": "^6.7.14",
+    "comlink": "^4.4.2",
+    "picocolors": "^1.1.1",
+    "puppeteer": "^23.11.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.8"
+  }
+}
