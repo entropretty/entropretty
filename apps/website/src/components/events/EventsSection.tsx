@@ -10,8 +10,8 @@ export function EventsSection() {
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold mb-4">Competitions</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Join us at our upcoming events and competitions. We host various
-            events throughout the year.
+            Catch up on our latest competitions, explore the highlights, and
+            discover where Entropretty has been active recently.
           </p>
           <div className="mt-8 flex items-center justify-center">
             <Link
@@ -24,22 +24,13 @@ export function EventsSection() {
         </div>
 
         <div className="space-y-16">
-          {/* Upcoming events section */}
-          <div className="flex flex-col h-full">
-            <h3 className="text-2xl font-semibold mb-6 text-foreground">
-              Upcoming Events
-            </h3>
-            <div className="flex flex-row justify-center">
-              <AssemblySummer2025EventCard />
-            </div>
-          </div>
-
           {/* Past events section */}
           <div className="flex flex-col h-full">
             <h3 className="text-2xl font-semibold mb-6 text-foreground">
               Past Events
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AssemblySummer2025EventCard />
               <PastRevision2025EventCard />
               <PastWinterAssemblyEventCard />
             </div>

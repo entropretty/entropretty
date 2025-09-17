@@ -4,10 +4,10 @@ export function AssemblySummer2025EventCard() {
   return (
     <EventCard
       title="Entropretty @ ASSEMBLY SUMMER 2025"
-      subtitle="GLOBAL DEMO COMPETITION"
+      subtitle="5000$ Prize Money"
       description={[
-        "We will be hosting multiple Entropretty Tattoo Competititons. With a total prize pool of 5000$",
-        "Features demoscene competitions, gaming tournaments, cosplay contests, and much more.",
+        "We hosted competitions across multiple Entropretty tattoo categories as part of the Assembly Summer 2025 program.",
+        "The event took place at Messukeskus, Helsinki from July 31st to August 3rd, 2025, alongside the broader demoscene festival, gaming tournaments, cosplay contests, and more.",
       ]}
       imageSrc="/assets/Assembly-Summer-25-1920x1080-bg.webp"
       logoSrc="/assets/assembly-summer-2025-logo-640w.png"
@@ -15,8 +15,8 @@ export function AssemblySummer2025EventCard() {
       date="July 31 - August 3, 2025"
       location="Messukeskus, Helsinki"
       linkUrl="https://assembly.org/en/events/summer25"
-      linkText="More Info"
-      isPast={false}
+      linkText="Event Overview"
+      isPast={true}
     />
   );
 }
