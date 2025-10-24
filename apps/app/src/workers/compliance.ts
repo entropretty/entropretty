@@ -44,6 +44,9 @@ export interface ComplianceResult {
   ruleTypesFailed: string[]
 }
 
+// Re-export BenchmarkResult for use in other files
+export type { BenchmarkResult }
+
 export interface ComplianceRequest {
   algorithmId: AlgorithmId
   size: Size
