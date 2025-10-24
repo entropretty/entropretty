@@ -45,8 +45,18 @@ export interface MultiImageRule extends BaseRule {
   checkMultiple: (images: Buffer[]) => Promise<ComplianceResult>
 }
 
+// For rules that check source code
+export interface CodeRule extends BaseRule {
+  type: "code"
+  check: (code: string) => Promise<ComplianceResult>
+}
+
 // Union type for all possible rules
-export type ComplianceRule = SingleImageRule | ComparisonRule | MultiImageRule
+export type ComplianceRule =
+  | SingleImageRule
+  | ComparisonRule
+  | MultiImageRule
+  | CodeRule
 
 export interface ComplianceReport {
   ruleName: string
