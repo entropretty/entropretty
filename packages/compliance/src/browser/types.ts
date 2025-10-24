@@ -22,7 +22,7 @@ export interface CheckMetadata {
 export interface ComplianceResult {
   status: CheckStatus
   metadata?: CheckMetadata[]
-  type: string // Identifies which check produced this result (e.g. "colorCount", "colorIsland")
+  type?: string // Identifies which check produced this result (e.g. "colorCount", "colorIsland")
 }
 
 // For rules that check a single image
@@ -46,5 +46,15 @@ export interface MultiImageRule extends BaseRule {
   checkMultiple: (images: ArrayBuffer[]) => Promise<ComplianceResult>
 }
 
+// For rules that check source code
+export interface CodeRule extends BaseRule {
+  type: "code"
+  check: (code: string) => Promise<ComplianceResult>
+}
+
 // Union type for all possible rules
-export type ComplianceRule = SingleImageRule | ComparisonRule | MultiImageRule
+export type ComplianceRule =
+  | SingleImageRule
+  | ComparisonRule
+  | MultiImageRule
+  | CodeRule

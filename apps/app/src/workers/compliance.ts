@@ -11,10 +11,13 @@ import { colorIslandsRule } from "@entropretty/compliance/browser"
 import {
   type FamilyKind,
   type AlgorithmId,
-  getSeedFamily,
   RenderCore,
   type Seed,
 } from "@entropretty/utils"
+import {
+  BenchmarkCore,
+  type BenchmarkResult,
+} from "@entropretty/benchmark-core"
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
@@ -39,16 +42,6 @@ export interface ComplianceResult {
   issues: CheckMetadata[]
   issueOverlayImageData?: ImageData
   ruleTypesFailed: string[]
-}
-
-export interface BenchmarkResult {
-  amount: number
-  algorithmId: AlgorithmId
-  size: Size
-  failedTotal: number
-  collisionsTotal: number
-  errors: number
-  warningDistribution: Record<number, number>
 }
 
 export interface ComplianceRequest {
@@ -122,68 +115,29 @@ const workerAPI = {
     if (!meta) {
       throw new Error(`No algorithm meta found for algorithm ${algorithmId}`)
     }
-    const kind = meta.kind
-    const seeds = getSeedFamily(kind, amount)
 
-    const results: ComplianceResult[] = []
-    const hashes: Record<string, number[][]> = {}
-
-    const hashesSet: Set<string> = new Set()
-    let checked = 0
-    let errors = 0
-    for (const seed of seeds) {
-      try {
-        const result = await this.checkCompliance(algorithmId, seed, {
-          withOverlay: false,
-          referenceSize: size,
-        })
-        results.push(result)
-
-        const dupeSeeds = hashes[result.imageHash]
-        if (dupeSeeds) {
-          hashes[result.imageHash] = [...dupeSeeds, [...seed]]
-        } else {
-          hashes[result.imageHash] = [[...seed]]
-        }
-        if (!hashesSet.has(result.imageHash)) {
-          hashesSet.add(result.imageHash)
-        }
-      } catch {
-        errors++
-      }
-
-      checked++
-      if (checked % 5 === 0) {
-        progressCallback?.(checked / amount)
-      }
-    }
-    // Post-process
-    progressCallback?.(checked)
-
-    const failed = results.filter((r) => !r.isCompliant).length
-    const chartData: Record<number, number> = {}
-    for (const result of results) {
-      const amountOfIssues = result.issues.length
-      if (chartData[amountOfIssues]) {
-        chartData[amountOfIssues]++
-      } else {
-        chartData[amountOfIssues] = 1
-      }
+    // Get the algorithm script from renderCore
+    const algorithm = renderCore.getAlgorithm(algorithmId)
+    if (!algorithm) {
+      throw new Error(`No algorithm found for algorithm ${algorithmId}`)
     }
 
-    const collisions = Object.entries(hashes).filter(
-      ([, seeds]) => seeds.length > 1,
-    )
+    // Use BenchmarkCore for the actual benchmarking
+    const benchmarkCore = new BenchmarkCore(COMPLIANCE_TIMEOUT_MS)
+    benchmarkCore.setRules(complianceRules)
 
-    return {
-      warningDistribution: chartData,
-      failedTotal: failed,
-      collisionsTotal: collisions.length,
+    const result = await benchmarkCore.benchmark({
+      algorithmId,
+      algorithm,
+      kind: meta.kind,
       size,
       amount,
-      errors,
-      algorithmId,
-    }
+      onProgress: (progress: number) => {
+        progressCallback?.(progress)
+      },
+    })
+
+    return result
   },
 
   cancelCheck(algorithmId: AlgorithmId, size: Size, seed: Seed) {
