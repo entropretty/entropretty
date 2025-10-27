@@ -18,7 +18,7 @@ export const WarningDistribution = ({
     const entries = Object.entries(warningDistribution).map(
       ([warnings, count]) => ({
         warnings: parseInt(warnings, 10),
-        count: count,
+        count: count as number,
       }),
     )
 

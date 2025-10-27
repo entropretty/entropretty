@@ -111,6 +111,13 @@ export class RenderCore {
   }
 
   /**
+   * Get algorithm script by ID
+   */
+  getAlgorithm(id: AlgorithmId): string | undefined {
+    return this.algorithms.get(id)
+  }
+
+  /**
    * Internal draw logic with timeout + abort
    */
   private async drawWithTimeout(

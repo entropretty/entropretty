@@ -1,7 +1,7 @@
 import { GalleryAlgorithm } from "@/components/GalleryAlgorithm"
 import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
-import { useQueryAlgorithmIds } from "../hooks/useQueryAlgorithmIds"
+import { useTopAlgorithmIds } from "../hooks/useTopAlgorithmIds"
 
 export function ExploreGallery() {
   const [algorithmIds, setAlgorithmIds] = useState<number[]>([])
@@ -10,32 +10,30 @@ export function ExploreGallery() {
     rootMargin: "400px", // Start loading more content before reaching the bottom
   })
 
-  const { data: availableAlgorithmIds } = useQueryAlgorithmIds()
+  const { data: availableAlgorithmIds } = useTopAlgorithmIds()
   console.log({ algorithmIds, availableAlgorithmIds })
 
   useEffect(() => {
     if (!availableAlgorithmIds) return
 
-    const initialSet = new Array(128).fill(1).map(() => {
-      const randomIndex = Math.floor(
-        Math.random() * availableAlgorithmIds.length,
-      )
-      return availableAlgorithmIds[randomIndex]
-    })
+    // Take the top 128 algorithms by score (no randomization)
+    const initialSet = availableAlgorithmIds.slice(0, 128)
     setAlgorithmIds(initialSet)
   }, [availableAlgorithmIds])
 
   const loadMore = useCallback(() => {
     if (!availableAlgorithmIds) return
-    const newSet = new Array(64).fill(1).map(() => {
-      const randomIndex = Math.floor(
-        Math.random() * availableAlgorithmIds.length,
-      )
-      return availableAlgorithmIds[randomIndex]
-    })
 
-    setAlgorithmIds((prev) => [...prev, ...newSet])
-  }, [availableAlgorithmIds])
+    const currentCount = algorithmIds.length
+    const nextBatch = availableAlgorithmIds.slice(
+      currentCount,
+      currentCount + 64,
+    )
+
+    if (nextBatch.length > 0) {
+      setAlgorithmIds((prev) => [...prev, ...nextBatch])
+    }
+  }, [availableAlgorithmIds, algorithmIds.length])
 
   useEffect(() => {
     if (inView) {
