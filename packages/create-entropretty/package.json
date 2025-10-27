@@ -1,0 +1,58 @@
+{
+  "name": "create-entropretty",
+  "version": "1.0.28",
+  "description": "Create entropretty sketch workspace with one command",
+  "license": "MIT",
+  "homepage": "https://github.com/peetzweg/entropretty-tools",
+  "bugs": {
+    "url": "https://github.com/peetzweg/entropretty-tools/issues"
+  },
+  "author": "peetzweg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peetzweg/entropretty-tools.git"
+  },
+  "scripts": {
+    "build": "pnpm run clean && pnpm run build:esm+types",
+    "build:esm+types": "tsc --project tsconfig.build.json --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "dev": "bun src/cli.ts",
+    "test:build": "publint --strict",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist/**",
+    "!dist/**/*.tsbuildinfo",
+    "src/**/*.ts",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "templates/**"
+  ],
+  "bin": {
+    "create-entropretty": "./dist/esm/cli.js"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "picocolors": "^1.0.1",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.6",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.16.2",
+    "@types/prompts": "^2.4.9",
+    "execa": "^9.3.1",
+    "fs-extra": "^11.2.0"
+  },
+  "keywords": [
+    "entropretty",
+    "citizenship",
+    "web3",
+    "cli"
+  ]
+}
