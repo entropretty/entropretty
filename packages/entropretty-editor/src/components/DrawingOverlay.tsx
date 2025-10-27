@@ -1,6 +1,6 @@
 import { useApp } from "@/lib/state"
 import { cn } from "@/lib/utils"
-import { Seed } from "entropretty-utils"
+import { Seed } from "@entropretty/utils"
 import { useCallback } from "react"
 
 interface Props {

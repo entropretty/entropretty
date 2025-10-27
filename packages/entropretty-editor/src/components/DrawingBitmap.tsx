@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useApp } from "../lib/state"
-import { Seed } from "entropretty-utils"
+import { Seed } from "@entropretty/utils"
 
 interface Props {
   id?: string

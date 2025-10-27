@@ -1,4 +1,4 @@
-import { split } from "entropretty-utils"
+import { split } from "@entropretty/utils"
 
 function drawPetals(ctx, count, bias, sway, width, shade) {
   ctx.save()

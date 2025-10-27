@@ -1,6 +1,6 @@
 import { Remote, wrap } from "comlink"
-import type { FamilyKind, SchemaMetadata, Seed } from "entropretty-utils"
-import { getSeedFamily } from "entropretty-utils"
+import type { FamilyKind, SchemaMetadata, Seed } from "@entropretty/utils"
+import { getSeedFamily } from "@entropretty/utils"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { EntroprettyEditorWorker } from "./createWorker"

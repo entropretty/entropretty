@@ -1,6 +1,6 @@
-import { Schema, SchemaMetadata } from "entropretty-utils"
+import { Schema, SchemaMetadata } from "@entropretty/utils"
 import * as Comlink from "comlink"
-import type { Seed } from "entropretty-utils"
+import type { Seed } from "@entropretty/utils"
 
 export const createWorker = (
   dynamicImports: Record<string, () => Promise<unknown>>,
