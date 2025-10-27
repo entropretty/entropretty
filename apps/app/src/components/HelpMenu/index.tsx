@@ -43,29 +43,34 @@ export function HelpMenu() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-2 md:w-[300px] lg:w-[400px]">
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Link to="https://entropretty.com/rules" target="_blank">
-              <ListItem
-                title="Competition Rules"
-                description="Learn about the rules of the competition"
-              />
-            </Link>
-
-            <Link
-              to="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
-              target="_blank"
-            >
-              <ListItem
-                title="Canvas API Reference"
-                description="Documentation for the CanvasRenderingContext2D API used for drawing"
-              />
-            </Link>
-          </div>
+        <div className="grid gap-1">
           <Link to="https://entropretty.com/" target="_blank">
             <ListItem
               title="What is this?"
               description="https://entropretty.com/"
+            />
+          </Link>
+
+          <Link to="https://github.com/entropretty/entropretty" target="_blank">
+            <ListItem
+              title="GitHub Repository"
+              description="View the source code for Entropretty"
+            />
+          </Link>
+          <Link to="https://entropretty.com/rules" target="_blank">
+            <ListItem
+              title="Competition Rules"
+              description="Learn about the rules of the competition"
+            />
+          </Link>
+
+          <Link
+            to="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
+            target="_blank"
+          >
+            <ListItem
+              title="Canvas API Reference"
+              description="Documentation for the CanvasRenderingContext2D API used for drawing"
             />
           </Link>
         </div>
