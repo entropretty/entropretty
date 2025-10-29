@@ -4,7 +4,6 @@ import {
   HeadContent,
   Scripts,
   createRootRoute,
-  Outlet,
 } from "@tanstack/react-router"
 import { HelmetProvider } from "react-helmet-async"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"

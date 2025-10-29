@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import HeaderLayout from "@/layouts/HeaderLayout"
 
 export const Route = createFileRoute("/_layout")({

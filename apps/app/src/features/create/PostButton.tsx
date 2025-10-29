@@ -19,7 +19,6 @@ import {
   scriptErrorAtom,
 } from "./atoms"
 import { FEATURES } from "@/lib/features"
-import { useState } from "react"
 
 const validateAlgorithmName = (
   name: string,
@@ -47,7 +46,7 @@ export const PostButton = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [remix] = useAtom(remixAtom)
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)
-  const [hasPosted, setHasPosted] = useState(false)
+  // const [hasPosted, setHasPosted] = useState(false)
 
   const nameValidation = validateAlgorithmName(algorithmName)
 
@@ -122,7 +121,7 @@ export const PostButton = () => {
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
-                setHasPosted(true)
+                // setHasPosted(true)
                 setTimeout(() => {
                   createAlgorithm.mutate()
                 }, 0)

@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { createFileRoute, Outlet } from "@tanstack/react-router"
 import { useAuth } from "@/contexts/auth-context"
 
 export const Route = createFileRoute("/_layout/_auth")({
