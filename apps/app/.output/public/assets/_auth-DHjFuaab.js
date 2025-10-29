@@ -1,1 +1,0 @@
-import{c as r,u as c,j as n,O as i}from"./main-D_QOtJ75.js";function u(){const e=r.c(2),{user:s}=c();if(!s){let o;return e[0]===Symbol.for("react.memo_cache_sentinel")?(o=n.jsx("div",{children:"You need to login first"}),e[0]=o):o=e[0],o}let t;return e[1]===Symbol.for("react.memo_cache_sentinel")?(t=n.jsx(i,{}),e[1]=t):t=e[1],t}export{u as component};
