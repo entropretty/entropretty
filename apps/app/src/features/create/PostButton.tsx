@@ -46,6 +46,9 @@ export const PostButton = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [remix] = useAtom(remixAtom)
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)
+  
+  // TODO: Re-enable navigation prompt when TanStack Router provides equivalent API
+  // Previously used for warning users before leaving page with unsaved changes
   // const [hasPosted, setHasPosted] = useState(false)
 
   const nameValidation = validateAlgorithmName(algorithmName)
@@ -121,6 +124,7 @@ export const PostButton = () => {
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
+                // TODO: Re-enable when navigation prompt is implemented
                 // setHasPosted(true)
                 setTimeout(() => {
                   createAlgorithm.mutate()
