@@ -2,6 +2,9 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import path from "path"
 import { visualizer } from "rollup-plugin-visualizer"
+import { tanstackStart } from "@tanstack/react-start/plugin/vite"
+import viteTsConfigPaths from "vite-tsconfig-paths"
+import { nitroV2Plugin } from "@tanstack/nitro-v2-vite-plugin"
 
 const ReactCompilerConfig = {
   /* ... */
@@ -20,6 +23,11 @@ const pluginsWithReactCompiler = [
 
 export default defineConfig(({ mode }) => ({
   plugins: [
+    nitroV2Plugin(),
+    viteTsConfigPaths({
+      projects: ["./tsconfig.json"],
+    }),
+    tanstackStart(),
     ...pluginsWithReactCompiler,
     mode === "analyze" &&
       visualizer({

@@ -11,7 +11,7 @@ import {
 } from "@entropretty/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
-import { Link } from "react-router"
+import { Link } from "@tanstack/react-router"
 import { LikeButton } from "../AlgorithmCard/LikeButton"
 import { AlgorithmInfo } from "../AlgorithmInfo"
 import { AutoScrollButton } from "../AutoScrollButton"

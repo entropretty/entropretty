@@ -9,7 +9,7 @@ import { supabase } from "@/lib/supabase"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { Loader2 } from "lucide-react"
-import { unstable_usePrompt, useNavigate } from "react-router"
+import { useNavigate } from "@tanstack/react-router"
 import { toast } from "sonner"
 import {
   algorithmNameAtom,
@@ -109,10 +109,11 @@ export const PostButton = () => {
     },
   })
 
-  unstable_usePrompt({
-    message: "Your code will be lost if you leave this page.",
-    when: !hasPosted,
-  })
+  // TODO: Re-implement navigation prompt with TanStack Router when available
+  // unstable_usePrompt({
+  //   message: "Your code will be lost if you leave this page.",
+  //   when: !hasPosted,
+  // })
 
   return (
     <div className="flex flex-col gap-2">

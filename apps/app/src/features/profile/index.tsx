@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router"
+import { useNavigate } from "@tanstack/react-router"
 
 import { useAuth } from "@/contexts/auth-context"
 import { useUserProfile } from "@/hooks/useUserProfile"

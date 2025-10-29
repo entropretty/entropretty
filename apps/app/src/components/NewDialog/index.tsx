@@ -10,7 +10,7 @@ import {
 import { cn, familyKindColor } from "@/lib/utils"
 import { FamilyKind } from "@entropretty/utils"
 import { ArrowUpRight, PlusIcon } from "lucide-react"
-import { Link, useNavigate } from "react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 
 interface SeedTypeCardProps {
   kind: FamilyKind

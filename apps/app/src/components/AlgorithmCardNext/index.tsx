@@ -6,7 +6,7 @@ import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AlgorithmView } from "@/lib/helper.types"
 import { getSeedFamily, seedToKey } from "@entropretty/utils"
 import { Dispatch, SetStateAction, useCallback, useState } from "react"
-import { Link } from "react-router"
+import { Link } from "@tanstack/react-router"
 import { SaveButton } from "./SaveButton"
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {

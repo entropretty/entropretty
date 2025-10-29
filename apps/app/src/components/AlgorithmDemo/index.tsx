@@ -4,7 +4,7 @@ import { AlgorithmView } from "@/lib/helper.types"
 import { deriveSeedFamily, getSeed, seedToKey } from "@entropretty/utils"
 import { AnimatePresence, motion } from "motion/react"
 import { useCallback, useEffect, useState } from "react"
-import { Link } from "react-router"
+import { Link } from "@tanstack/react-router"
 import { cn } from "../../lib/utils"
 
 interface Props {

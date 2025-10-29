@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router"
+import { Navigate, Outlet } from "@tanstack/react-router"
 import { useUserProfile } from "../hooks/useUserProfile"
 
 export default function RequireUsername() {
