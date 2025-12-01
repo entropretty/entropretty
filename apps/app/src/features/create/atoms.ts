@@ -11,6 +11,7 @@ export const remixAtom = atom<AlgorithmView | null>(null)
 export const scriptErrorAtom = atom<string | null>(null)
 
 export const algorithmNameAtom = atom<string>("")
+export const formatOnSaveAtom = atom<boolean>(true)
 
 const initialSeeds = [...getSeedFamily("Procedural").map((s) => [...s])]
 export const editorSeedFamilyAtom = atom<number[][]>(initialSeeds)

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import { useCallback } from "react"
 import {
   editorSeedFamilyAtom,
   editorSeedTypeAtom,
+  formatOnSaveAtom,
   generateNewSeedAtom,
   SeedType,
 } from "../atoms"
@@ -23,6 +25,7 @@ export const SeedTools = () => {
 
   const [seedType, setSeedType] = useAtom(editorSeedTypeAtom)
   const [seedFamily] = useAtom(editorSeedFamilyAtom)
+  const [formatOnSave, setFormatOnSave] = useAtom(formatOnSaveAtom)
 
   const handleSeedTypeChange = useCallback(
     (value: SeedType) => {
@@ -61,6 +64,21 @@ export const SeedTools = () => {
           REROLL
         </Button>
       </div>
+
+      <div className="flex flex-row items-center gap-2">
+        <Checkbox
+          id="format-on-save"
+          checked={formatOnSave}
+          onCheckedChange={(checked) => setFormatOnSave(checked === true)}
+        />
+        <label
+          htmlFor="format-on-save"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Format code on save (Cmd+S)
+        </label>
+      </div>
+
       <Separator />
 
       <div className="flex w-full flex-col gap-4">
