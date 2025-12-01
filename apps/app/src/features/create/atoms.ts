@@ -1,6 +1,7 @@
 import { AlgorithmView } from "@/lib/helper.types"
 import { FamilyKind, getSeed, getSeedFamily } from "@entropretty/utils"
 import { atom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
 
 export type SeedType = FamilyKind
 
@@ -11,7 +12,10 @@ export const remixAtom = atom<AlgorithmView | null>(null)
 export const scriptErrorAtom = atom<string | null>(null)
 
 export const algorithmNameAtom = atom<string>("")
-export const formatOnSaveAtom = atom<boolean>(true)
+export const formatOnSaveAtom = atomWithStorage<boolean>(
+  "entropretty-format-on-save",
+  true,
+)
 
 const initialSeeds = [...getSeedFamily("Procedural").map((s) => [...s])]
 export const editorSeedFamilyAtom = atom<number[][]>(initialSeeds)

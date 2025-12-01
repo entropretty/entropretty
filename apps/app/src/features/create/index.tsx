@@ -78,7 +78,7 @@ export const CreateFeature = () => {
                 <TabsTrigger className="border-foreground border" value="check">
                   Check
                 </TabsTrigger>
-                <TabsTrigger value="seed">Seed</TabsTrigger>
+                <TabsTrigger value="seed">Settings</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="code" className="flex-1">

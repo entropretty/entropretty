@@ -36,73 +36,71 @@ export const SeedTools = () => {
   )
 
   return (
-    <div className="flex h-full w-full flex-col items-start gap-4 overflow-y-scroll p-4">
-      <div>
-        <h3 className="text-md font-medium">Settings</h3>
-        <p className="text-muted-foreground text-xs">
-          Configure your seed type and modify your current rolled seed.
-          Remember, your algorithm should cover the whole seed spectrum.
-        </p>
-      </div>
+    <div className="flex h-full w-full flex-col items-start gap-6 overflow-y-scroll p-4">
+      <div className="flex w-full flex-col gap-4">
+        <h2 className="text-base">Seed Type</h2>
 
-      <div className="flex flex-row items-center gap-2">
-        <Select
-          defaultValue="Procedural"
-          onValueChange={handleSeedTypeChange}
-          value={seedType}
-        >
-          <SelectTrigger className="w-[240px]">
-            <SelectValue placeholder="Select type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Procedural">Entropy</SelectItem>
-            <SelectItem value="ProceduralPersonal">Personal Id</SelectItem>
-            <SelectItem value="ProceduralAccount">Account Id</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button variant="destructive" onClick={generateNewSeed}>
-          REROLL
-        </Button>
-      </div>
+        <div className="flex flex-row items-center gap-2">
+          <Select
+            defaultValue="Procedural"
+            onValueChange={handleSeedTypeChange}
+            value={seedType}
+          >
+            <SelectTrigger className="w-[240px]">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Procedural">Entropy</SelectItem>
+              <SelectItem value="ProceduralPersonal">Personal Id</SelectItem>
+              <SelectItem value="ProceduralAccount">Account Id</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button variant="destructive" onClick={generateNewSeed}>
+            REROLL
+          </Button>
+        </div>
 
-      <div className="flex flex-row items-center gap-2">
-        <Checkbox
-          id="format-on-save"
-          checked={formatOnSave}
-          onCheckedChange={(checked) => setFormatOnSave(checked === true)}
-        />
-        <label
-          htmlFor="format-on-save"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Format code on save (Cmd+S)
-        </label>
+        <div className="flex w-full flex-col gap-4 pt-2">
+          <div>
+            <h3 className="text-base">Current Seed</h3>
+            <p className="text-muted-foreground text-xs">
+              This is the value of your main seed. The other shown seeds are
+              slightly mutated versions of this one.
+            </p>
+          </div>
+
+          <SeedRepresentation seed={seedFamily[0]} />
+        </div>
+
+        <div className="flex w-full flex-col gap-4 pt-2">
+          <div>
+            <h3 className="text-base">Manipulation</h3>
+            <p className="text-muted-foreground text-xs">
+              Fine-tune and adjust your current seed values manually.
+            </p>
+          </div>
+          <SeedManipulator />
+        </div>
       </div>
 
       <Separator />
 
       <div className="flex w-full flex-col gap-4">
-        <div>
-          <h3 className="text-md font-medium">Current Seed</h3>
-          <p className="text-muted-foreground text-xs">
-            This is the value of your main seed. The other shown seeds are
-            slightly mutated versions of this one.
-          </p>
+        <h2 className="text-lg">Editor</h2>
+
+        <div className="flex flex-row items-center gap-2">
+          <Checkbox
+            id="format-on-save"
+            checked={formatOnSave}
+            onCheckedChange={(checked) => setFormatOnSave(checked === true)}
+          />
+          <label
+            htmlFor="format-on-save"
+            className="select-none text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Format code on save (Cmd+S)
+          </label>
         </div>
-
-        <SeedRepresentation seed={seedFamily[0]} />
-      </div>
-
-      <Separator />
-
-      <div className="flex w-full flex-col gap-4">
-        <div>
-          <h3 className="text-md font-medium">Manipulation</h3>
-          <p className="text-muted-foreground text-xs">
-            Fine-tune and adjust your current seed values manually.
-          </p>
-        </div>
-        <SeedManipulator />
       </div>
     </div>
   )
