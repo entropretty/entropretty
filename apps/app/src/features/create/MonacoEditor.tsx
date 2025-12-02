@@ -1,17 +1,23 @@
 import { useTheme } from "@/contexts/theme-context"
 import { FEATURES } from "@/lib/features"
 import Editor, { useMonaco } from "@monaco-editor/react"
-import { useAtom } from "jotai"
-import { useCallback, useEffect, useState } from "react"
+import { useAtom, useAtomValue } from "jotai"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useDebouncedCallback } from "use-debounce"
-import { editorCodeAtom } from "./atoms"
+import type { editor } from "monaco-editor"
+import { editorCodeAtom, formatOnSaveAtom } from "./atoms"
 import initialCode from "./initialCode"
 import poimandresTheme from "./PoimandresTheme"
+import { useFormatCode } from "./useFormatCode"
 
 const MonacoEditor = () => {
   const monaco = useMonaco()
   const [code, setEditorCode] = useAtom(editorCodeAtom)
   const [localCode, setLocalCode] = useState(code)
+  const formatOnSave = useAtomValue(formatOnSaveAtom)
+  const { formatCode } = useFormatCode()
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null)
+
   const debouncedSetEditorCode = useDebouncedCallback(
     // function
     (value) => {
@@ -64,13 +70,48 @@ const MonacoEditor = () => {
     debouncedSetEditorCode(value)
   }
 
-  const onMount = useCallback(() => {
-    if (!code) {
-      console.log("setting initial code as no code", code)
-      setLocalCode(initialCode)
-      setEditorCode(initialCode)
+  const onMount = useCallback(
+    (editor: editor.IStandaloneCodeEditor) => {
+      editorRef.current = editor
+
+      if (!code) {
+        console.log("setting initial code as no code", code)
+        setLocalCode(initialCode)
+        setEditorCode(initialCode)
+      }
+    },
+    [code, setEditorCode],
+  )
+
+  useEffect(() => {
+    if (monaco && editorRef.current) {
+      editorRef.current.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
+        async () => {
+          if (!formatOnSave || !editorRef.current) return
+
+          const editor = editorRef.current
+          const currentCode = editor.getValue()
+          const cursorPosition = editor.getPosition()
+          const scrollTop = editor.getScrollTop()
+
+          const formatted = await formatCode(currentCode)
+
+          if (formatted !== currentCode) {
+            editor.setValue(formatted)
+            setLocalCode(formatted)
+            setEditorCode(formatted)
+
+            if (cursorPosition) {
+              editor.setPosition(cursorPosition)
+            }
+            editor.setScrollTop(scrollTop)
+            editor.focus()
+          }
+        },
+      )
     }
-  }, [code, setEditorCode])
+  }, [monaco, formatOnSave, formatCode, setEditorCode])
 
   // Determine which theme to use for the Editor component
   const getEditorTheme = () => {
