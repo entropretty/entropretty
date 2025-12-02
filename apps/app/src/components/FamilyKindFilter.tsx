@@ -26,7 +26,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
       <Select value={value} onValueChange={handleValueChange}>
         <SelectTrigger
           className={cn(
-            "font-jersey text-lg hover:cursor-pointer",
+            "hover:cursor-pointer",
             value !== "All" && familyKindColor(value as FamilyKind),
             value === "Procedural"
               ? "text-primary-foreground"
@@ -40,7 +40,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
         <SelectContent>
           <SelectItem
             value="All"
-            className="font-jersey bg-transparent text-lg hover:cursor-pointer"
+            className="bg-transparent hover:cursor-pointer"
           >
             Show All
           </SelectItem>
@@ -48,7 +48,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
             value="Procedural"
             className={cn(
               familyKindColor("Procedural"),
-              "text-primary-foreground font-jersey text-lg hover:cursor-pointer",
+              "text-primary-foreground hover:cursor-pointer",
             )}
           >
             Entropy
@@ -58,7 +58,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
             className={cn(
               familyKindColor("ProceduralPersonal"),
               "text-primary-background",
-              "font-jersey text-lg",
+              "",
               "hover:cursor-pointer",
             )}
           >
@@ -69,7 +69,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
             className={cn(
               familyKindColor("ProceduralAccount"),
               "text-primary-background",
-              "font-jersey text-lg",
+              "",
               "hover:cursor-pointer",
             )}
           >

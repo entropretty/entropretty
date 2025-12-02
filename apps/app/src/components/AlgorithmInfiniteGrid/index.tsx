@@ -89,7 +89,7 @@ export function AlgorithmInfiniteGrid({
         <div className="bg-background border-background-200 fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
           <FamilyKindBadge
             familyKind={algorithm.family_kind}
-            className="absolute left-0 top-[-22px] z-10"
+            className="absolute left-[-1px] top-0 translate-y-[calc(-100%-1px)]"
           />
           <AlgorithmInfo algorithm={algorithm} />
           <AlgorithmActions algorithm={algorithm} />

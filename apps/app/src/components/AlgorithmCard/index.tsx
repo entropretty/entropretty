@@ -61,7 +61,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
       <div className="border-background-200 relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
-          className="absolute left-0 top-[-22px]"
+          className="absolute left-0 top-0 translate-y-[calc(-100%-1px)]"
         />
 
         <AlgorithmInfo algorithm={algorithm} />

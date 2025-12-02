@@ -82,7 +82,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
       <div className="bg-background absolute bottom-0 w-full border-t border-black/30 px-4 py-2 opacity-0 transition-opacity group-hover:opacity-100 group-hover:[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] hover:dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
-          className="absolute left-0 top-[-22px]"
+          className="absolute left-0 top-0 translate-y-[calc(-100%-.5px)]"
         />
         <div className="relative flex flex-col items-start justify-between gap-y-2">
           <AlgorithmInfo algorithm={algorithm} />
