@@ -91,6 +91,7 @@ export async function generateOGImage(
   const renderCore = getServerRenderCore()
 
   // Add algorithm to render core
+  console.log(`[OG Image] Generating for algorithm ${algorithmId}, kind: ${familyKind}, content length: ${algorithmContent?.length ?? 0}`)
   renderCore.updateAlgorithm(algorithmId, algorithmContent, familyKind)
 
   // Generate seeds for the 3x3 grid
@@ -128,6 +129,8 @@ export async function generateOGImage(
       const img = await loadImageFromBuffer(tileBuffer)
       ctx.drawImage(img, x, y, config.tileSize, config.tileSize)
     } catch (error) {
+      // Log the error for debugging
+      console.error(`[OG Image] Failed to render tile ${i} for algorithm ${algorithmId}:`, error)
       // Draw placeholder on error
       ctx.fillStyle = '#f0f0f0'
       ctx.fillRect(x, y, config.tileSize, config.tileSize)
