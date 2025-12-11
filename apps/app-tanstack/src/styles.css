@@ -167,3 +167,9 @@ code {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .font-jersey {
+    font-family: 'Jersey 20', sans-serif;
+  }
+}

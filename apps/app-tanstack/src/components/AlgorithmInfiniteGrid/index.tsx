@@ -1,21 +1,22 @@
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
-import { AlgorithmView } from "@/lib/helper.types"
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { AlgorithmView } from '@/lib/helper.types'
 import {
   deriveSeedFamily,
   FamilyKind,
   getSeed,
   seedToKey,
-} from "@entropretty/utils"
-import { useCallback, useEffect, useState } from "react"
-import { useInView } from "react-intersection-observer"
-import { Link } from "react-router"
-import { LikeButton } from "../AlgorithmCard/LikeButton"
-import { AlgorithmInfo } from "../AlgorithmInfo"
-import { AutoScrollButton } from "../AutoScrollButton"
-import { FamilyKindBadge } from "../FamilyKindBadge"
+} from '@entropretty/utils'
+import { useCallback, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
+import { Link } from '@tanstack/react-router'
+import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
+import { AlgorithmInfo } from '@/components/AlgorithmInfo'
+import { AutoScrollButton } from '@/components/AutoScrollButton'
+import { FamilyKindBadge } from '@/components/FamilyKindBadge'
+
 interface AlgorithmInfiniteGridProps {
   algorithm: AlgorithmView
   className?: string
@@ -33,12 +34,12 @@ const getSeedFamily = (kind: FamilyKind, amount: number) => {
 
 export function AlgorithmInfiniteGrid({
   algorithm,
-  className = "",
+  className = '',
 }: AlgorithmInfiniteGridProps) {
   const [seeds, setSeeds] = useState<number[][]>([])
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "400px", // Start loading more content before reaching the bottom
+    rootMargin: '400px', // Start loading more content before reaching the bottom
   })
 
   const { infinite } = useDisplaySizes()
@@ -110,7 +111,7 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
       </Button>
       {user && (
         <Button asChild variant="link">
-          <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
+          <Link to={`/create`} search={{ remix: algorithm.id }}>{`REMIX`}</Link>
         </Button>
       )}
 

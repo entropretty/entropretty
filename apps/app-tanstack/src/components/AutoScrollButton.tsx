@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { Button } from '@/components/ui/button'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface AutoScrollButtonProps {
   className?: string
@@ -8,18 +8,18 @@ interface AutoScrollButtonProps {
 }
 
 export function AutoScrollButton({
-  className = "",
+  className = '',
   scrollAmount = 2000,
   scrollInterval = 8, // ~60fps
 }: AutoScrollButtonProps) {
   const [isScrolling, setIsScrolling] = useState(false)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const startScrolling = useCallback(() => {
     if (intervalRef.current) return // Already scrolling
 
     intervalRef.current = setInterval(() => {
-      window.scrollBy(0, 2000)
+      window.scrollBy({ top: scrollAmount, behavior: 'smooth' })
     }, scrollInterval)
   }, [scrollAmount, scrollInterval])
 
@@ -49,11 +49,11 @@ export function AutoScrollButton({
 
   return (
     <Button
-      variant={isScrolling ? undefined : "ghost"}
+      variant={isScrolling ? undefined : 'ghost'}
       onClick={toggleScrolling}
       className={className}
     >
-      {isScrolling ? "STOP" : "SCROLL"}
+      {isScrolling ? 'STOP' : 'SCROLL'}
     </Button>
   )
 }

@@ -2,10 +2,10 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { Link } from "react-router"
+} from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Link } from '@tanstack/react-router'
 
 export const ListItem = ({
   className,
@@ -19,7 +19,7 @@ export const ListItem = ({
   return (
     <div
       className={cn(
-        "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 p-3 leading-none no-underline outline-none transition-colors hover:cursor-pointer",
+        'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 p-3 leading-none no-underline outline-none transition-colors hover:cursor-pointer',
         className,
       )}
       {...props}
@@ -44,35 +44,44 @@ export function HelpMenu() {
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-2 md:w-[300px] lg:w-[400px]">
         <div className="grid gap-1">
-          <Link to="https://entropretty.com/" target="_blank">
+          <a href="https://entropretty.com/" target="_blank" rel="noreferrer">
             <ListItem
               title="What is this?"
               description="https://entropretty.com/"
             />
-          </Link>
+          </a>
 
-          <Link to="https://github.com/entropretty/entropretty" target="_blank">
+          <a
+            href="https://github.com/entropretty/entropretty"
+            target="_blank"
+            rel="noreferrer"
+          >
             <ListItem
               title="GitHub Repository"
               description="View the source code for Entropretty"
             />
-          </Link>
-          <Link to="https://entropretty.com/rules" target="_blank">
+          </a>
+          <a
+            href="https://entropretty.com/rules"
+            target="_blank"
+            rel="noreferrer"
+          >
             <ListItem
               title="Competition Rules"
               description="Learn about the rules of the competition"
             />
-          </Link>
+          </a>
 
-          <Link
-            to="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"
             target="_blank"
+            rel="noreferrer"
           >
             <ListItem
               title="Canvas API Reference"
               description="Documentation for the CanvasRenderingContext2D API used for drawing"
             />
-          </Link>
+          </a>
         </div>
       </PopoverContent>
     </Popover>

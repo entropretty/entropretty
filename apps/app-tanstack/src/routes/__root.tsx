@@ -7,10 +7,10 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Toaster } from 'sonner'
 
-import Header from '../components/Header'
 import { AuthProvider } from '../contexts/auth-context'
 import { ServiceProvider } from '../contexts/service-context'
 import { ThemeProvider } from '../contexts/theme-context'
+import HeaderLayout from '../layouts/HeaderLayout'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -45,7 +45,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
 
   shellComponent: RootDocument,
+  component: RootComponent,
 })
+
+function RootComponent() {
+  return <HeaderLayout />
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -57,7 +62,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <ThemeProvider>
           <AuthProvider>
             <ServiceProvider>
-              <Header />
               {children}
               <Toaster />
               <TanStackDevtools
