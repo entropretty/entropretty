@@ -11,6 +11,8 @@ const config = defineConfig({
     devtools(),
     nitro({
       preset: 'netlify',
+      // Don't bundle native modules - let Netlify handle them
+      externals: ['@napi-rs/canvas'],
     }),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

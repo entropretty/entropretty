@@ -1,0 +1,18 @@
+# Netlify configuration for TanStack Start app
+
+[build]
+  # Build command handled by Netlify UI or netlify.toml
+  command = "pnpm build"
+  publish = "dist"
+
+[functions]
+  # Include native modules as external to prevent bundling issues
+  external_node_modules = ["@napi-rs/canvas"]
+  # Node.js version for serverless functions
+  node_bundler = "esbuild"
+  
+  # Increase function timeout for OG image generation (default is 10s)
+  # Note: Netlify free tier max is 10s, Pro tier allows up to 26s
+
+# Redirect all requests to the server function (handled by Nitro)
+# Nitro generates its own redirects, but these are fallbacks
