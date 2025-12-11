@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { AlgorithmService } from '@/services/algorithm-service'
+import type { AlgorithmService } from '@/services/algorithm-service'
 
 interface ServiceContextType {
   algorithmService: AlgorithmService | null
@@ -23,9 +23,12 @@ export const ServiceProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     // Only create the AlgorithmService on the client side
     // Workers are not available during SSR
+    // Using dynamic import to prevent comlink from being bundled for the server
     if (typeof window !== 'undefined' && !serviceRef.current) {
-      serviceRef.current = new AlgorithmService()
-      setMounted(true)
+      import('@/services/algorithm-service').then((mod) => {
+        serviceRef.current = new mod.AlgorithmService()
+        setMounted(true)
+      })
     }
   }, [])
 
