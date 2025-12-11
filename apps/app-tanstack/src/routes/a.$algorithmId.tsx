@@ -57,9 +57,11 @@ export const Route = createFileRoute('/a/$algorithmId')({
       : 'Generative art algorithm on Entropretty'
 
     // Use absolute URL for OG images
+    // On server: use VITE_APP_URL or Netlify's URL env var
+    // On client: use window.location.origin
     const baseUrl = typeof window !== 'undefined'
       ? window.location.origin
-      : process.env.VITE_APP_URL || 'https://entropretty.app'
+      : process.env.VITE_APP_URL || process.env.URL || 'https://entropretty.app'
     const ogImageUrl = `${baseUrl}/api/og/${algorithmId}`
     const twitterImageUrl = `${baseUrl}/api/og/${algorithmId}?type=twitter`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
