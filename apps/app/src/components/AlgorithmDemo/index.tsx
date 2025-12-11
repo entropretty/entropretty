@@ -4,8 +4,7 @@ import { AlgorithmView } from "@/lib/helper.types"
 import { deriveSeedFamily, getSeed, seedToKey } from "@entropretty/utils"
 import { AnimatePresence, motion } from "motion/react"
 import { useCallback, useEffect, useState } from "react"
-import { Link } from "react-router"
-import { cn } from "../../lib/utils"
+import { cn } from "@/lib/utils"
 
 interface Props {
   algorithm: AlgorithmView
@@ -30,9 +29,9 @@ export function AlgorithmDemo({
 
     const newSeed = getSeed(algorithm.family_kind!)
     const newFamily = deriveSeedFamily(newSeed, {
-      size: 3,
-      minBits: 1,
-      maxBits: 1,
+      size: 1,
+      minBits: 2,
+      maxBits: 8,
     })
 
     // Filter out any duplicates by converting to string for comparison
@@ -66,8 +65,8 @@ export function AlgorithmDemo({
       if (index + 1 === seeds.length) {
         loadMore()
       }
-      setIndex((prev) => (prev + 1) % seeds.length)
-    }, 1800)
+      setIndex((prev) => prev + 1)
+    }, 600)
     return () => clearInterval(interval)
   }, [index, loadMore, seeds, shouldStartCycling])
 
@@ -95,33 +94,45 @@ export function AlgorithmDemo({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center bg-white p-10 ${className}`}
+      className={`flex flex-col items-center justify-center bg-white ${className}`}
     >
       <div className={cn("flex w-full flex-col items-center justify-center")}>
-        <div className="relative aspect-square h-[70vh] overflow-hidden">
+        <div className="relative aspect-square h-[70vh] overflow-visible">
           <AnimatePresence mode="sync">
             <motion.div
               key={seedToKey(seeds[index])}
               initial={{
                 opacity: 0.0,
-                // scale: 0.95,
+                scale: 1.8,
                 filter: "blur(2px)",
               }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                filter: "blur(0px)",
+                transition: {
+                  duration: 0.2,
+                  ease: "easeIn",
+                },
+              }}
               exit={{
                 opacity: 0.0,
-                // scale: 1.05,
+                scale: 0.8,
                 filter: "blur(2px)",
+                transition: {
+                  duration: 0.5,
+                  ease: "easeOut",
+                },
               }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute inset-0 flex items-center justify-center p-8"
+              className="absolute inset-0 flex items-center justify-center"
             >
               <AlgorithmBitmap
                 algorithmId={algorithm.id!}
                 seed={seeds[index]}
                 size={demo}
-                scale={2}
+                scale={3}
                 style={{
+                  padding: 0,
                   width: "100%",
                   height: "100%",
                   display: "block",
@@ -131,39 +142,6 @@ export function AlgorithmDemo({
             </motion.div>
           </AnimatePresence>
         </div>
-      </div>
-    </div>
-  )
-}
-
-export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
-  return (
-    <div className="flex w-full flex-col items-center justify-center gap-2 text-gray-600">
-      <div className="text-2xl font-bold">{`${algorithm.name || "Untitled"} `}</div>
-      <div className="text-xl">
-        {`by `}
-        <Link
-          className="text-muted-foreground underline"
-          to={`/u/${algorithm.username || "Anonymous"}`}
-        >
-          {algorithm.username || "Anonymous"}
-        </Link>
-      </div>
-      <div>
-        <Link
-          className="text-muted-foreground underline"
-          to={`/a/${algorithm.id}`}
-        >{`/a/${algorithm.id}`}</Link>
-
-        {algorithm.remix_of && (
-          <>
-            {` remix of `}
-            <Link
-              className="text-muted-foreground underline"
-              to={`/a/${algorithm.remix_of}`}
-            >{`/a/${algorithm.remix_of}`}</Link>
-          </>
-        )}
       </div>
     </div>
   )
