@@ -15,6 +15,11 @@ export interface AlgorithmMeta {
 
 export type OutputType = "bitmap" | "imagedata"
 
+/**
+ * Browser-only RenderCore using OffscreenCanvas
+ * For Node.js, use RenderCoreBase with NodeCanvasAdapter
+ * @deprecated Use RenderCoreBase with appropriate CanvasAdapter for new code
+ */
 export class RenderCore {
   private algorithms = new Map<AlgorithmId, string>()
   private metadata = new Map<AlgorithmId, FamilyKind>()
@@ -115,6 +120,13 @@ export class RenderCore {
    */
   getAlgorithm(id: AlgorithmId): string | undefined {
     return this.algorithms.get(id)
+  }
+
+  /**
+   * Check if algorithm exists
+   */
+  hasAlgorithm(id: AlgorithmId): boolean {
+    return this.algorithms.has(id)
   }
 
   /**

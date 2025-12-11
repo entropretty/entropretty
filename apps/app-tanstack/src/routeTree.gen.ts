@@ -13,10 +13,12 @@ import { Route as NewRouteImport } from './routes/new'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as AAlgorithmIdRouteImport } from './routes/a.$algorithmId'
+import { Route as PreviewOgAlgorithmIdRouteImport } from './routes/preview/og.$algorithmId'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
 import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
@@ -42,6 +44,11 @@ const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
   path: '/a/$algorithmId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreviewOgAlgorithmIdRoute = PreviewOgAlgorithmIdRouteImport.update({
+  id: '/preview/og/$algorithmId',
+  path: '/preview/og/$algorithmId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
   path: '/demo/start/server-funcs',
@@ -60,6 +67,11 @@ const DemoApiTqTodosRoute = DemoApiTqTodosRouteImport.update({
 const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   id: '/demo/api/names',
   path: '/demo/api/names',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOgAlgorithmIdRoute = ApiOgAlgorithmIdRouteImport.update({
+  id: '/api/og/$algorithmId',
+  path: '/api/og/$algorithmId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
@@ -88,10 +100,12 @@ export interface FileRoutesByFullPath {
   '/new': typeof NewRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/preview/og/$algorithmId': typeof PreviewOgAlgorithmIdRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -102,10 +116,12 @@ export interface FileRoutesByTo {
   '/new': typeof NewRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/preview/og/$algorithmId': typeof PreviewOgAlgorithmIdRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -117,10 +133,12 @@ export interface FileRoutesById {
   '/new': typeof NewRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/preview/og/$algorithmId': typeof PreviewOgAlgorithmIdRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -133,10 +151,12 @@ export interface FileRouteTypes {
     | '/new'
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
+    | '/api/og/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/preview/og/$algorithmId'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -147,10 +167,12 @@ export interface FileRouteTypes {
     | '/new'
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
+    | '/api/og/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/preview/og/$algorithmId'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -161,10 +183,12 @@ export interface FileRouteTypes {
     | '/new'
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
+    | '/api/og/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/preview/og/$algorithmId'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -176,10 +200,12 @@ export interface RootRouteChildren {
   NewRoute: typeof NewRoute
   AAlgorithmIdRoute: typeof AAlgorithmIdRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  ApiOgAlgorithmIdRoute: typeof ApiOgAlgorithmIdRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
+  PreviewOgAlgorithmIdRoute: typeof PreviewOgAlgorithmIdRoute
   DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
   DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
   DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
@@ -216,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AAlgorithmIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/og/$algorithmId': {
+      id: '/preview/og/$algorithmId'
+      path: '/preview/og/$algorithmId'
+      fullPath: '/preview/og/$algorithmId'
+      preLoaderRoute: typeof PreviewOgAlgorithmIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
@@ -242,6 +275,13 @@ declare module '@tanstack/react-router' {
       path: '/demo/api/names'
       fullPath: '/demo/api/names'
       preLoaderRoute: typeof DemoApiNamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/og/$algorithmId': {
+      id: '/api/og/$algorithmId'
+      path: '/api/og/$algorithmId'
+      fullPath: '/api/og/$algorithmId'
+      preLoaderRoute: typeof ApiOgAlgorithmIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/ssr/': {
@@ -280,10 +320,12 @@ const rootRouteChildren: RootRouteChildren = {
   NewRoute: NewRoute,
   AAlgorithmIdRoute: AAlgorithmIdRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  ApiOgAlgorithmIdRoute: ApiOgAlgorithmIdRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
+  PreviewOgAlgorithmIdRoute: PreviewOgAlgorithmIdRoute,
   DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
   DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
   DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
