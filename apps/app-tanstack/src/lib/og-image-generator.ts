@@ -1,11 +1,12 @@
-import { createCanvas, Path2D, type Canvas } from '@napi-rs/canvas'
 import {
   RenderCoreBase,
   createNodeCanvasAdapter,
   deriveSeedFamily,
   getSeed,
-  type FamilyKind,
 } from '@entropretty/utils'
+import { Path2D, createCanvas } from '@napi-rs/canvas'
+import type { Canvas } from '@napi-rs/canvas'
+import type { FamilyKind } from '@entropretty/utils'
 
 // In-memory cache for generated OG images
 const imageCache = new Map<string, { buffer: Uint8Array; timestamp: number }>()
@@ -105,12 +106,10 @@ export async function generateOGImage(
   renderCore.updateAlgorithm(algorithmId, algorithmContent, familyKind)
 
   // Generate seeds for the 3x3 grid
-  const initialSeed = getSeed(familyKind)
-  const seeds = deriveSeedFamily(initialSeed, {
-    size: config.gridSize * config.gridSize,
-    minBits: 1,
-    maxBits: 1,
-  }) as number[][]
+
+  const seeds = new Array(config.gridSize * config.gridSize)
+    .fill(0)
+    .map(() => getSeed(familyKind))
 
   // Create main canvas
   const canvas = createCanvas(config.width, config.height)

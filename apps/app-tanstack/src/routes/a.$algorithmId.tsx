@@ -2,9 +2,9 @@ import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAlgorithm } from '@/hooks/useAlgorithm'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
 
 // Server function to fetch algorithm data for meta tags
@@ -90,6 +90,12 @@ export const Route = createFileRoute('/a/$algorithmId')({
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
         { name: 'twitter:image', content: twitterImageUrl },
+        { name: 'twitter:image:height', content: '630' },
+        { name: 'twitter:image:width', content: '1200' },
+        { name: 'twitter:site', content: '@entropretty' },
+        { name: 'twitter:creator', content: '@entropretty' },
+        { name: 'twitter:domain', content: 'entropretty.com' },
+        { name: 'twitter:image:type', content: 'image/png' },
       ],
     }
   },
