@@ -8,9 +8,11 @@ export const Route = createFileRoute('/api/twitter/$algorithmId')({
     handlers: {
       GET: async ({ params }) => {
         const { algorithmId } = params
+        console.log('[TWITTER] Processing algorithm ID:', algorithmId)
 
         const id = Number(algorithmId)
         if (isNaN(id)) {
+          console.log('[TWITTER] Invalid algorithm ID:', algorithmId)
           return new Response('Invalid algorithm ID', { status: 400 })
         }
 
