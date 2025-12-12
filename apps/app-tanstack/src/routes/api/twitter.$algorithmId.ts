@@ -42,6 +42,7 @@ export const Route = createFileRoute('/api/twitter/$algorithmId')({
           .single()
 
         if (error || !algorithm.content) {
+          console.log('Algorithm not found', id)
           return new Response('Algorithm not found', { status: 404 })
         }
 
