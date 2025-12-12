@@ -1,9 +1,9 @@
-import { useAlgorithmService } from "@/contexts/service-context"
-import { supabase } from "@/lib/supabase"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { AlgorithmView } from "@/lib/helper.types"
-import { useAtomValue } from "jotai"
-import { familyKindFilterAtom } from "@/atoms/family-kind-filter"
+import { useAlgorithmService } from '@/contexts/service-context'
+import { getSupabase } from '@/lib/supabase'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { AlgorithmView } from '@/lib/helper.types'
+import { useAtomValue } from 'jotai'
+import { familyKindFilterAtom } from '@/atoms/family-kind-filter'
 
 const PAGE_SIZE = 3
 
@@ -12,21 +12,23 @@ export function useHotAlgorithms() {
   const familyKindFilter = useAtomValue(familyKindFilterAtom)
 
   return useInfiniteQuery<AlgorithmView[]>({
-    queryKey: ["algorithms", "hot", familyKindFilter],
+    queryKey: ['algorithms', 'hot', familyKindFilter],
+    enabled: typeof window !== 'undefined',
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const from = (pageParam as number) * PAGE_SIZE
       const to = from + PAGE_SIZE - 1
 
+      const supabase = getSupabase()
       let query = supabase
-        .from("algorithms_with_user_profile")
+        .from('algorithms_with_user_profile')
         .select()
-        .order("like_count", { ascending: false })
-        .order("id", { ascending: true })
-        .gt("like_count", 0)
+        .order('like_count', { ascending: false })
+        .order('id', { ascending: true })
+        .gt('like_count', 0)
 
-      if (familyKindFilter !== "All") {
-        query = query.eq("family_kind", familyKindFilter)
+      if (familyKindFilter !== 'All') {
+        query = query.eq('family_kind', familyKindFilter)
       }
 
       const { data, error } = await query.range(from, to)

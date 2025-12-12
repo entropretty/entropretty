@@ -3,20 +3,20 @@ import { AlgorithmCardSkeleton } from '@/components/AlgorithmCard/AlgorithmCardS
 import { FamilyKindFilter } from '@/components/FamilyKindFilter'
 import { FeedbackDialog } from '@/components/FeedbackDialog'
 import { useAuth } from '@/contexts/auth-context'
-import { useLatestAlgorithms } from '@/hooks/useLatestAlgorithms'
+import { useHotAlgorithms } from '@/hooks/useHotAlgorithms'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
-export const Route = createFileRoute('/')({
-  component: IndexPage,
+export const Route = createFileRoute('/hot')({
+  component: HotPage,
   ssr: false, // Client-side only for now
 })
 
 function Feed() {
   const { ref, inView } = useInView()
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useLatestAlgorithms()
+    useHotAlgorithms()
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -48,14 +48,14 @@ function Feed() {
         ) : hasNextPage ? (
           <div>Load more</div>
         ) : (
-          <div>No more algorithms</div>
+          <div>No more rated algorithms</div>
         )}
       </div>
     </div>
   )
 }
 
-function IndexPage() {
+function HotPage() {
   const { user } = useAuth()
   return (
     <>

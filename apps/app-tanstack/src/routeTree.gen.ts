@@ -14,8 +14,10 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as MineRouteImport } from './routes/mine'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HotRouteImport } from './routes/hot'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as AAlgorithmIdRouteImport } from './routes/a.$algorithmId'
 import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
 import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
@@ -45,6 +47,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotRoute = HotRouteImport.update({
+  id: '/hot',
+  path: '/hot',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreateRoute = CreateRouteImport.update({
   id: '/create',
   path: '/create',
@@ -53,6 +60,11 @@ const CreateRoute = CreateRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
@@ -74,24 +86,28 @@ const ApiOgAlgorithmIdRoute = ApiOgAlgorithmIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
   '/new': typeof NewRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
   '/new': typeof NewRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
 }
@@ -99,12 +115,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
   '/new': typeof NewRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
 }
@@ -113,36 +131,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/create'
+    | '/hot'
     | '/login'
     | '/mine'
     | '/new'
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/create'
+    | '/hot'
     | '/login'
     | '/mine'
     | '/new'
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
   id:
     | '__root__'
     | '/'
     | '/create'
+    | '/hot'
     | '/login'
     | '/mine'
     | '/new'
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
   fileRoutesById: FileRoutesById
@@ -150,12 +174,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateRoute: typeof CreateRoute
+  HotRoute: typeof HotRoute
   LoginRoute: typeof LoginRoute
   MineRoute: typeof MineRoute
   NewRoute: typeof NewRoute
   ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   AAlgorithmIdRoute: typeof AAlgorithmIdRoute
+  UUsernameRoute: typeof UUsernameRoute
   ApiOgAlgorithmIdRoute: typeof ApiOgAlgorithmIdRoute
   ApiTwitterAlgorithmIdRoute: typeof ApiTwitterAlgorithmIdRoute
 }
@@ -197,6 +223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hot': {
+      id: '/hot'
+      path: '/hot'
+      fullPath: '/hot'
+      preLoaderRoute: typeof HotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/create': {
       id: '/create'
       path: '/create'
@@ -209,6 +242,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a/$algorithmId': {
@@ -238,12 +278,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateRoute: CreateRoute,
+  HotRoute: HotRoute,
   LoginRoute: LoginRoute,
   MineRoute: MineRoute,
   NewRoute: NewRoute,
   ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   AAlgorithmIdRoute: AAlgorithmIdRoute,
+  UUsernameRoute: UUsernameRoute,
   ApiOgAlgorithmIdRoute: ApiOgAlgorithmIdRoute,
   ApiTwitterAlgorithmIdRoute: ApiTwitterAlgorithmIdRoute,
 }
