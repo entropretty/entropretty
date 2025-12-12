@@ -1,11 +1,11 @@
-import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useAlgorithm } from '@/hooks/useAlgorithm'
-import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { Database } from '@/lib/database.types'
+import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useAlgorithm } from '@/hooks/useAlgorithm'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 
 // Server function to fetch algorithm data for meta tags
 const fetchAlgorithmMeta = createServerFn().handler(
@@ -27,7 +27,7 @@ const fetchAlgorithmMeta = createServerFn().handler(
       .eq('id', Number(data.algorithmId))
       .single()
 
-    if (error || !algorithm) {
+    if (error || !algorithm.id) {
       return null
     }
 
@@ -65,9 +65,9 @@ export const Route = createFileRoute('/a/$algorithmId')({
     const baseUrl =
       typeof window !== 'undefined'
         ? window.location.origin
-        : process.env.VITE_APP_URL || 'https://entropretty.app'
-    const ogImageUrl = `${baseUrl}/api/og/${algorithmId}`
-    const twitterImageUrl = `${baseUrl}/api/twitter/${algorithmId}`
+        : process.env.VITE_APP_URL || 'https://app.entropretty.com'
+    const ogImageUrl = `https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/opengraph/${algorithmId}.png`
+    const twitterImageUrl = `https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/twitter/${algorithmId}.png`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
 
     return {
@@ -91,8 +91,7 @@ export const Route = createFileRoute('/a/$algorithmId')({
         { name: 'twitter:description', content: description },
         {
           name: 'twitter:image',
-          content:
-            'https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/opengraph/549.png',
+          content: twitterImageUrl,
         },
         { name: 'twitter:image:height', content: '630' },
         { name: 'twitter:image:width', content: '1200' },

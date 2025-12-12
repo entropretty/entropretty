@@ -6,6 +6,7 @@ import { getSupabase } from '@/lib/supabase'
 
 type AuthContextType = {
   user: User | null
+  isLoading: boolean
   signIn: (
     email: string,
     password: string,
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Only run on client side
@@ -30,9 +32,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const supabase = getSupabase()
+
+      // Check for existing session first
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        setUser(user ?? null)
+        setIsLoading(false)
+      })
+
       const { data: authListener } = supabase.auth.onAuthStateChange(
         (_event, session) => {
           setUser(session?.user ?? null)
+          setIsLoading(false)
         },
       )
 
@@ -42,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Supabase not configured, ignore
       console.warn('Supabase not configured')
+      setIsLoading(false)
     }
   }, [])
 
@@ -85,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )
@@ -98,4 +109,3 @@ export function useAuth() {
   }
   return context
 }
-

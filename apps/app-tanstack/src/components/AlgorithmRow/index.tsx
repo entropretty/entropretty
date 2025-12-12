@@ -3,11 +3,11 @@ import { DeleteButton } from "@/components/AlgorithmRow/DeleteButton"
 import { FamilyKindBadge } from "@/components/FamilyKindBadge"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
+import { AlgorithmBitmap } from "@/components/AlgorithmBitmap"
 import { AlgorithmView } from "@/lib/helper.types"
 import { getSeed, seedToKey } from "@entropretty/utils"
 import { useMemo } from "react"
-import { Link } from "react-router"
+import { Link } from "@tanstack/react-router"
 
 interface AlgorithmRowProps {
   algorithm: AlgorithmView
