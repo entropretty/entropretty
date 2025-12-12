@@ -1,4 +1,4 @@
-import { createCanvas, type Canvas } from '@napi-rs/canvas'
+import { createCanvas, Path2D, type Canvas } from '@napi-rs/canvas'
 import {
   RenderCoreBase,
   createNodeCanvasAdapter,
@@ -11,12 +11,20 @@ import {
 const imageCache = new Map<string, { buffer: Uint8Array; timestamp: number }>()
 const CACHE_TTL = 1000 * 60 * 60 // 1 hour
 
+// Install Path2D globally for algorithm code
+if (typeof globalThis.Path2D === 'undefined') {
+  // @ts-ignore - Install Path2D globally for user algorithm code
+  globalThis.Path2D = Path2D
+}
+
 // Singleton RenderCore for server-side rendering
 let serverRenderCore: RenderCoreBase | null = null
 
 function getServerRenderCore(): RenderCoreBase {
   if (!serverRenderCore) {
-    const adapter = createNodeCanvasAdapter(createCanvas as (w: number, h: number) => Canvas)
+    const adapter = createNodeCanvasAdapter(
+      createCanvas as (w: number, h: number) => Canvas,
+    )
     serverRenderCore = new RenderCoreBase(adapter, 1000) // 1s timeout for OG images
   }
   return serverRenderCore
@@ -81,7 +89,7 @@ export async function generateOGImage(
   familyKind: FamilyKind,
   algorithmName: string,
   authorName: string,
-  type: 'og' | 'twitter' = 'og'
+  type: 'og' | 'twitter' = 'og',
 ): Promise<Uint8Array> {
   const cacheKey = getCacheKey(algorithmId, type)
   const cached = getFromCache(cacheKey)
@@ -91,7 +99,9 @@ export async function generateOGImage(
   const renderCore = getServerRenderCore()
 
   // Add algorithm to render core
-  console.log(`[OG Image] Generating for algorithm ${algorithmId}, kind: ${familyKind}, content length: ${algorithmContent?.length ?? 0}`)
+  console.log(
+    `[OG Image] Generating for algorithm ${algorithmId}, kind: ${familyKind}, content length: ${algorithmContent?.length ?? 0}`,
+  )
   renderCore.updateAlgorithm(algorithmId, algorithmContent, familyKind)
 
   // Generate seeds for the 3x3 grid
@@ -111,7 +121,8 @@ export async function generateOGImage(
   ctx.fillRect(0, 0, config.width, config.height)
 
   // Calculate grid positioning (left side)
-  const gridWidth = config.gridSize * config.tileSize + (config.gridSize - 1) * config.gap
+  const gridWidth =
+    config.gridSize * config.tileSize + (config.gridSize - 1) * config.gap
   const gridHeight = gridWidth
   const gridX = config.padding
   const gridY = (config.height - gridHeight) / 2
@@ -124,13 +135,20 @@ export async function generateOGImage(
     const y = gridY + row * (config.tileSize + config.gap)
 
     try {
-      const tileBuffer = await renderCore.renderBuffer(algorithmId, config.tileSize, seeds[i])
+      const tileBuffer = await renderCore.renderBuffer(
+        algorithmId,
+        config.tileSize,
+        seeds[i],
+      )
       // Decode PNG buffer and draw to canvas
       const img = await loadImageFromBuffer(tileBuffer)
       ctx.drawImage(img, x, y, config.tileSize, config.tileSize)
     } catch (error) {
       // Log the error for debugging
-      console.error(`[OG Image] Failed to render tile ${i} for algorithm ${algorithmId}:`, error)
+      console.error(
+        `[OG Image] Failed to render tile ${i} for algorithm ${algorithmId}:`,
+        error,
+      )
       // Draw placeholder on error
       ctx.fillStyle = '#f0f0f0'
       ctx.fillRect(x, y, config.tileSize, config.tileSize)
@@ -172,7 +190,11 @@ export async function generateOGImage(
   ctx.font = 'bold 24px sans-serif'
   ctx.fillStyle = '#cccccc'
   ctx.textAlign = 'right'
-  ctx.fillText('entropretty.app', config.width - config.padding, config.height - config.padding)
+  ctx.fillText(
+    'entropretty.app',
+    config.width - config.padding,
+    config.height - config.padding,
+  )
 
   const buffer = canvas.toBuffer('image/png')
   const result = new Uint8Array(buffer)
@@ -188,7 +210,11 @@ async function loadImageFromBuffer(buffer: Uint8Array): Promise<Canvas> {
   return loadImage(Buffer.from(buffer)) as unknown as Canvas
 }
 
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+function wrapText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+): string[] {
   const words = text.split(' ')
   const lines: string[] = []
   let currentLine = ''
@@ -216,4 +242,3 @@ function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number)
 export function clearOGImageCache(): void {
   imageCache.clear()
 }
-

@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import type { Database } from '@/lib/database.types'
 import { generateOGImage } from '@/lib/og-image-generator'
 import { createClient } from '@supabase/supabase-js'
-import type { Database } from '@/lib/database.types'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/api/og/$algorithmId')({
   server: {
@@ -9,7 +9,8 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
       GET: async ({ params, request }) => {
         const { algorithmId } = params
         const url = new URL(request.url)
-        const type = url.searchParams.get('type') === 'twitter' ? 'twitter' : 'og'
+        const type =
+          url.searchParams.get('type') === 'twitter' ? 'twitter' : 'og'
 
         const id = Number(algorithmId)
         if (isNaN(id)) {
@@ -17,8 +18,10 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
         }
 
         // Get algorithm from database
-        const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-        const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+        const supabaseUrl =
+          process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+        const supabaseKey =
+          process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
 
         if (!supabaseUrl || !supabaseKey) {
           return new Response('Server configuration error', { status: 500 })
@@ -43,7 +46,7 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
             algorithm.family_kind!,
             algorithm.name || `Algorithm #${id}`,
             algorithm.username || 'Anonymous',
-            type
+            type,
           )
 
           return new Response(imageBuffer, {
@@ -60,4 +63,3 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
     },
   },
 })
-

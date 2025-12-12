@@ -8,10 +8,12 @@ import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/lib/database.types'
 
 // Server function to fetch algorithm data for meta tags
-const fetchAlgorithmMeta = createServerFn()
-  .handler(async ({ data }: { data: { algorithmId: string } }) => {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-    const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+const fetchAlgorithmMeta = createServerFn().handler(
+  async ({ data }: { data: { algorithmId: string; baseUrl?: string } }) => {
+    const supabaseUrl =
+      process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
+    const supabaseKey =
+      process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
 
     if (!supabaseUrl || !supabaseKey) {
       return null
@@ -29,8 +31,9 @@ const fetchAlgorithmMeta = createServerFn()
       return null
     }
 
-    return algorithm
-  })
+    return { ...algorithm, baseUrl: data.baseUrl }
+  },
+)
 
 export const Route = createFileRoute('/a/$algorithmId')({
   component: AlgorithmPage,
@@ -38,7 +41,9 @@ export const Route = createFileRoute('/a/$algorithmId')({
   // Load algorithm metadata for SEO
   loader: async ({ params }) => {
     try {
-      const algorithm = await fetchAlgorithmMeta({ data: { algorithmId: params.algorithmId } })
+      const algorithm = await fetchAlgorithmMeta({
+        data: { algorithmId: params.algorithmId },
+      })
       return { algorithm }
     } catch {
       return { algorithm: null }
@@ -57,11 +62,10 @@ export const Route = createFileRoute('/a/$algorithmId')({
       : 'Generative art algorithm on Entropretty'
 
     // Use absolute URL for OG images
-    // On server: use VITE_APP_URL or Netlify's URL env var
-    // On client: use window.location.origin
-    const baseUrl = typeof window !== 'undefined'
-      ? window.location.origin
-      : process.env.VITE_APP_URL || process.env.URL || 'https://entropretty.app'
+    const baseUrl =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : process.env.VITE_APP_URL || 'https://entropretty.app'
     const ogImageUrl = `${baseUrl}/api/og/${algorithmId}`
     const twitterImageUrl = `${baseUrl}/api/og/${algorithmId}?type=twitter`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
