@@ -67,7 +67,7 @@ export const Route = createFileRoute('/a/$algorithmId')({
         ? window.location.origin
         : process.env.VITE_APP_URL || 'https://entropretty.app'
     const ogImageUrl = `${baseUrl}/api/og/${algorithmId}`
-    const twitterImageUrl = `${baseUrl}/api/og/${algorithmId}?type=twitter`
+    const twitterImageUrl = `${baseUrl}/api/twitter/${algorithmId}`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
 
     return {

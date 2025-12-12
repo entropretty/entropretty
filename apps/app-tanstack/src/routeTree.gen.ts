@@ -18,6 +18,7 @@ import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.se
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiTqTodosRouteImport } from './routes/demo/api.tq-todos'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
 import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
 import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
@@ -69,6 +70,11 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTwitterAlgorithmIdRoute = ApiTwitterAlgorithmIdRouteImport.update({
+  id: '/api/twitter/$algorithmId',
+  path: '/api/twitter/$algorithmId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiOgAlgorithmIdRoute = ApiOgAlgorithmIdRouteImport.update({
   id: '/api/og/$algorithmId',
   path: '/api/og/$algorithmId',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
+  '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
+  '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/a/$algorithmId': typeof AAlgorithmIdRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
+  '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
     | '/api/og/$algorithmId'
+    | '/api/twitter/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
     | '/api/og/$algorithmId'
+    | '/api/twitter/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/a/$algorithmId'
     | '/demo/tanstack-query'
     | '/api/og/$algorithmId'
+    | '/api/twitter/$algorithmId'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/start/api-request'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   AAlgorithmIdRoute: typeof AAlgorithmIdRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   ApiOgAlgorithmIdRoute: typeof ApiOgAlgorithmIdRoute
+  ApiTwitterAlgorithmIdRoute: typeof ApiTwitterAlgorithmIdRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoApiTqTodosRoute: typeof DemoApiTqTodosRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/twitter/$algorithmId': {
+      id: '/api/twitter/$algorithmId'
+      path: '/api/twitter/$algorithmId'
+      fullPath: '/api/twitter/$algorithmId'
+      preLoaderRoute: typeof ApiTwitterAlgorithmIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/og/$algorithmId': {
       id: '/api/og/$algorithmId'
       path: '/api/og/$algorithmId'
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   AAlgorithmIdRoute: AAlgorithmIdRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   ApiOgAlgorithmIdRoute: ApiOgAlgorithmIdRoute,
+  ApiTwitterAlgorithmIdRoute: ApiTwitterAlgorithmIdRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoApiTqTodosRoute: DemoApiTqTodosRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,

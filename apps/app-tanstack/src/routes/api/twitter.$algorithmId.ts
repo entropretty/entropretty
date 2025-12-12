@@ -3,7 +3,7 @@ import { generateOGImage } from '@/lib/og-image-generator'
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/api/og/$algorithmId')({
+export const Route = createFileRoute('/api/twitter/$algorithmId')({
   server: {
     handlers: {
       GET: async ({ params }) => {
@@ -43,7 +43,7 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
             algorithm.family_kind!,
             algorithm.name || `Algorithm #${id}`,
             algorithm.username || 'Anonymous',
-            'og',
+            'twitter',
           )
 
           return new Response(imageBuffer, {
@@ -53,7 +53,7 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
             },
           })
         } catch (err) {
-          console.error('Error generating OG image:', err)
+          console.error('Error generating Twitter card image:', err)
           return new Response('Error generating image', { status: 500 })
         }
       },
