@@ -14,6 +14,7 @@
   "dependencies": {
     "@entropretty/benchmark-core": "workspace:*",
     "@entropretty/compliance": "workspace:*",
+    "@entropretty/opengraph": "workspace:*",
     "@entropretty/utils": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^1.12.1",
     "@hookform/resolvers": "^3.10.0",

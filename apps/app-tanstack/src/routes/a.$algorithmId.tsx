@@ -97,8 +97,6 @@ export const Route = createFileRoute('/a/$algorithmId')({
         { name: 'twitter:image:height', content: '630' },
         { name: 'twitter:image:width', content: '1200' },
         { name: 'twitter:site', content: '@entropretty' },
-        { name: 'twitter:creator', content: '@entropretty' },
-        { name: 'twitter:domain', content: 'entropretty.com' },
         { name: 'twitter:image:type', content: 'image/png' },
       ],
     }

@@ -252,6 +252,9 @@ importers:
       '@entropretty/compliance':
         specifier: workspace:*
         version: link:../../packages/compliance
+      '@entropretty/opengraph':
+        specifier: workspace:*
+        version: link:../../packages/opengraph
       '@entropretty/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -818,6 +821,25 @@ importers:
       vite-plugin-dts:
         specifier: ^4.5.0
         version: 4.5.4(@types/node@22.13.16)(rollup@4.53.3)(typescript@5.9.2)(vite@6.3.5(@types/node@22.13.16)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6)(yaml@2.7.1))
+
+  packages/opengraph:
+    dependencies:
+      '@entropretty/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@napi-rs/canvas':
+        specifier: ^0.1.84
+        version: 0.1.84
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.13.16
+      tsup:
+        specifier: ^8.0.0
+        version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.16))(@swc/core@1.11.16(@swc/helpers@0.5.15))(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.2)(yaml@2.7.1)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.2
 
   packages/utils:
     dependencies:
@@ -8735,7 +8757,7 @@ snapshots:
       '@babel/parser': 7.28.5
       '@babel/template': 7.27.0
       '@babel/types': 7.28.5
-      debug: 4.4.0
+      debug: 4.4.3
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -12214,7 +12236,7 @@ snapshots:
       '@typescript-eslint/types': 8.49.0
       '@typescript-eslint/typescript-estree': 8.49.0(typescript@5.9.2)
       '@typescript-eslint/visitor-keys': 8.49.0
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.32.0(jiti@2.6.1)
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -12224,7 +12246,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.49.0(typescript@5.8.2)
       '@typescript-eslint/types': 8.49.0
-      debug: 4.4.0
+      debug: 4.4.3
       typescript: 5.8.2
     transitivePeerDependencies:
       - supports-color
@@ -12234,7 +12256,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.49.0(typescript@5.9.2)
       '@typescript-eslint/types': 8.49.0
-      debug: 4.4.0
+      debug: 4.4.3
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
@@ -12285,7 +12307,7 @@ snapshots:
       '@typescript-eslint/types': 8.49.0
       '@typescript-eslint/typescript-estree': 8.49.0(typescript@5.9.2)
       '@typescript-eslint/utils': 8.49.0(eslint@9.32.0(jiti@2.6.1))(typescript@5.9.2)
-      debug: 4.4.0
+      debug: 4.4.3
       eslint: 9.32.0(jiti@2.6.1)
       ts-api-utils: 2.1.0(typescript@5.9.2)
       typescript: 5.9.2
@@ -12330,7 +12352,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.49.0(typescript@5.8.2)
       '@typescript-eslint/types': 8.49.0
       '@typescript-eslint/visitor-keys': 8.49.0
-      debug: 4.4.0
+      debug: 4.4.3
       minimatch: 9.0.5
       semver: 7.7.1
       tinyglobby: 0.2.15
@@ -12346,7 +12368,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.49.0(typescript@5.9.2)
       '@typescript-eslint/types': 8.49.0
       '@typescript-eslint/visitor-keys': 8.49.0
-      debug: 4.4.0
+      debug: 4.4.3
       minimatch: 9.0.5
       semver: 7.7.1
       tinyglobby: 0.2.15
@@ -12659,7 +12681,7 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -13600,7 +13622,7 @@ snapshots:
       '@typescript-eslint/parser': 8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2)
       eslint: 9.23.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.23.0(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint@9.23.0(jiti@2.6.1)))(eslint@9.23.0(jiti@2.6.1))
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.23.0(jiti@2.6.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.23.0(jiti@2.6.1))
       eslint-plugin-react: 7.37.5(eslint@9.23.0(jiti@2.6.1))
@@ -13627,7 +13649,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.23.0(jiti@2.6.1)):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint@9.23.0(jiti@2.6.1)))(eslint@9.23.0(jiti@2.6.1)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.0
@@ -13650,7 +13672,7 @@ snapshots:
       '@typescript-eslint/parser': 8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2)
       eslint: 9.23.0(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0)(eslint@9.23.0(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.49.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint@9.23.0(jiti@2.6.1)))(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.29.0(eslint@9.23.0(jiti@2.6.1))(typescript@5.8.2))(eslint@9.23.0(jiti@2.6.1)))(eslint@9.23.0(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -14005,7 +14027,7 @@ snapshots:
 
   extract-zip@2.0.1:
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.3
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -14228,7 +14250,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -14472,7 +14494,7 @@ snapshots:
   https-proxy-agent@5.0.1:
     dependencies:
       agent-base: 6.0.2
-      debug: 4.4.0
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -15385,7 +15407,7 @@ snapshots:
   micromark@4.0.2:
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.0
+      debug: 4.4.3
       decode-named-character-reference: 1.1.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -15794,7 +15816,7 @@ snapshots:
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.4
-      debug: 4.4.0
+      debug: 4.4.3
       get-uri: 6.0.5
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
@@ -16050,7 +16072,7 @@ snapshots:
   proxy-agent@6.5.0:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.0
+      debug: 4.4.3
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.6
       lru-cache: 7.18.3
@@ -16839,7 +16861,7 @@ snapshots:
   socks-proxy-agent@8.0.5:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.0
+      debug: 4.4.3
       socks: 2.8.7
     transitivePeerDependencies:
       - supports-color
@@ -17244,17 +17266,17 @@ snapshots:
       cac: 6.7.14
       chokidar: 4.0.3
       consola: 3.4.2
-      debug: 4.4.0
+      debug: 4.4.3
       esbuild: 0.25.2
       joycon: 3.1.1
       picocolors: 1.1.1
       postcss-load-config: 6.0.1(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(yaml@2.7.1)
       resolve-from: 5.0.0
-      rollup: 4.38.0
+      rollup: 4.53.3
       source-map: 0.8.0-beta.0
       sucrase: 3.35.0
       tinyexec: 0.3.2
-      tinyglobby: 0.2.14
+      tinyglobby: 0.2.15
       tree-kill: 1.2.2
     optionalDependencies:
       '@microsoft/api-extractor': 7.52.2(@types/node@22.13.16)

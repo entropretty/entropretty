@@ -1,7 +1,7 @@
-import type { Database } from '@/lib/database.types'
-import { generateOGImage } from '@/lib/og-image-generator'
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
+import { generateOGImage } from '@entropretty/opengraph'
+import type { Database } from '@/lib/database.types'
 
 export const Route = createFileRoute('/api/og/$algorithmId')({
   server: {
@@ -14,17 +14,26 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
           return new Response('Invalid algorithm ID', { status: 400 })
         }
 
-        // Get algorithm from database
         const supabaseUrl =
           process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-        const supabaseKey =
-          process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+        const supabaseKey = process.env.SUPABASE_SECRET_KEY
 
         if (!supabaseUrl || !supabaseKey) {
           return new Response('Server configuration error', { status: 500 })
         }
 
         const supabase = createClient<Database>(supabaseUrl, supabaseKey)
+        const { data: exists } = await supabase.storage
+          .from('opengraph')
+          .exists(`${id}.png`)
+
+        if (exists) {
+          const {
+            data: { publicUrl },
+          } = await supabase.storage.from('opengraph').getPublicUrl(`${id}.png`)
+
+          return Response.redirect(publicUrl, 302)
+        }
 
         const { data: algorithm, error } = await supabase
           .from('algorithms_with_user_profile')
@@ -32,21 +41,33 @@ export const Route = createFileRoute('/api/og/$algorithmId')({
           .eq('id', id)
           .single()
 
-        if (error || !algorithm) {
+        if (error || !algorithm.content) {
           return new Response('Algorithm not found', { status: 404 })
         }
 
         try {
           const imageBuffer = await generateOGImage(
             id,
-            algorithm.content!,
+            algorithm.content,
             algorithm.family_kind!,
             algorithm.name || `Algorithm #${id}`,
             algorithm.username || 'Anonymous',
             'og',
           )
 
-          return new Response(imageBuffer, {
+          const { error: uploadError } = await supabase.storage
+            .from('opengraph')
+            .upload(`${id}.png`, imageBuffer, {
+              contentType: 'image/png',
+            })
+
+          if (uploadError) {
+            console.error('Error uploading OG image:', uploadError)
+            return new Response('Error uploading image', { status: 500 })
+          }
+
+          console.log('uploaded')
+          return new Response(new Uint8Array(imageBuffer), {
             headers: {
               'Content-Type': 'image/png',
               'Cache-Control': 'public, max-age=3600, s-maxage=86400',
