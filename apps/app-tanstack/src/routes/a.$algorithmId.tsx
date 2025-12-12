@@ -89,7 +89,11 @@ export const Route = createFileRoute('/a/$algorithmId')({
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
-        { name: 'twitter:image', content: twitterImageUrl },
+        {
+          name: 'twitter:image',
+          content:
+            'https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/opengraph/549.png',
+        },
         { name: 'twitter:image:height', content: '630' },
         { name: 'twitter:image:width', content: '1200' },
         { name: 'twitter:site', content: '@entropretty' },
