@@ -6,7 +6,7 @@ import { useDisplaySizes } from "@/hooks/useDisplaySizes"
 import { AlgorithmView } from "@/lib/helper.types"
 import { getSeedFamily, seedToKey } from "@entropretty/utils"
 import { Dispatch, SetStateAction, useCallback, useState } from "react"
-import { Link } from "react-router"
+import { Link } from "@tanstack/react-router"
 import { SaveButton } from "./SaveButton"
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
@@ -60,9 +60,9 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-background-200 hover:border-foreground/30 group relative flex w-full flex-col border">
+    <div className="border-background-200 hover:border-foreground/30 group relative flex w-full flex-col overflow-hidden border">
       <Link to={`/a/${algorithm.id}`}>
-        <div className="z-100 relative flex flex-col items-center justify-center gap-4 p-4 transition-colors md:flex-row">
+        <div className="relative flex flex-col items-center justify-center gap-4 p-4 transition-colors md:flex-row">
           <div className={`flex h-full w-full items-center justify-center`}>
             <div className="grid grid-cols-3 items-center justify-center gap-4">
               {seedFamily.slice(0, 9).map((seed) => (
@@ -79,7 +79,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         </div>
       </Link>
 
-      <div className="bg-background absolute bottom-0 w-full border-t border-black/30 px-4 py-2 opacity-0 transition-opacity group-hover:opacity-100 group-hover:[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] hover:dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]">
+      <div className="bg-background absolute bottom-0 z-20 w-full border-t border-black/30 px-4 py-2 opacity-0 transition-opacity group-hover:opacity-100 group-hover:[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] hover:dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-0 translate-y-[calc(-100%-.5px)]"

@@ -15,6 +15,7 @@ import { Route as NewRouteImport } from './routes/new'
 import { Route as MineRouteImport } from './routes/mine'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HotRouteImport } from './routes/hot'
+import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
@@ -52,6 +53,11 @@ const HotRoute = HotRouteImport.update({
   path: '/hot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreateRoute = CreateRouteImport.update({
   id: '/create',
   path: '/create',
@@ -86,6 +92,7 @@ const ApiOgAlgorithmIdRoute = ApiOgAlgorithmIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/explore': typeof ExploreRoute
   '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/explore': typeof ExploreRoute
   '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
+  '/explore': typeof ExploreRoute
   '/hot': typeof HotRoute
   '/login': typeof LoginRoute
   '/mine': typeof MineRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/create'
+    | '/explore'
     | '/hot'
     | '/login'
     | '/mine'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/create'
+    | '/explore'
     | '/hot'
     | '/login'
     | '/mine'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/create'
+    | '/explore'
     | '/hot'
     | '/login'
     | '/mine'
@@ -174,6 +186,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateRoute: typeof CreateRoute
+  ExploreRoute: typeof ExploreRoute
   HotRoute: typeof HotRoute
   LoginRoute: typeof LoginRoute
   MineRoute: typeof MineRoute
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/create': {
       id: '/create'
       path: '/create'
@@ -278,6 +298,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateRoute: CreateRoute,
+  ExploreRoute: ExploreRoute,
   HotRoute: HotRoute,
   LoginRoute: LoginRoute,
   MineRoute: MineRoute,
