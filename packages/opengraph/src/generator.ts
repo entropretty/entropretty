@@ -5,32 +5,28 @@ import {
   getSeed,
   type FamilyKind,
 } from "@entropretty/utils"
-import { fileURLToPath } from "url"
-import { dirname, join } from "path"
+import {
+  IBM_PLEX_MONO_LIGHT_BASE64,
+  IBM_PLEX_MONO_MEDIUM_BASE64,
+} from "./embedded-fonts"
 
-// Get the directory of this module
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-// Register IBM Plex Mono fonts
-// Fonts are copied to dist/fonts/ during build, so they're in the same directory level
-const fontsDir = join(__dirname, "fonts")
 let fontsRegistered = false
 
 function registerFonts(): void {
   if (fontsRegistered) return
 
   try {
-    GlobalFonts.registerFromPath(
-      join(fontsDir, "IBMPlexMono-Light.ttf"),
-      "IBM Plex Mono"
-    )
-    GlobalFonts.registerFromPath(
-      join(fontsDir, "IBMPlexMono-Medium.ttf"),
-      "IBM Plex Mono"
-    )
+    // Use embedded base64 fonts for reliable serverless deployment
+    const lightFontBuffer = Buffer.from(IBM_PLEX_MONO_LIGHT_BASE64, "base64")
+    const mediumFontBuffer = Buffer.from(IBM_PLEX_MONO_MEDIUM_BASE64, "base64")
+
+    GlobalFonts.register(lightFontBuffer, "IBM Plex Mono")
+    GlobalFonts.register(mediumFontBuffer, "IBM Plex Mono")
+
     fontsRegistered = true
-    console.log("[OG Image] IBM Plex Mono fonts registered successfully")
+    console.log(
+      "[OG Image] IBM Plex Mono fonts registered from embedded base64",
+    )
   } catch (error) {
     console.error("[OG Image] Failed to register fonts:", error)
   }

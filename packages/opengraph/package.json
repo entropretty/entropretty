@@ -11,8 +11,7 @@
     }
   },
   "files": [
-    "dist",
-    "fonts"
+    "dist"
   ],
   "scripts": {
     "build": "tsup",
