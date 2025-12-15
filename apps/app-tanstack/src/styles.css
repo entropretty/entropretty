@@ -47,7 +47,7 @@ code {
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.871 0.006 286.286);
@@ -56,7 +56,7 @@ code {
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
+  --radius: 0.5rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.21 0.006 285.885);
@@ -96,7 +96,7 @@ code {
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.274 0.006 286.033);
   --input: oklch(0.274 0.006 286.033);
   --ring: oklch(0.442 0.017 285.786);
@@ -161,10 +161,43 @@ code {
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
+  }
+
+  h2 {
+    @apply font-mono text-3xl text-black sm:text-4xl dark:text-white;
+  }
+
+  p {
+    @apply leading-8;
+  }
+
+  .keyword-sans {
+    @apply text-primary whitespace-nowrap font-sans italic;
+  }
+
+  .keyword-serif {
+    @apply text-primary whitespace-nowrap font-serif;
+  }
+
+  .keyword-code {
+    @apply text-primary whitespace-nowrap rounded-sm bg-slate-200 p-1;
+  }
+
+  .keyword-code-inverse {
+    @apply text-background bg-primary whitespace-nowrap rounded-sm p-1;
+  }
+
+  .keyword-highlight {
+    @apply text-primary whitespace-nowrap rounded-sm bg-slate-100 p-1;
   }
 }
 
