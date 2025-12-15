@@ -26,7 +26,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-background-200 flex w-full flex-col border">
+    <div className="border-background-200 flex w-full flex-col border sm:w-card-algorithm">
       <Link to={`/a/${algorithm.id}`}>
         <div className="relative flex flex-col items-center justify-center gap-4 p-4 md:flex-row">
           <div className={`flex aspect-square items-center justify-center`}>
@@ -81,9 +81,7 @@ const AlgorithmActions = ({
 }) => {
   const { user } = useAuth()
   const reroll = useCallback(() => {
-    setSeedFamily([
-      ...getSeedFamily(algorithm.family_kind!).map((s) => [...s]),
-    ])
+    setSeedFamily([...getSeedFamily(algorithm.family_kind!).map((s) => [...s])])
   }, [algorithm.family_kind, setSeedFamily])
 
   return (

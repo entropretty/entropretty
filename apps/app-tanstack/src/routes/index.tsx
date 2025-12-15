@@ -67,8 +67,8 @@ function IndexPage() {
   return (
     <>
       {user && <FeedbackDialog className="fixed bottom-4 left-4 z-50" />}
-      <div className="mx-auto my-4">
-        <div className="space-y-4">
+      <div className="my-4 w-full sm:mx-auto sm:w-auto">
+        <div className="space-y-4 px-4 sm:px-0">
           <FamilyKindFilter />
           <Feed />
         </div>

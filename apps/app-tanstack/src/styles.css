@@ -26,6 +26,7 @@ code {
   --grid-algorithm: 100px; /* Mobile default */
   --infinite-algorithm: 130px; /* Mobile default */
   --demo-algorithm: 480px; /* Mobile default */
+  --card-algorithm: 680px; /* Card max width */
 
   /* Brand Colors */
   --brand-blue: 230 18% 13%;
@@ -157,6 +158,9 @@ code {
   --color-brand-blue: hsl(var(--brand-blue));
   --color-brand-yellow: hsl(var(--brand-yellow));
   --color-brand-green: hsl(var(--brand-green));
+
+  /* Algorithm display sizes */
+  --width-card-algorithm: var(--card-algorithm);
 }
 
 @layer base {
