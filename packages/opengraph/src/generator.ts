@@ -1,10 +1,40 @@
-import { createCanvas, Path2D, type Canvas } from "@napi-rs/canvas"
+import { createCanvas, GlobalFonts, Path2D, type Canvas } from "@napi-rs/canvas"
 import {
   RenderCoreBase,
   createNodeCanvasAdapter,
   getSeed,
   type FamilyKind,
 } from "@entropretty/utils"
+import { fileURLToPath } from "url"
+import { dirname, join } from "path"
+
+// Get the directory of this module
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+// Register IBM Plex Mono fonts
+// Fonts are copied to dist/fonts/ during build, so they're in the same directory level
+const fontsDir = join(__dirname, "fonts")
+let fontsRegistered = false
+
+function registerFonts(): void {
+  if (fontsRegistered) return
+
+  try {
+    GlobalFonts.registerFromPath(
+      join(fontsDir, "IBMPlexMono-Light.ttf"),
+      "IBM Plex Mono"
+    )
+    GlobalFonts.registerFromPath(
+      join(fontsDir, "IBMPlexMono-Medium.ttf"),
+      "IBM Plex Mono"
+    )
+    fontsRegistered = true
+    console.log("[OG Image] IBM Plex Mono fonts registered successfully")
+  } catch (error) {
+    console.error("[OG Image] Failed to register fonts:", error)
+  }
+}
 
 // In-memory cache for generated OG images
 const imageCache = new Map<string, { buffer: Uint8Array; timestamp: number }>()
@@ -91,6 +121,9 @@ export async function generateOGImage(
   authorName: string,
   type: "og" | "twitter" = "og",
 ): Promise<Uint8Array> {
+  // Ensure fonts are registered before rendering
+  registerFonts()
+
   const cacheKey = getCacheKey(algorithmId, type)
   const cached = getFromCache(cacheKey)
   if (cached) return cached
@@ -159,9 +192,9 @@ export async function generateOGImage(
   const textWidth = config.width - textX - config.padding
   const textCenterX = textX + textWidth / 2
 
-  // Algorithm name
+  // Algorithm name (using Medium weight for emphasis)
   ctx.fillStyle = config.textColor
-  ctx.font = "bold 48px monospace"
+  ctx.font = "500 48px 'IBM Plex Mono'"
   ctx.textAlign = "center"
   ctx.textBaseline = "middle"
 
@@ -172,19 +205,19 @@ export async function generateOGImage(
     ctx.fillText(line, textCenterX, nameY + i * 56)
   })
 
-  // Author name
-  ctx.font = "32px monospace"
+  // Author name (using Light weight)
+  ctx.font = "300 32px 'IBM Plex Mono'"
   ctx.fillStyle = "#666666"
   const authorY = nameY + nameLines.length * 56 + 30
   ctx.fillText(`by ${authorName}`, textCenterX, authorY)
 
-  // Family kind badge
-  ctx.font = "24px monospace"
+  // Family kind badge (using Light weight)
+  ctx.font = "300 24px 'IBM Plex Mono'"
   ctx.fillStyle = "#999999"
   ctx.fillText(familyKind.toUpperCase(), textCenterX, authorY + 50)
 
-  // Entropretty branding
-  ctx.font = "bold 24px monospace"
+  // Entropretty branding (using Medium weight)
+  ctx.font = "500 24px 'IBM Plex Mono'"
   ctx.fillStyle = "#cccccc"
   ctx.textAlign = "right"
   ctx.fillText(

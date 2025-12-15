@@ -10,6 +10,10 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "fonts"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
