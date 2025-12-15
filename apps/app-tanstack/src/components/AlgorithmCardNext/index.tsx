@@ -1,20 +1,20 @@
-import { FamilyKindBadge } from "@/components/FamilyKindBadge"
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
-import { AlgorithmView } from "@/lib/helper.types"
-import { getSeedFamily, seedToKey } from "@entropretty/utils"
-import { Dispatch, SetStateAction, useCallback, useState } from "react"
-import { Link } from "@tanstack/react-router"
-import { SaveButton } from "./SaveButton"
+import { FamilyKindBadge } from '@/components/FamilyKindBadge'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { AlgorithmBitmap } from '@/features/create/AlgorithmBitmap'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { AlgorithmView } from '@/lib/helper.types'
+import { getSeedFamily, seedToKey } from '@entropretty/utils'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { SaveButton } from './SaveButton'
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
   return (
     <div className="flex flex-col text-xs text-gray-600">
       <div>
         <span>
-          {`${algorithm.name || "Untitled"} `}
+          {`${algorithm.name || 'Untitled'} `}
           <Link
             className="text-muted-foreground underline"
             to={`/a/${algorithm.id}`}
@@ -35,9 +35,9 @@ export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
         {`by `}
         <Link
           className="text-muted-foreground underline"
-          to={`/u/${algorithm.username || "Anonymous"}`}
+          to={`/u/${algorithm.username || 'Anonymous'}`}
         >
-          {algorithm.username || "Anonymous"}
+          {algorithm.username || 'Anonymous'}
         </Link>
       </div>
     </div>
@@ -60,7 +60,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-background-200 hover:border-foreground/30 group relative flex w-full flex-col overflow-hidden border">
+    <div className="border-border hover:border-foreground/30 group relative flex w-full flex-col overflow-hidden border">
       <Link to={`/a/${algorithm.id}`}>
         <div className="relative flex flex-col items-center justify-center gap-4 p-4 transition-colors md:flex-row">
           <div className={`flex h-full w-full items-center justify-center`}>
@@ -117,7 +117,7 @@ const AlgorithmActions = ({
     <div className="flex w-full flex-row items-center justify-center gap-2">
       <Button
         variant="ghost"
-        size={"sm"}
+        size={'sm'}
         onClick={reroll}
         className="select-none"
       >
@@ -125,7 +125,7 @@ const AlgorithmActions = ({
       </Button>
 
       {user && (
-        <Button asChild variant="link" size={"sm"} className="select-none">
+        <Button asChild variant="link" size={'sm'} className="select-none">
           <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
         </Button>
       )}

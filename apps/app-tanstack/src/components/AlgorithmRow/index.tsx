@@ -1,13 +1,13 @@
-import { AlgorithmInfo } from "@/components/AlgorithmInfo"
-import { DeleteButton } from "@/components/AlgorithmRow/DeleteButton"
-import { FamilyKindBadge } from "@/components/FamilyKindBadge"
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/components/AlgorithmBitmap"
-import { AlgorithmView } from "@/lib/helper.types"
-import { getSeed, seedToKey } from "@entropretty/utils"
-import { useMemo } from "react"
-import { Link } from "@tanstack/react-router"
+import { AlgorithmInfo } from '@/components/AlgorithmInfo'
+import { DeleteButton } from '@/components/AlgorithmRow/DeleteButton'
+import { FamilyKindBadge } from '@/components/FamilyKindBadge'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
+import { AlgorithmView } from '@/lib/helper.types'
+import { getSeed, seedToKey } from '@entropretty/utils'
+import { useMemo } from 'react'
+import { Link } from '@tanstack/react-router'
 
 interface AlgorithmRowProps {
   algorithm: AlgorithmView
@@ -22,7 +22,7 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="bg-background border-background-200 relative flex w-full items-center justify-between gap-4 border p-2">
+    <div className="bg-background border-border relative flex w-full items-center justify-between gap-4 border p-2">
       <FamilyKindBadge
         familyKind={algorithm.family_kind}
         className="absolute bottom-0 left-0 z-10"

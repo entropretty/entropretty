@@ -11,6 +11,22 @@ import { Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router'
 import { FEATURES } from '@/lib/features'
 import { XIcon } from '@/components/icons/XIcon'
 import { DiscordIcon } from '@/components/icons/DiscordIcon'
+import { useMemo } from 'react'
+
+function HeaderLogo({ pathname }: { pathname: string }) {
+  const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
+
+  return (
+    <Link to={'/'} className="hidden sm:flex  items-center gap-2">
+      <img
+        src={`/favicon/${randomFavicon}.png`}
+        alt="favicon"
+        className="h-10 w-10 hidden sm:block"
+      />
+      <EntroprettyLogo className="hidden lg:flex" />
+    </Link>
+  )
+}
 
 export default function HeaderLayout() {
   const { user, signOut } = useAuth()
@@ -20,9 +36,10 @@ export default function HeaderLayout() {
   const { data: profile, isLoading: isLoadingProfile } = useUserProfile()
 
   return (
-    <div className="flex h-screen w-screen flex-col">
-      <nav className="border-background-200 relative flex flex-row items-center justify-between gap-2 border-b px-6 py-2">
-        <div className="flex flex-1 flex-row items-center justify-start gap-2">
+    <div className="flex h-screen w-screen flex-col relative  overflow-y-scroll">
+      <nav className=" z-20 border-border border-b sticky top-0 flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md ">
+        <div className="flex flex-1 flex-row items-center justify-around md:justify-between gap-2">
+          <HeaderLogo pathname={location.pathname} />
           {!FEATURES.isCompetition && (
             <>
               <Button asChild variant={'link'}>
@@ -60,7 +77,11 @@ export default function HeaderLayout() {
           )}
           <HelpMenu />
           <Button asChild variant={'link'} className="h-5 w-5">
-            <a href="https://x.com/entropretty" target="_blank" rel="noreferrer">
+            <a
+              href="https://x.com/entropretty"
+              target="_blank"
+              rel="noreferrer"
+            >
               <XIcon className="h-5 w-5 fill-current" />
             </a>
           </Button>
@@ -82,17 +103,7 @@ export default function HeaderLayout() {
           )}
         </div>
 
-        {location.pathname !== '/' && FEATURES.isCompetition && (
-          <Link to={'/'}>
-            <EntroprettyLogo className="hidden lg:flex" />
-          </Link>
-        )}
-        {!FEATURES.isCompetition && (
-          <Link to={'/'}>
-            <EntroprettyLogo className="hidden lg:flex" />
-          </Link>
-        )}
-        <div className="flex flex-1 flex-row items-center justify-end gap-2">
+        <div className="flex-1 hidden lg:flex flex-row items-center justify-end gap-2">
           {FEATURES.isCompetition && (
             <Button
               variant="ghost"
@@ -142,10 +153,9 @@ export default function HeaderLayout() {
           )}
         </div>
       </nav>
-      <main className="relative flex h-full w-full flex-col items-center overflow-auto">
+      <main className="relative flex h-full w-full flex-col items-center">
         <Outlet />
       </main>
     </div>
   )
 }
-

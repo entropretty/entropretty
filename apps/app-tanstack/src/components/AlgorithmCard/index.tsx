@@ -26,7 +26,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-background-200 flex w-full flex-col border sm:w-card-algorithm">
+    <div className="border-border flex w-full flex-col border sm:w-card-algorithm">
       <Link to={`/a/${algorithm.id}`}>
         <div className="relative flex flex-col items-center justify-center gap-4 p-4 md:flex-row">
           <div className={`flex aspect-square items-center justify-center`}>
@@ -58,7 +58,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
       </Link>
 
       {/* Bottom Part */}
-      <div className="border-background-200 relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
+      <div className="border-border relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-0 translate-y-[calc(-100%-1px)]"
