@@ -12,6 +12,12 @@ import {
 
 let fontsRegistered = false
 
+const mapFamilyKindToLabel: Record<FamilyKind, string> = {
+  Procedural: "Entropy",
+  ProceduralPersonal: "Personal Id",
+  ProceduralAccount: "Account Id",
+}
+
 function registerFonts(): void {
   if (fontsRegistered) return
 
@@ -24,17 +30,10 @@ function registerFonts(): void {
     GlobalFonts.register(mediumFontBuffer, "IBM Plex Mono")
 
     fontsRegistered = true
-    console.log(
-      "[OG Image] IBM Plex Mono fonts registered from embedded base64",
-    )
   } catch (error) {
-    console.error("[OG Image] Failed to register fonts:", error)
+    console.error("[@entropretty/opengraph] Failed to register fonts:", error)
   }
 }
-
-// In-memory cache for generated OG images
-const imageCache = new Map<string, { buffer: Uint8Array; timestamp: number }>()
-const CACHE_TTL = 1000 * 60 * 60 // 1 hour
 
 // Install Path2D globally for algorithm code
 if (typeof globalThis.Path2D === "undefined") {
@@ -59,7 +58,8 @@ function getServerRenderCore(): RenderCoreBase {
 export interface OGImageConfig {
   width: number
   height: number
-  gridSize: number // 3 for 3x3 grid
+  rows: number
+  columns: number
   tileSize: number
   padding: number
   gap: number
@@ -70,7 +70,8 @@ export interface OGImageConfig {
 export const OG_IMAGE_CONFIG: OGImageConfig = {
   width: 1200,
   height: 630,
-  gridSize: 3,
+  rows: 3,
+  columns: 3,
   tileSize: 160,
   padding: 40,
   gap: 16,
@@ -81,32 +82,13 @@ export const OG_IMAGE_CONFIG: OGImageConfig = {
 export const TWITTER_CARD_CONFIG: OGImageConfig = {
   width: 1200,
   height: 600,
-  gridSize: 3,
+  rows: 3,
+  columns: 3,
   tileSize: 150,
   padding: 40,
   gap: 16,
   backgroundColor: "#ffffff",
   textColor: "#000000",
-}
-
-function getCacheKey(algorithmId: number, type: "og" | "twitter"): string {
-  return `${type}-${algorithmId}`
-}
-
-function getFromCache(key: string): Uint8Array | null {
-  const cached = imageCache.get(key)
-  if (!cached) return null
-
-  if (Date.now() - cached.timestamp > CACHE_TTL) {
-    imageCache.delete(key)
-    return null
-  }
-
-  return cached.buffer
-}
-
-function setCache(key: string, buffer: Uint8Array): void {
-  imageCache.set(key, { buffer, timestamp: Date.now() })
 }
 
 export async function generateOGImage(
@@ -120,23 +102,22 @@ export async function generateOGImage(
   // Ensure fonts are registered before rendering
   registerFonts()
 
-  const cacheKey = getCacheKey(algorithmId, type)
-  const cached = getFromCache(cacheKey)
-  if (cached) return cached
+  // const cacheKey = getCacheKey(algorithmId, type)
+  // const cached = getFromCache(cacheKey)
+  // if (cached) return cached
 
   const config = type === "og" ? OG_IMAGE_CONFIG : TWITTER_CARD_CONFIG
   const renderCore = getServerRenderCore()
 
   // Add algorithm to render core
-  console.log(
-    `[OG Image] Generating for algorithm ${algorithmId}, kind: ${familyKind}, content length: ${algorithmContent?.length ?? 0}`,
+  console.info(
+    `[${type} Image] Generating for algorithm ${algorithmId}, kind: ${familyKind}, content length: ${algorithmContent?.length ?? 0}`,
   )
   renderCore.updateAlgorithm(algorithmId, algorithmContent, familyKind)
 
-  // Generate seeds for the 3x3 grid
-  const seeds = new Array(config.gridSize * config.gridSize)
-    .fill(0)
-    .map(() => getSeed(familyKind))
+  // Generate seeds for the grid (rows × columns)
+  const totalTiles = config.rows * config.columns
+  const seeds = new Array(totalTiles).fill(0).map(() => getSeed(familyKind))
 
   // Create main canvas
   const canvas = createCanvas(config.width, config.height)
@@ -148,22 +129,35 @@ export async function generateOGImage(
 
   // Calculate grid positioning (left side)
   const gridWidth =
-    config.gridSize * config.tileSize + (config.gridSize - 1) * config.gap
-  const gridHeight = gridWidth
+    config.columns * config.tileSize + (config.columns - 1) * config.gap
+  const gridHeight =
+    config.rows * config.tileSize + (config.rows - 1) * config.gap
   const gridX = config.padding
   const gridY = (config.height - gridHeight) / 2
 
+  ctx.translate(config.padding / 2, 0)
+  ctx.strokeStyle = "black"
+  ctx.lineWidth = 0.5
+  ctx.lineCap = "butt"
+  ctx.strokeRect(
+    gridX - config.padding / 2,
+    gridY - config.padding / 2,
+    gridWidth + config.padding,
+    gridHeight + config.padding,
+  )
+  ctx.stroke()
+
   // Render algorithm tiles
   for (let i = 0; i < seeds.length; i++) {
-    const row = Math.floor(i / config.gridSize)
-    const col = i % config.gridSize
+    const row = Math.floor(i / config.columns)
+    const col = i % config.columns
     const x = gridX + col * (config.tileSize + config.gap)
     const y = gridY + row * (config.tileSize + config.gap)
 
     try {
       const tileBuffer = await renderCore.renderBuffer(
         algorithmId,
-        config.tileSize,
+        config.tileSize * 1,
         seeds[i],
       )
       // Decode PNG buffer and draw to canvas
@@ -172,7 +166,7 @@ export async function generateOGImage(
     } catch (error) {
       // Log the error for debugging
       console.error(
-        `[OG Image] Failed to render tile ${i} for algorithm ${algorithmId}:`,
+        `[${type} Image] Failed to render tile ${i} for algorithm ${algorithmId}:`,
         error,
       )
       // Draw placeholder on error
@@ -184,13 +178,14 @@ export async function generateOGImage(
   }
 
   // Text area (right side)
-  const textX = gridX + gridWidth + config.padding
+  ctx.translate(-config.padding / 2, 0)
+  const textX = gridX + gridWidth + config.padding * 2
   const textWidth = config.width - textX - config.padding
   const textCenterX = textX + textWidth / 2
 
   // Algorithm name (using Medium weight for emphasis)
   ctx.fillStyle = config.textColor
-  ctx.font = "500 48px 'IBM Plex Mono'"
+  ctx.font = "500 56px 'IBM Plex Mono'"
   ctx.textAlign = "center"
   ctx.textBaseline = "middle"
 
@@ -202,30 +197,32 @@ export async function generateOGImage(
   })
 
   // Author name (using Light weight)
-  ctx.font = "300 32px 'IBM Plex Mono'"
-  ctx.fillStyle = "#666666"
-  const authorY = nameY + nameLines.length * 56 + 30
+  ctx.font = "500 40px 'IBM Plex Mono'"
+  ctx.fillStyle = "black"
+  const authorY = nameY + nameLines.length * 40 + 30
   ctx.fillText(`by ${authorName}`, textCenterX, authorY)
 
   // Family kind badge (using Light weight)
   ctx.font = "300 24px 'IBM Plex Mono'"
-  ctx.fillStyle = "#999999"
-  ctx.fillText(familyKind.toUpperCase(), textCenterX, authorY + 50)
+  ctx.fillStyle = "black"
+  ctx.fillText(
+    mapFamilyKindToLabel[familyKind].toUpperCase(),
+    textCenterX,
+    authorY + 50,
+  )
 
   // Entropretty branding (using Medium weight)
   ctx.font = "500 24px 'IBM Plex Mono'"
-  ctx.fillStyle = "#cccccc"
+  ctx.fillStyle = "black"
   ctx.textAlign = "right"
   ctx.fillText(
-    "entropretty.app",
+    `app.entropretty.com/a/${algorithmId}`,
     config.width - config.padding,
     config.height - config.padding,
   )
 
   const buffer = canvas.toBuffer("image/png")
   const result = new Uint8Array(buffer)
-
-  setCache(cacheKey, result)
 
   return result
 }
@@ -262,9 +259,4 @@ function wrapText(
   }
 
   return lines.length > 0 ? lines : [text]
-}
-
-// Clear cache (useful for debugging)
-export function clearOGImageCache(): void {
-  imageCache.clear()
 }
