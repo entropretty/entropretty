@@ -25,6 +25,13 @@ const createSearchSchema = z.object({
 export const Route = createFileRoute('/create')({
   component: CreatePageWithAuth,
   validateSearch: createSearchSchema,
+  head: () => ({
+    meta: [
+      {
+        title: 'Create - Entropretty',
+      },
+    ],
+  }),
 })
 
 function CreatePageWithAuth() {

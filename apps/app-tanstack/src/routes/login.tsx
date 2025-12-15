@@ -19,6 +19,13 @@ import { useAuth } from '@/contexts/auth-context'
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Login - Entropretty',
+      },
+    ],
+  }),
 })
 
 const loginSchema = z.object({

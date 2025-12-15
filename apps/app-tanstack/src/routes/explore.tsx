@@ -7,6 +7,13 @@ import { useInView } from 'react-intersection-observer'
 export const Route = createFileRoute('/explore')({
   component: ExplorePage,
   ssr: false, // Client-side only for now
+  head: () => ({
+    meta: [
+      {
+        title: 'Explore - Entropretty',
+      },
+    ],
+  }),
 })
 
 function ExploreGallery() {

@@ -8,6 +8,13 @@ import { useInView } from 'react-intersection-observer'
 export const Route = createFileRoute('/u/$username')({
   component: UserPage,
   ssr: false,
+  head: ({ params }) => ({
+    meta: [
+      {
+        title: `${params.username} - Entropretty`,
+      },
+    ],
+  }),
 })
 
 function UserPage() {

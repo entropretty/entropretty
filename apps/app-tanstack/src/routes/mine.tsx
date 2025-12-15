@@ -12,6 +12,13 @@ import RequireUser from '@/layouts/RequireUser'
 export const Route = createFileRoute('/mine')({
   component: MinePageWithAuth,
   ssr: false,
+  head: () => ({
+    meta: [
+      {
+        title: 'My Algorithms - Entropretty',
+      },
+    ],
+  }),
 })
 
 function MinePageWithAuth() {

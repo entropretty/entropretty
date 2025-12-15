@@ -4,6 +4,13 @@ import { Profile } from '@/features/profile'
 
 export const Route = createFileRoute('/profile')({
   component: ProfilePageWithAuth,
+  head: () => ({
+    meta: [
+      {
+        title: 'Profile - Entropretty',
+      },
+    ],
+  }),
 })
 
 function ProfilePageWithAuth() {

@@ -21,6 +21,13 @@ import { useAuth } from '@/contexts/auth-context'
 
 export const Route = createFileRoute('/signup')({
   component: SignUpPage,
+  head: () => ({
+    meta: [
+      {
+        title: 'Sign Up - Entropretty',
+      },
+    ],
+  }),
 })
 
 const signUpSchema = z

@@ -11,6 +11,13 @@ import { useInView } from 'react-intersection-observer'
 export const Route = createFileRoute('/hot')({
   component: HotPage,
   ssr: false, // Client-side only for now
+  head: () => ({
+    meta: [
+      {
+        title: 'Hot - Entropretty',
+      },
+    ],
+  }),
 })
 
 function Feed() {
