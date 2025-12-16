@@ -19,6 +19,7 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
+import { Route as DemoAlgorithmIdRouteImport } from './routes/demo.$algorithmId'
 import { Route as AAlgorithmIdRouteImport } from './routes/a.$algorithmId'
 import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
 import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
@@ -73,6 +74,11 @@ const UUsernameRoute = UUsernameRouteImport.update({
   path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoAlgorithmIdRoute = DemoAlgorithmIdRouteImport.update({
+  id: '/demo/$algorithmId',
+  path: '/demo/$algorithmId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
   id: '/a/$algorithmId',
   path: '/a/$algorithmId',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
   '/api/twitter/$algorithmId': typeof ApiTwitterAlgorithmIdRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
     | '/api/twitter/$algorithmId'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   AAlgorithmIdRoute: typeof AAlgorithmIdRoute
+  DemoAlgorithmIdRoute: typeof DemoAlgorithmIdRoute
   UUsernameRoute: typeof UUsernameRoute
   ApiOgAlgorithmIdRoute: typeof ApiOgAlgorithmIdRoute
   ApiTwitterAlgorithmIdRoute: typeof ApiTwitterAlgorithmIdRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/$algorithmId': {
+      id: '/demo/$algorithmId'
+      path: '/demo/$algorithmId'
+      fullPath: '/demo/$algorithmId'
+      preLoaderRoute: typeof DemoAlgorithmIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/a/$algorithmId': {
       id: '/a/$algorithmId'
       path: '/a/$algorithmId'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   AAlgorithmIdRoute: AAlgorithmIdRoute,
+  DemoAlgorithmIdRoute: DemoAlgorithmIdRoute,
   UUsernameRoute: UUsernameRoute,
   ApiOgAlgorithmIdRoute: ApiOgAlgorithmIdRoute,
   ApiTwitterAlgorithmIdRoute: ApiTwitterAlgorithmIdRoute,

@@ -68,8 +68,8 @@ function LoginPage() {
   }
 
   return (
-    <div className="container flex h-[100vh] w-full items-center justify-center">
-      <Card className="mx-auto w-full max-w-md">
+    <div className="container flex h-screen w-full items-center justify-center">
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription>

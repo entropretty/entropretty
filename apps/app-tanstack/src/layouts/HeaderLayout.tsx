@@ -1,28 +1,27 @@
 import { EntroprettyLogo } from '@/components/EntroprettyLogo'
 import { HelpMenu } from '@/components/HelpMenu'
+import { DiscordIcon } from '@/components/icons/DiscordIcon'
+import { XIcon } from '@/components/icons/XIcon'
 import { NewDialog } from '@/components/NewDialog'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { useTheme } from '@/contexts/theme-context'
 import { useUserProfile } from '@/hooks/useUserProfile'
-import { cn } from '@/lib/utils'
-import { Moon, Sun } from 'lucide-react'
-import { Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router'
 import { FEATURES } from '@/lib/features'
-import { XIcon } from '@/components/icons/XIcon'
-import { DiscordIcon } from '@/components/icons/DiscordIcon'
-import { useMemo } from 'react'
+import { cn } from '@/lib/utils'
+import { Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router'
+import { Moon, Sun } from 'lucide-react'
 
 function HeaderLogo({ pathname }: { pathname: string }) {
-  const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
+  // const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
 
   return (
     <Link to={'/'} className="hidden sm:flex  items-center gap-2">
-      <img
+      {/* <img
         src={`/favicon/${randomFavicon}.png`}
         alt="favicon"
         className="h-10 w-10 hidden sm:block"
-      />
+      /> */}
       <EntroprettyLogo className="hidden lg:flex" />
     </Link>
   )
@@ -36,7 +35,7 @@ export default function HeaderLayout() {
   const { data: profile, isLoading: isLoadingProfile } = useUserProfile()
 
   return (
-    <div className="flex h-screen w-screen flex-col relative  overflow-y-scroll">
+    <div className="flex h-screen w-screen flex-col relative overflow-y-scroll">
       <nav className=" z-20 border-border border-b sticky top-0 flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md ">
         <div className="flex flex-1 flex-row items-center justify-around md:justify-between gap-2">
           <HeaderLogo pathname={location.pathname} />

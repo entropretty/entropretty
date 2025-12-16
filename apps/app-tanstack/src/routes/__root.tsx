@@ -2,6 +2,8 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
+  useLocation,
+  Outlet,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
@@ -117,7 +119,28 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
 })
 
+// Routes that should render without the HeaderLayout
+const HEADERLESS_ROUTES = ['/demo/', '/login', '/signup']
+
+function shouldShowHeader(pathname: string): boolean {
+  return !HEADERLESS_ROUTES.some(
+    (route) =>
+      pathname === route ||
+      pathname.startsWith(route.endsWith('/') ? route : `${route}/`),
+  )
+}
+
 function RootComponent() {
+  const location = useLocation()
+
+  if (!shouldShowHeader(location.pathname)) {
+    return (
+      <main className="relative flex h-full w-full flex-col items-center">
+        <Outlet />
+      </main>
+    )
+  }
+
   return <HeaderLayout />
 }
 
