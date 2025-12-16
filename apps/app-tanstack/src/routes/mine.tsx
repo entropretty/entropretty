@@ -43,14 +43,14 @@ function MinePage() {
 
   if (isLoading) {
     return (
-      <div className="flex w-full max-w-4xl flex-col gap-4 p-4">Loading...</div>
+      <div className="flex w-full max-w-4xl flex-col gap-4 px-4 sm:px-0 py-4">Loading...</div>
     )
   }
 
   return (
     <>
       {user && <FeedbackDialog className="fixed bottom-4 left-4 z-50" />}
-      <div className="flex w-full max-w-4xl flex-col gap-4 p-4">
+      <div className="flex w-full max-w-4xl flex-col gap-4 px-4 sm:px-0 py-4">
         <h1 className="text-2xl font-bold">My Algorithms</h1>
         <AnimatePresence>
           {data?.pages.map((page) =>

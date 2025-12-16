@@ -134,7 +134,7 @@ function SignUpPage() {
   }
 
   return (
-    <div className="container flex h-[100vh] w-full items-center justify-center">
+    <div className="flex h-[100vh] w-full items-center justify-center px-4 sm:px-0">
       <Card className="mx-auto w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">

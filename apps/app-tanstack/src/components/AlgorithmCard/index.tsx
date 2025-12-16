@@ -28,7 +28,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   return (
     <div className="border-border flex w-full flex-col border sm:w-card-algorithm">
       <Link to={`/a/${algorithm.id}`}>
-        <div className="relative flex flex-col items-center justify-center gap-4 p-4 md:flex-row">
+        <div className="relative flex flex-col items-center justify-center gap-4 p-4 sm:flex-row">
           <div className={`flex aspect-square items-center justify-center`}>
             <AlgorithmBitmap
               key={seedToKey(seedFamily[0])}
