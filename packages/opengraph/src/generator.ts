@@ -84,7 +84,7 @@ export const TWITTER_CARD_CONFIG: OGImageConfig = {
   height: 600,
   rows: 3,
   columns: 3,
-  tileSize: 150,
+  tileSize: 175,
   padding: 40,
   gap: 16,
   backgroundColor: "#ffffff",
@@ -135,17 +135,18 @@ export async function generateOGImage(
   const gridX = config.padding
   const gridY = (config.height - gridHeight) / 2
 
-  ctx.translate(config.padding / 2, 0)
-  ctx.strokeStyle = "black"
-  ctx.lineWidth = 0.5
-  ctx.lineCap = "butt"
-  ctx.strokeRect(
-    gridX - config.padding / 2,
-    gridY - config.padding / 2,
-    gridWidth + config.padding,
-    gridHeight + config.padding,
-  )
-  ctx.stroke()
+  // ctx.translate(config.padding / 2, 0)
+  // Gray Box
+  // ctx.strokeStyle = "black"
+  // ctx.lineWidth = 0.5
+  // ctx.lineCap = "butt"
+  // ctx.strokeRect(
+  //   gridX - config.padding / 2,
+  //   gridY - config.padding / 2,
+  //   gridWidth + config.padding,
+  //   gridHeight + config.padding,
+  // )
+  // ctx.stroke()
 
   // Render algorithm tiles
   for (let i = 0; i < seeds.length; i++) {
