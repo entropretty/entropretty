@@ -16,7 +16,7 @@ function HeaderLogo({ pathname }: { pathname: string }) {
   // const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
 
   return (
-    <Link to={'/'} className="hidden sm:flex  items-center gap-2">
+    <Link to={'/'} className="hidden sm:flex pr-2">
       {/* <img
         src={`/favicon/${randomFavicon}.png`}
         alt="favicon"
