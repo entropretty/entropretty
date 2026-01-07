@@ -1,18 +1,18 @@
-import Image from "next/image";
-import { Button } from "../ui/button";
+import Image from "next/image"
+import { Button } from "../ui/button"
 
 export interface EventCardProps {
-  title: string;
-  subtitle: string;
-  description: string[];
-  imageSrc: string;
-  logoSrc: string;
-  logoAlt: string;
-  date: string;
-  location: string;
-  linkUrl: string;
-  linkText: string;
-  isPast?: boolean;
+  title: string
+  subtitle: string
+  description: string[]
+  imageSrc: string
+  logoSrc: string
+  logoAlt: string
+  date: string
+  location: string
+  linkUrl: string
+  linkText: string
+  isPast?: boolean
 }
 
 export function EventCard({
@@ -28,7 +28,7 @@ export function EventCard({
   isPast = false,
 }: EventCardProps) {
   return (
-    <div className="overflow-hidden bg-black font-sans text-md text-white hover:shadow-lg transition-all hover:scale-[1.02] flex flex-col">
+    <div className="text-md flex flex-col overflow-hidden bg-black font-sans text-white transition-all hover:scale-[1.02] hover:shadow-lg">
       <div className="relative h-64">
         <Image
           src={imageSrc}
@@ -47,28 +47,28 @@ export function EventCard({
           />
         </div>
         {isPast && (
-          <div className="absolute top-2 right-2 bg-gray-800 text-white px-2 py-1 rounded text-sm">
+          <div className="absolute right-2 top-2 rounded bg-gray-800 px-2 py-1 text-sm text-white">
             Past Event
           </div>
         )}
-        <div className="absolute bottom-0 left-0 bg-black text-white px-4 py-2 text-sm">
+        <div className="absolute bottom-0 left-0 bg-black px-4 py-2 text-sm text-white">
           {date}
         </div>
       </div>
 
-      <div className="space-y-4 p-4 flex-grow flex flex-col">
-        <div className="flex flex-col gap-1 flex-grow">
+      <div className="flex flex-grow flex-col space-y-4 p-4">
+        <div className="flex flex-grow flex-col gap-1">
           <h1 className="text-2xl font-bold">{title}</h1>
           <h2 className="text-xl text-white">{subtitle}</h2>
 
           {description.map((line, index) => (
-            <p key={index} className="text-gray-300 py-2">
+            <p key={index} className="hidden py-2 text-gray-300 sm:block">
               {line}
             </p>
           ))}
         </div>
 
-        <div className="flex items-center justify-between mt-auto">
+        <div className="mt-auto flex items-center justify-between">
           <Button
             variant="link"
             className="text-white hover:text-gray-300"
@@ -81,5 +81,5 @@ export function EventCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

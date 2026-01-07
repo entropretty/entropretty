@@ -9,8 +9,8 @@ interface AutoScrollButtonProps {
 
 export function AutoScrollButton({
   className = "",
-  scrollAmount = 2,
-  scrollInterval = 16, // ~60fps
+  scrollAmount = 2000,
+  scrollInterval = 8, // ~60fps
 }: AutoScrollButtonProps) {
   const [isScrolling, setIsScrolling] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -19,7 +19,7 @@ export function AutoScrollButton({
     if (intervalRef.current) return // Already scrolling
 
     intervalRef.current = setInterval(() => {
-      window.scrollBy(0, scrollAmount)
+      window.scrollBy(0, 2000)
     }, scrollInterval)
   }, [scrollAmount, scrollInterval])
 
