@@ -1,4 +1,4 @@
-import { supabase, type Algorithm, type AlgorithmScore } from "./supabase"
+import { supabase, type Algorithm, type AlgorithmScore } from "../../lib/supabase"
 
 export async function getUnscoredAlgorithms(): Promise<Algorithm[]> {
   // First get all scored algorithm IDs
@@ -21,26 +21,6 @@ export async function getUnscoredAlgorithms(): Promise<Algorithm[]> {
 
   if (error) throw error
   return data as Algorithm[]
-}
-
-export async function getAllAlgorithms(): Promise<Algorithm[]> {
-  const { data, error } = await supabase
-    .from("algorithms")
-    .select("id, content, family_kind")
-
-  if (error) throw error
-  return data as Algorithm[]
-}
-
-export async function getAlgorithmById(id: number): Promise<Algorithm | null> {
-  const { data, error } = await supabase
-    .from("algorithms")
-    .select("id, content, family_kind")
-    .eq("id", id)
-    .single()
-
-  if (error) throw error
-  return data as Algorithm
 }
 
 export async function getAlgorithmsOlderThan(

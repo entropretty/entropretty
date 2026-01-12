@@ -1,10 +1,13 @@
 {
-  "name": "@entropretty/scoring-cli",
+  "name": "@entropretty/admin-cli",
   "version": "0.0.1",
   "type": "module",
+  "bin": {
+    "admin": "./src/index.ts"
+  },
   "scripts": {
-    "score": "tsx src/index.ts",
-    "score:bun": "bun run src/index.ts"
+    "admin": "tsx src/index.ts",
+    "admin:bun": "bun run src/index.ts"
   },
   "dependencies": {
     "@entropretty/benchmark-core": "workspace:*",

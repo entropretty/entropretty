@@ -6,7 +6,7 @@ import type { BenchmarkResultV1 } from "@entropretty/benchmark-core"
 
 // Load environment variables
 const __dirname = dirname(fileURLToPath(import.meta.url))
-config({ path: join(__dirname, "../.env") })
+config({ path: join(__dirname, "../../.env") })
 
 if (!process.env.SUPABASE_URL) {
   throw new Error("Missing SUPABASE_URL environment variable")

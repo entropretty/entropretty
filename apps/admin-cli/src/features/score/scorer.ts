@@ -1,6 +1,6 @@
 import { BenchmarkCore, addQualityScore } from "@entropretty/benchmark-core"
-import type { Algorithm, AlgorithmScore } from "./supabase"
-import { upsertAlgorithmScore } from "./database"
+import type { Algorithm, AlgorithmScore } from "../../lib/supabase"
+import { upsertAlgorithmScore } from "./queries"
 
 // Import compliance rules
 // Note: We need browser rules since we're using canvas/OffscreenCanvas
