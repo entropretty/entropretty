@@ -12,6 +12,7 @@ const config = defineConfig({
     nitro({
       preset: 'netlify',
     }),
+
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
@@ -20,6 +21,9 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  optimizeDeps: {
+    exclude: ['@entropretty/opengraph'],
+  },
 })
 
 export default config
