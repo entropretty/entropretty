@@ -6,6 +6,7 @@ const SSR_DEFAULTS = {
   grid: 200,
   infinite: 150,
   demo: 300,
+  hero: 80,
 }
 
 export const useDisplaySizes = () => {
@@ -33,6 +34,10 @@ export const useDisplaySizes = () => {
         parseFloat(
           getComputedStyle(root).getPropertyValue('--demo-algorithm'),
         ) || SSR_DEFAULTS.demo,
+      hero:
+        parseFloat(
+          getComputedStyle(root).getPropertyValue('--hero-algorithm'),
+        ) || SSR_DEFAULTS.hero,
     }
   }, [])
 }
