@@ -12,7 +12,7 @@ export function Header() {
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2">
           <Button variant="ghost" asChild className="text-sm">
-            <Link href="/rules">Rules</Link>
+            <Link href="/rules">RULES</Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm">
             <a
@@ -20,11 +20,11 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              GitHub
+              GITHUB
             </a>
           </Button>
           <Button asChild className="text-sm">
-            <a href="https://app.entropretty.com/">Launch App</a>
+            <a href="https://app.entropretty.com/">LAUNCH APP</a>
           </Button>
         </nav>
       </div>
