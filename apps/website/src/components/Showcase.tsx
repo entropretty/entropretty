@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { motion } from "motion/react";
-import { Marquee } from "@/components/magicui/marquee";
+import { useEffect, useState } from "react"
+import { motion } from "motion/react"
+import { Marquee } from "@/components/magicui/marquee"
 
 const useWebMTransparencySupport = () => {
-  const [isSupported, setIsSupported] = useState(true);
+  const [isSupported, setIsSupported] = useState(true)
 
   useEffect(() => {
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
     if (isSafari) {
-      setIsSupported(false);
+      setIsSupported(false)
     }
-  }, []);
+  }, [])
 
-  return isSupported;
-};
+  return isSupported
+}
 
 const videos = [
   "inkflow.webm",
@@ -43,14 +43,14 @@ const videos = [
   "confusedeyeball.webm",
   "tilesoflisbon.webm",
   "musicalnotes.webm",
-];
+]
 
-const firstRow = videos.slice(0, Math.ceil(videos.length / 2));
-const secondRow = videos.slice(Math.ceil(videos.length / 2));
+const firstRow = videos.slice(0, Math.ceil(videos.length / 2))
+const secondRow = videos.slice(Math.ceil(videos.length / 2))
 
 const VideoCard = ({ filename }: { filename: string }) => {
   return (
-    <div className="relative h-28 w-28 cursor-pointer overflow-hidden border-r border-border/50 px-3 sm:h-36 sm:w-36 sm:px-4">
+    <div className="border-border/50 relative h-28 w-28 cursor-pointer overflow-hidden border-r px-3 sm:h-36 sm:w-36 sm:px-4">
       <video
         className="h-full w-full object-contain"
         autoPlay
@@ -61,18 +61,18 @@ const VideoCard = ({ filename }: { filename: string }) => {
         <source src={`/design-videos/${filename}`} type="video/webm" />
       </video>
     </div>
-  );
-};
+  )
+}
 
 export function Showcase() {
-  const webMTransparencySupported = useWebMTransparencySupport();
+  const webMTransparencySupported = useWebMTransparencySupport()
 
   if (!webMTransparencySupported) {
-    return null;
+    return null
   }
 
   return (
-    <section className="border-b border-border bg-secondary/30">
+    <section className="border-border bg-secondary/30 border-b">
       <div className="py-16 sm:py-24">
         <motion.div
           className="mx-auto mb-12 max-w-6xl px-4 sm:mb-16 sm:px-6 lg:px-8"
@@ -84,27 +84,28 @@ export function Showcase() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">
             Community Designs
           </h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
+          <p className="text-muted-foreground mt-4 max-w-2xl">
             Explore algorithms created by the community. Each design transforms
             entropy into unique, recognizable patterns.
           </p>
         </motion.div>
 
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden border-y border-border">
+        <div className="border-border relative flex w-full flex-col items-center justify-center overflow-hidden border-y">
           <Marquee reverse pauseOnHover className="[--duration:40s]">
             {firstRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
             ))}
           </Marquee>
+          <div className="h-0 w-full border-y" />
           <Marquee pauseOnHover className="[--duration:40s]">
             {secondRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
             ))}
           </Marquee>
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r from-background to-transparent sm:w-1/4" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l from-background to-transparent sm:w-1/4" />
+          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r to-transparent sm:w-1/4" />
+          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l to-transparent sm:w-1/4" />
         </div>
       </div>
     </section>
-  );
+  )
 }
