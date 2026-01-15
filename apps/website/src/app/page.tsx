@@ -2,10 +2,13 @@
 
 import { useEffect } from "react";
 import { Toaster } from "sonner";
-import EntroprettyVideo from "../components/EntroprettyVideo";
-import HeroBlock from "../components/HeroBlock";
-import { MarqueeDemo } from "../components/MarqueeDemo";
-import { EventsSection } from "../components/events";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
+import { Features } from "@/components/Features";
+import { Showcase } from "@/components/Showcase";
+import { VideoSection } from "@/components/VideoSection";
+import { EventsSection } from "@/components/events";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   useEffect(() => {
@@ -24,11 +27,16 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen font-[family-name:var(--font-geist-sans)]">
-        <HeroBlock />
-        <MarqueeDemo />
-        <EntroprettyVideo />
-        <EventsSection />
+      <div className="relative min-h-screen">
+        <Header />
+        <main>
+          <Hero />
+          <Features />
+          <Showcase />
+          <VideoSection />
+          <EventsSection />
+        </main>
+        <Footer />
       </div>
       <Toaster />
     </>
