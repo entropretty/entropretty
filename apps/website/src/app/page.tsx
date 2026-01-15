@@ -1,36 +1,41 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { Toaster } from "sonner";
-import EntroprettyVideo from "../components/EntroprettyVideo";
-import HeroBlock from "../components/HeroBlock";
-import { MarqueeDemo } from "../components/MarqueeDemo";
-import { EventsSection } from "../components/events";
+import { useEffect } from "react"
+import { Toaster } from "sonner"
+import { Hero } from "@/components/Hero"
+import { Features } from "@/components/Features"
+import { Showcase } from "@/components/Showcase"
+import { VideoSection } from "@/components/VideoSection"
+import { EventsSection } from "@/components/events"
+import { Footer } from "@/components/Footer"
 
 export default function Home() {
   useEffect(() => {
     // Set random favicon
-    const randomFaviconNumber = Math.floor(Math.random() * 3) + 1;
-    const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
+    const randomFaviconNumber = Math.floor(Math.random() * 3) + 1
+    const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement
     if (!link) {
-      const newLink = document.createElement("link");
-      newLink.rel = "icon";
-      document.head.appendChild(newLink);
+      const newLink = document.createElement("link")
+      newLink.rel = "icon"
+      document.head.appendChild(newLink)
     }
-    (
-      document.querySelector("link[rel~='icon']") as HTMLLinkElement
-    ).href = `/favicon/${randomFaviconNumber}.png`;
-  }, []);
+    ;(document.querySelector("link[rel~='icon']") as HTMLLinkElement).href =
+      `/favicon/${randomFaviconNumber}.png`
+  }, [])
 
   return (
     <>
-      <div className="relative min-h-screen font-[family-name:var(--font-geist-sans)]">
-        <HeroBlock />
-        <MarqueeDemo />
-        <EntroprettyVideo />
-        <EventsSection />
+      <div className="relative min-h-screen">
+        <main>
+          <Hero />
+          <Showcase />
+          <VideoSection />
+          <EventsSection />
+          <Features />
+        </main>
+        <Footer />
       </div>
       <Toaster />
     </>
-  );
+  )
 }

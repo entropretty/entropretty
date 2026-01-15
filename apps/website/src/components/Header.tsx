@@ -1,0 +1,33 @@
+"use client"
+
+import Link from "next/link"
+import { Button } from "./ui/button"
+
+export function Header() {
+  return (
+    <header className="border-border bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="font-jersey text-2xl tracking-tight">
+          Entropretty
+        </Link>
+        <nav className="flex items-center gap-1 sm:gap-2">
+          <Button variant="ghost" asChild className="text-sm">
+            <Link href="/">HOME</Link>
+          </Button>
+          <Button variant="ghost" asChild className="text-sm">
+            <a
+              href="https://github.com/entropretty/entropretty"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GITHUB
+            </a>
+          </Button>
+          <Button asChild className="text-sm">
+            <a href="https://app.entropretty.com/">LAUNCH APP</a>
+          </Button>
+        </nav>
+      </div>
+    </header>
+  )
+}
