@@ -60,7 +60,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-border hover:border-foreground/30 group relative flex w-full flex-col overflow-hidden border">
+    <div className="border-border hover:border-foreground/30 group relative flex w-full flex-col border">
       <Link to={`/a/${algorithm.id}`}>
         <div className="relative flex flex-col items-center justify-center gap-4 p-4 transition-colors md:flex-row">
           <div className={`flex h-full w-full items-center justify-center`}>
@@ -79,7 +79,18 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
         </div>
       </Link>
 
-      <div className="bg-background absolute bottom-0 z-20 w-full border-t border-black/30 px-4 py-2 opacity-0 transition-opacity group-hover:opacity-100 group-hover:[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] hover:dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]">
+      {/* Mobile: always visible info section below card */}
+      <div className="border-border relative flex flex-row items-center justify-between gap-y-2 border-t p-4 md:hidden">
+        <FamilyKindBadge
+          familyKind={algorithm.family_kind}
+          className="absolute left-0 top-0 translate-y-[calc(-100%-1px)]"
+        />
+        <AlgorithmInfo algorithm={algorithm} />
+        <AlgorithmActions algorithm={algorithm} setSeedFamily={setSeedFamily} />
+      </div>
+
+      {/* Desktop: hover overlay */}
+      <div className="bg-background absolute bottom-0 z-20 hidden w-full border-t border-black/30 px-4 py-2 opacity-0 transition-opacity group-hover:opacity-100 group-hover:[box-shadow:4px_4px_0_0_rgba(0,0,0,0.5)] md:block hover:dark:[box-shadow:4px_4px_0_0_rgba(255,255,255,0.5)]">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-0 translate-y-[calc(-100%-.5px)]"
@@ -114,7 +125,7 @@ const AlgorithmActions = ({
   }, [algorithm.family_kind, setSeedFamily])
 
   return (
-    <div className="flex w-full flex-row items-center justify-center gap-2">
+    <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-full md:justify-center">
       <Button
         variant="ghost"
         size={'sm'}
