@@ -128,7 +128,7 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
         {/* Scroll indicator - only on mobile in info section */}
         <button
           onClick={onScrollDown}
-          className="text-muted-foreground hover:text-foreground absolute bottom-8 left-1/2 -translate-x-1/2 transition-colors lg:hidden"
+          className="hover:cursor-pointer text-muted-foreground hover:text-foreground absolute bottom-4 left-1/2 -translate-x-1/2 p-4 transition-colors lg:hidden"
           aria-label="Scroll down to see more"
         >
           <svg
@@ -172,7 +172,7 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
       {/* Scroll indicator - only on desktop in preview section */}
       <button
         onClick={onScrollDown}
-        className="text-muted-foreground hover:text-foreground absolute bottom-25 left-1/2 hidden  transition-colors lg:block"
+        className="text-muted-foreground hover:cursor-pointer hover:text-foreground absolute bottom-[5.25rem] left-1/2 -translate-x-1/2 hidden p-4 transition-colors lg:block"
         aria-label="Scroll down to see more"
       >
         <svg

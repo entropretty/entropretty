@@ -4,6 +4,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { Database } from '@/lib/database.types'
 import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
 import { AlgorithmHero } from '@/components/AlgorithmHero'
+import { AlgorithmHeroSkeleton } from '@/components/AlgorithmHero/AlgorithmHeroSkeleton'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAlgorithm } from '@/hooks/useAlgorithm'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
@@ -130,18 +131,24 @@ function AlgorithmPage() {
 
   if (isLoading) {
     return (
-      <div className="h-full w-full p-4">
-        <div className="flex flex-col gap-4 p-0 sm:p-8">
-          <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-4 sm:gap-16">
-            {Array(48)
-              .fill(0)
-              .map((_, i) => (
-                <Skeleton
-                  key={i}
-                  style={{ width: infinite, height: infinite }}
-                  className={`aspect-square rounded-none`}
-                />
-              ))}
+      <div className="flex flex-col">
+        {/* Hero Section Skeleton */}
+        <AlgorithmHeroSkeleton />
+
+        {/* Infinite Grid Skeleton */}
+        <div className="min-h-screen p-0 sm:p-8">
+          <div className="h-full w-full p-4">
+            <div className="mx-auto flex w-full flex-wrap items-center justify-evenly gap-4 sm:gap-16">
+              {Array(48)
+                .fill(0)
+                .map((_, i) => (
+                  <Skeleton
+                    key={i}
+                    style={{ width: infinite, height: infinite }}
+                    className="aspect-square rounded-none"
+                  />
+                ))}
+            </div>
           </div>
         </div>
       </div>
