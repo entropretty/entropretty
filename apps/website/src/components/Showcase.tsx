@@ -50,7 +50,7 @@ const secondRow = videos.slice(Math.ceil(videos.length / 2))
 
 const VideoCard = ({ filename }: { filename: string }) => {
   return (
-    <div className="border-border/50 relative h-28 w-28 cursor-pointer overflow-hidden border-r px-3 sm:h-36 sm:w-36 sm:px-4">
+    <div className="border-border/50 relative aspect-square w-28 cursor-pointer overflow-hidden border-r px-3 sm:h-36 sm:w-36 sm:px-4">
       <video
         className="h-full w-full object-contain"
         autoPlay
@@ -91,13 +91,15 @@ export function Showcase() {
         </motion.div>
 
         <div className="border-border relative flex w-full flex-col items-center justify-center overflow-hidden border-y">
-          <Marquee reverse pauseOnHover className="[--duration:40s]">
+          <Marquee reverse pauseOnHover className="[--duration:90s]">
             {firstRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
             ))}
           </Marquee>
-          <div className="h-0 w-full border-y" />
-          <Marquee pauseOnHover className="[--duration:40s]">
+          <Marquee
+            pauseOnHover
+            className="border-border border-t [--duration:90s]"
+          >
             {secondRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
             ))}
