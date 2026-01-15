@@ -4,13 +4,21 @@ import { motion } from "motion/react";
 import { Button } from "./ui/button";
 
 export function Hero() {
+  const scrollToLearnMore = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById("learn-more");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="relative border-b border-border">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="mx-auto max-w-6xl lg:px-8">
+        <div className="grid gap-0 lg:grid-cols-2 lg:gap-16 lg:py-32">
           {/* Left: Content */}
           <motion.div
-            className="flex flex-col justify-center"
+            className="flex flex-col justify-center px-4 py-16 sm:px-6 sm:py-24 lg:py-0"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -25,15 +33,11 @@ export function Hero() {
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Button size="lg" asChild>
-                <a href="https://app.entropretty.com/">Launch App</a>
+                <a href="https://app.entropretty.com/">LAUNCH APP</a>
               </Button>
               <Button variant="outline" size="lg" asChild>
-                <a
-                  href="https://www.youtube.com/watch?v=xJKjGjiJytA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Watch Video
+                <a href="#learn-more" onClick={scrollToLearnMore}>
+                  WATCH VIDEO
                 </a>
               </Button>
             </div>
@@ -41,7 +45,7 @@ export function Hero() {
 
           {/* Right: Video Preview */}
           <motion.div
-            className="relative aspect-square overflow-hidden border border-border lg:aspect-auto lg:h-full lg:min-h-[400px]"
+            className="relative aspect-square w-full overflow-hidden border-t border-border lg:aspect-auto lg:h-full lg:min-h-[400px] lg:border lg:border-t"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
