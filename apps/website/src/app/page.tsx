@@ -31,10 +31,10 @@ export default function Home() {
         <Header />
         <main>
           <Hero />
-          <Features />
-          <Showcase />
           <VideoSection />
+          <Showcase />
           <EventsSection />
+          <Features />
         </main>
         <Footer />
       </div>
