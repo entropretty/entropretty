@@ -73,7 +73,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
         variant={'ghost'}
         onClick={toggleLike}
         className={cn({
-          'bg-brand-blue hover:bg-brand-blue/80 text-background': isLiked,
+          'bg-brand-blue hover:bg-brand-blue/20 text-background': isLiked,
           'pointer-events-none': !user || isLoading,
         })}
       >

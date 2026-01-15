@@ -110,7 +110,11 @@ function AlgorithmPage() {
 
   const { infinite } = useDisplaySizes()
 
-  const { data: algorithm, isLoading } = useAlgorithm(Number(algorithmId))
+  const {
+    data: algorithm,
+    isLoading,
+    isFetched,
+  } = useAlgorithm(Number(algorithmId))
 
   // Scroll to top when visiting this route
   useEffect(() => {
@@ -144,7 +148,7 @@ function AlgorithmPage() {
     )
   }
 
-  if (!algorithm) {
+  if (!algorithm && isFetched) {
     return <div>Algorithm not found</div>
   }
 
