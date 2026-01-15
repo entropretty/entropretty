@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "watch": "tsup --watch"
   },
   "dependencies": {
     "@entropretty/utils": "workspace:*",

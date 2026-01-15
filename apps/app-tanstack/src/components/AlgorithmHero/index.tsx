@@ -66,7 +66,8 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
           {/* Author */}
           <div className="text-foreground text-base lg:text-lg">
             <Link
-              to={`/u/${algorithm.username || 'Anonymous'}`}
+              to="/u/$username"
+              params={{ username: algorithm.username || 'Anonymous' }}
               className="underline-offset-4 hover:underline"
             >
               {algorithm.username || 'Anonymous'}
@@ -78,7 +79,8 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
             <div className="text-muted-foreground text-sm">
               remix of{' '}
               <Link
-                to={`/a/${algorithm.remix_of}`}
+                to="/a/$algorithmId"
+                params={{ algorithmId: algorithm.remix_of.toString() }}
                 className="text-foreground underline-offset-4 hover:underline"
               >
                 /a/{algorithm.remix_of}
@@ -104,9 +106,14 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
           </div>
 
           {/* Actions */}
-          <div className="mt-2 flex flex-wrap items-center gap-2 lg:mt-4">
+          <div className="mt-2 flex flex-wrap items-center gap-8 lg:mt-4">
             <Button asChild variant="link" className="px-0">
-              <Link to={`/demo/${algorithm.id}`}>DEMO</Link>
+              <Link
+                to="/demo/$algorithmId"
+                params={{ algorithmId: algorithm.id!.toString() }}
+              >
+                DEMO
+              </Link>
             </Button>
             {user && (
               <Button asChild variant="link" className="px-0">
@@ -118,11 +125,10 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
             {user && <LikeButton algorithm={algorithm} />}
           </div>
         </div>
-
         {/* Scroll indicator - only on mobile in info section */}
         <button
           onClick={onScrollDown}
-          className="text-muted-foreground hover:text-foreground absolute bottom-8 left-1/2 -translate-x-1/2 transition-colors lg:hidden"
+          className="hover:cursor-pointer text-muted-foreground hover:text-foreground absolute bottom-4 left-1/2 -translate-x-1/2 p-4 transition-colors lg:hidden"
           aria-label="Scroll down to see more"
         >
           <svg
@@ -162,28 +168,27 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
             </div>
           ))}
         </div>
-
-        {/* Scroll indicator - only on desktop in preview section */}
-        <button
-          onClick={onScrollDown}
-          className="text-muted-foreground hover:text-foreground absolute bottom-8 left-1/2 hidden -translate-x-1/2 transition-colors lg:block"
-          aria-label="Scroll down to see more"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="animate-bounce"
-          >
-            <path d="M12 5v14M5 12l7 7 7-7" />
-          </svg>
-        </button>
       </div>
+      {/* Scroll indicator - only on desktop in preview section */}
+      <button
+        onClick={onScrollDown}
+        className="text-muted-foreground hover:cursor-pointer hover:text-foreground absolute bottom-[5.25rem] left-1/2 -translate-x-1/2 hidden p-4 transition-colors lg:block"
+        aria-label="Scroll down to see more"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="animate-bounce"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </button>
     </div>
   )
 }
