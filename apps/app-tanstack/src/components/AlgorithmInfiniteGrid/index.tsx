@@ -20,6 +20,7 @@ import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 interface AlgorithmInfiniteGridProps {
   algorithm: AlgorithmView
   className?: string
+  hideBottomBar?: boolean
 }
 
 const getSeedFamily = (kind: FamilyKind, amount: number) => {
@@ -35,6 +36,7 @@ const getSeedFamily = (kind: FamilyKind, amount: number) => {
 export function AlgorithmInfiniteGrid({
   algorithm,
   className = '',
+  hideBottomBar = false,
 }: AlgorithmInfiniteGridProps) {
   const [seeds, setSeeds] = useState<number[][]>([])
   const { ref, inView } = useInView({
@@ -87,14 +89,16 @@ export function AlgorithmInfiniteGrid({
             <div ref={ref} className="h-4 w-full" />
           </div>
         </div>
-        <div className="bg-background border-border fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
-          <FamilyKindBadge
-            familyKind={algorithm.family_kind}
-            className="absolute left-[-1px] top-0 translate-y-[calc(-100%-1px)]"
-          />
-          <AlgorithmInfo algorithm={algorithm} />
-          <AlgorithmActions algorithm={algorithm} />
-        </div>
+        {!hideBottomBar && (
+          <div className="bg-background border-border fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
+            <FamilyKindBadge
+              familyKind={algorithm.family_kind}
+              className="absolute left-[-1px] top-0 translate-y-[calc(-100%-1px)]"
+            />
+            <AlgorithmInfo algorithm={algorithm} />
+            <AlgorithmActions algorithm={algorithm} />
+          </div>
+        )}
       </div>
     </div>
   )

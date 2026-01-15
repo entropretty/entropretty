@@ -22,12 +22,16 @@ code {
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, 'Liberation Mono', 'Courier New', monospace;
 
+  /* Nav height for layout calculations */
+  --nav-height: 57px; /* Mobile: py-2 (16px) + content (~40px) + border (1px) */
+
   /* Custom Additions for Algorithm Display */
   --single-algorithm: 210px; /* Mobile default */
   --grid-algorithm: 100px; /* Mobile default */
   --infinite-algorithm: 130px; /* Mobile default */
   --demo-algorithm: 480px; /* Mobile default */
   --card-algorithm: 680px; /* Card max width */
+  --hero-algorithm: 80px; /* Hero grid preview size - Mobile */
 
   /* Brand Colors */
   --brand-blue: 230 18% 13%;
@@ -73,10 +77,12 @@ code {
 
 @media (min-width: 768px) {
   :root {
+    --nav-height: 81px; /* Desktop: py-5 (40px) + content (~40px) + border (1px) */
     --single-algorithm: 300px; /* Desktop size */
     --grid-algorithm: 100px; /* Desktop size */
     --infinite-algorithm: 150px; /* Desktop size */
     --demo-algorithm: 960px; /* Desktop size */
+    --hero-algorithm: 200px; /* Hero grid preview size - Desktop */
   }
 }
 

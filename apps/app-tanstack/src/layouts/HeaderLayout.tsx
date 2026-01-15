@@ -34,9 +34,15 @@ export default function HeaderLayout() {
   const location = useLocation()
   const { data: profile, isLoading: isLoadingProfile } = useUserProfile()
 
+  // On algorithm detail pages, let the nav scroll out of view
+  const isAlgorithmPage = location.pathname.startsWith('/a/')
+
   return (
-    <div className="flex h-screen w-screen flex-col relative overflow-y-scroll">
-      <nav className=" z-20 border-border border-b sticky top-0 flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md ">
+    <div id="main-scroll-container" className="flex h-screen w-screen flex-col relative overflow-y-scroll">
+      <nav className={cn(
+        "z-20 border-border border-b flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md",
+        !isAlgorithmPage && "sticky top-0"
+      )}>
         <div className="flex flex-1 flex-row items-center justify-around md:justify-between gap-2">
           <HeaderLogo pathname={location.pathname} />
           {!FEATURES.isCompetition && (

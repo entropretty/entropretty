@@ -3,9 +3,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import type { Database } from '@/lib/database.types'
 import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
+import { AlgorithmHero } from '@/components/AlgorithmHero'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAlgorithm } from '@/hooks/useAlgorithm'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { useRef, useCallback, useEffect } from 'react'
 
 // Server function to fetch algorithm data for meta tags
 const fetchAlgorithmMeta = createServerFn().handler(
@@ -104,10 +106,23 @@ export const Route = createFileRoute('/a/$algorithmId')({
 
 function AlgorithmPage() {
   const { algorithmId } = Route.useParams()
+  const gridRef = useRef<HTMLDivElement>(null)
 
   const { infinite } = useDisplaySizes()
 
   const { data: algorithm, isLoading } = useAlgorithm(Number(algorithmId))
+
+  // Scroll to top when visiting this route
+  useEffect(() => {
+    const scrollContainer = document.getElementById('main-scroll-container')
+    if (scrollContainer) {
+      scrollContainer.scrollTo(0, 0)
+    }
+  }, [algorithmId])
+
+  const scrollToGrid = useCallback(() => {
+    gridRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   if (isLoading) {
     return (
@@ -134,8 +149,14 @@ function AlgorithmPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-0 sm:p-8">
-      <AlgorithmInfiniteGrid algorithm={algorithm} />
+    <div className="flex flex-col">
+      {/* Hero Section - Full screen cover */}
+      <AlgorithmHero algorithm={algorithm} onScrollDown={scrollToGrid} />
+
+      {/* Infinite Grid Section */}
+      <div ref={gridRef} className="min-h-screen p-0 sm:p-8">
+        <AlgorithmInfiniteGrid algorithm={algorithm} hideBottomBar />
+      </div>
     </div>
   )
 }

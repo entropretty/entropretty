@@ -70,11 +70,11 @@ export interface OGImageConfig {
 export const OG_IMAGE_CONFIG: OGImageConfig = {
   width: 1200,
   height: 630,
-  rows: 3,
+  rows: 2,
   columns: 3,
-  tileSize: 160,
+  tileSize: 245,
   padding: 40,
-  gap: 16,
+  gap: 12,
   backgroundColor: "#ffffff",
   textColor: "#000000",
 }
@@ -82,11 +82,11 @@ export const OG_IMAGE_CONFIG: OGImageConfig = {
 export const TWITTER_CARD_CONFIG: OGImageConfig = {
   width: 1200,
   height: 600,
-  rows: 3,
+  rows: 2,
   columns: 3,
-  tileSize: 175,
+  tileSize: 240,
   padding: 40,
-  gap: 16,
+  gap: 12,
   backgroundColor: "#ffffff",
   textColor: "#000000",
 }
@@ -127,28 +127,27 @@ export async function generateOGImage(
   ctx.fillStyle = config.backgroundColor
   ctx.fillRect(0, 0, config.width, config.height)
 
-  // Calculate grid positioning (left side)
+  // Layout: Text on left (35%), Grid on right (65%) - matching AlgorithmHero
+  const leftSectionWidth = Math.floor(config.width * 0.35)
+  const rightSectionWidth = config.width - leftSectionWidth
+
+  // Calculate grid positioning (right side)
   const gridWidth =
     config.columns * config.tileSize + (config.columns - 1) * config.gap
   const gridHeight =
     config.rows * config.tileSize + (config.rows - 1) * config.gap
-  const gridX = config.padding
+  const gridX = leftSectionWidth + (rightSectionWidth - gridWidth) / 2
   const gridY = (config.height - gridHeight) / 2
 
-  // ctx.translate(config.padding / 2, 0)
-  // Gray Box
-  // ctx.strokeStyle = "black"
-  // ctx.lineWidth = 0.5
-  // ctx.lineCap = "butt"
-  // ctx.strokeRect(
-  //   gridX - config.padding / 2,
-  //   gridY - config.padding / 2,
-  //   gridWidth + config.padding,
-  //   gridHeight + config.padding,
-  // )
-  // ctx.stroke()
+  // Draw vertical separator line (like border-r in hero component)
+  ctx.strokeStyle = "#e5e5e5"
+  ctx.lineWidth = 1
+  ctx.beginPath()
+  ctx.moveTo(leftSectionWidth, 0)
+  ctx.lineTo(leftSectionWidth, config.height)
+  ctx.stroke()
 
-  // Render algorithm tiles
+  // Render algorithm tiles (right side)
   for (let i = 0; i < seeds.length; i++) {
     const row = Math.floor(i / config.columns)
     const col = i % config.columns
@@ -178,46 +177,51 @@ export async function generateOGImage(
     }
   }
 
-  // Text area (right side)
-  ctx.translate(-config.padding / 2, 0)
-  const textX = gridX + gridWidth + config.padding * 2
-  const textWidth = config.width - textX - config.padding
-  const textCenterX = textX + textWidth / 2
+  // Text area (left side) - matching AlgorithmHero layout
+  const textPadding = config.padding * 1.5
+  const textX = textPadding
+  const textMaxWidth = leftSectionWidth - textPadding * 2
 
-  // Algorithm name (using Medium weight for emphasis)
+  // Starting Y position for text content (vertically centered)
+  let currentY = config.height / 2 - 100
+
+  // Algorithm ID badge (like /a/{id} in hero)
+  ctx.fillStyle = "#737373" // muted-foreground
+  ctx.font = "300 18px 'IBM Plex Mono'"
+  ctx.textAlign = "left"
+  ctx.textBaseline = "top"
+  ctx.fillText(`/a/${algorithmId}`, textX, currentY)
+  currentY += 35
+
+  // Family kind badge
   ctx.fillStyle = config.textColor
-  ctx.font = "500 56px 'IBM Plex Mono'"
-  ctx.textAlign = "center"
-  ctx.textBaseline = "middle"
+  ctx.font = "300 16px 'IBM Plex Mono'"
+  ctx.fillText(mapFamilyKindToLabel[familyKind].toUpperCase(), textX, currentY)
+  currentY += 40
+
+  // Algorithm name (large, prominent - like h1 in hero)
+  ctx.fillStyle = config.textColor
+  ctx.font = "500 42px 'IBM Plex Mono'"
 
   // Word wrap algorithm name if needed
-  const nameLines = wrapText(ctx, algorithmName, textWidth - 20)
-  const nameY = config.height / 2 - 40
-  nameLines.forEach((line, i) => {
-    ctx.fillText(line, textCenterX, nameY + i * 56)
+  const nameLines = wrapText(ctx, algorithmName, textMaxWidth)
+  nameLines.forEach((line) => {
+    ctx.fillText(line, textX, currentY)
+    currentY += 50
   })
+  currentY += 10
 
-  // Author name (using Light weight)
-  ctx.font = "500 40px 'IBM Plex Mono'"
-  ctx.fillStyle = "black"
-  const authorY = nameY + nameLines.length * 40 + 30
-  ctx.fillText(`by ${authorName}`, textCenterX, authorY)
-
-  // Family kind badge (using Light weight)
+  // Author name
   ctx.font = "300 24px 'IBM Plex Mono'"
-  ctx.fillStyle = "black"
-  ctx.fillText(
-    mapFamilyKindToLabel[familyKind].toUpperCase(),
-    textCenterX,
-    authorY + 50,
-  )
+  ctx.fillStyle = config.textColor
+  ctx.fillText(authorName, textX, currentY)
 
-  // Entropretty branding (using Medium weight)
-  ctx.font = "500 24px 'IBM Plex Mono'"
-  ctx.fillStyle = "black"
+  // Entropretty branding (bottom right)
+  ctx.font = "300 18px 'IBM Plex Mono'"
+  ctx.fillStyle = "#737373"
   ctx.textAlign = "right"
   ctx.fillText(
-    `app.entropretty.com/a/${algorithmId}`,
+    `app.entropretty.com`,
     config.width - config.padding,
     config.height - config.padding,
   )
