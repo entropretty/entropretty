@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "motion/react"
 import { Marquee } from "@/components/magicui/marquee"
+import Link from "next/link"
 
 const useWebMTransparencySupport = () => {
   const [isSupported, setIsSupported] = useState(true)
@@ -88,6 +89,13 @@ export function Showcase() {
             Explore algorithms created by the community. Each design transforms
             entropy into unique, recognizable patterns.
           </p>
+          <Link
+            href="https://app.entropretty.com/explore"
+            className="text-foreground mt-4 inline-flex items-center gap-2 underline-offset-4 hover:underline"
+          >
+            Explore more designs
+            <span>→</span>
+          </Link>
         </motion.div>
 
         <div className="border-border relative flex w-full flex-col items-center justify-center overflow-hidden border-y">
