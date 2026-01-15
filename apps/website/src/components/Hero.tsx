@@ -27,9 +27,9 @@ export function Hero() {
               Entropretty
             </h1>
             <p className="mt-4 max-w-lg text-lg text-muted-foreground sm:mt-6 sm:text-xl">
-              Algorithmic art for proof of personhood. Create unique visual
-              identities from entropy that are beautiful, recognizable, and
-              impossible to forge.
+              Algorithmic art powering Polkadot&apos;s Proof of Ink. Generate
+              billions of unique visual identities that prove you&apos;re human
+              without revealing who you are.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Button size="lg" asChild>

@@ -4,24 +4,24 @@ import { motion } from "motion/react";
 
 const features = [
   {
-    title: "Proof of Personhood",
+    title: "Sybil Resistant",
     description:
-      "Generate unique visual identities that help verify human uniqueness in digital systems without compromising privacy.",
+      "Combat the digital identity crisis. Entropretty powers Polkadot's Proof of Ink—a privacy-preserving way to prove you're a unique human without invasive KYC.",
   },
   {
-    title: "Algorithmic Art",
+    title: "Billions of Designs",
     description:
-      "Create beautiful, deterministic art from entropy. Each piece is procedurally generated and completely reproducible.",
+      "The blockchain generates billions of unique geometric patterns. Each person receives 100 designs unique only to them—impossible to duplicate or forge.",
   },
   {
     title: "Human Recognizable",
     description:
-      "Designs optimized for human perception. Easy to recognize, remember, and verify at a glance.",
+      "Optimized for human perception, not machines. Easy to recognize, remember, and verify at a glance—because identity should be human-first.",
   },
   {
-    title: "Open Source",
+    title: "Privacy by Design",
     description:
-      "Built in the open. Explore the code, contribute algorithms, and join a community of creators.",
+      "A proof that does not identify you. No personal information required—just mathematical proof that you're one unique person in the system.",
   },
 ];
 
@@ -38,9 +38,10 @@ export function Features() {
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">Why Entropretty?</h2>
           <p className="mt-4 max-w-2xl text-muted-foreground">
-            Entropretty creates visual fingerprints from random data, making it
-            easy for humans to recognize and verify identity without relying on
-            text or numbers.
+            Web3 should serve people, not platforms. Entropretty is the
+            algorithmic art engine behind Polkadot&apos;s proof of personhood—creating
+            visual identities that let you prove you&apos;re human without
+            sacrificing privacy.
           </p>
         </motion.div>
 

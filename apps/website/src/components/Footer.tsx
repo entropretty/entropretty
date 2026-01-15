@@ -13,7 +13,7 @@ export function Footer() {
               Entropretty
             </Link>
             <p className="mt-2 text-sm text-muted-foreground">
-              Algorithmic art for proof of personhood.
+              Powering Polkadot&apos;s Proof of Ink.
             </p>
           </div>
 
@@ -21,6 +21,16 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-medium">Resources</h4>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <li>
+                <a
+                  href="https://app.entropretty.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Launch App
+                </a>
+              </li>
               <li>
                 <Link
                   href="/rules"
@@ -57,6 +67,16 @@ export function Footer() {
               </li>
               <li>
                 <a
+                  href="https://www.youtube.com/watch?v=YRBgGEfelnk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Proof of Personhood Interview
+                </a>
+              </li>
+              <li>
+                <a
                   href="https://www.youtube.com/watch?v=MrWioikibEI"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -69,14 +89,36 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-medium">App</h4>
+            <h4 className="text-sm font-medium">Community</h4>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="https://app.entropretty.com/"
+                  href="https://x.com/entropretty"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="transition-colors hover:text-foreground"
                 >
-                  Launch App
+                  X (Twitter)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://bsky.app/profile/entropretty.bsky.social"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Bluesky
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://polkadot.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Polkadot
                 </a>
               </li>
             </ul>
@@ -85,7 +127,7 @@ export function Footer() {
 
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-center text-sm text-muted-foreground">
-            Built for the Web3 community
+            Web3 should serve people, not platforms
           </p>
         </div>
       </div>

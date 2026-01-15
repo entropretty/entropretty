@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { Toaster } from "sonner";
-import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { Showcase } from "@/components/Showcase";
@@ -28,7 +27,6 @@ export default function Home() {
   return (
     <>
       <div className="relative min-h-screen">
-        <Header />
         <main>
           <Hero />
           <VideoSection />

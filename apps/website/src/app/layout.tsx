@@ -14,7 +14,7 @@ const jersey = Jersey_20({
 export const metadata: Metadata = {
   title: "Entropretty - Algorithmic Art for Proof of Personhood",
   description:
-    "Create unique visual identities from entropy. Algorithmic art that is beautiful, recognizable, and impossible to forge.",
+    "Powering Polkadot's Proof of Ink. Generate billions of unique visual identities that prove you're human without revealing who you are.",
   metadataBase: new URL("https://entropretty.com"),
 };
 

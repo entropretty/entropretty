@@ -1,21 +1,25 @@
-"use client";
+"use client"
 
-import { motion } from "motion/react";
+import { motion } from "motion/react"
 
 const resources = [
+  {
+    title: "Proof of Personhood with Dr. Gavin Wood - Space Monkeys 178",
+    url: "https://www.youtube.com/watch?v=YRBgGEfelnk",
+  },
   {
     title: "Web3 Citizenship - Gavin Wood @ Web3 Summit 2024",
     url: "https://www.youtube.com/watch?v=MrWioikibEI",
   },
   {
-    title: "Proof of Personhood with Dr. Gavin Wood - Space Monkeys 178",
-    url: "https://www.youtube.com/watch?v=YRBgGEfelnk",
+    title: "Individuality - Gavin Wood @ Web3 Summit 2025",
+    url: "https://youtu.be/PV1QP8cJh74?si=zZOQfJCAjWQtJZRj&t=3228",
   },
-];
+]
 
 export function VideoSection() {
   return (
-    <section id="learn-more" className="border-b border-border">
+    <section id="learn-more" className="border-border border-b">
       <div className="mx-auto max-w-6xl py-16 sm:py-24 lg:px-8">
         {/* Header */}
         <motion.div
@@ -26,16 +30,17 @@ export function VideoSection() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">Learn More</h2>
-          <p className="mt-4 max-w-2xl text-muted-foreground">
-            Discover how Entropretty fits into the broader vision of Web3
-            identity and proof of personhood. Learn about the technology and
-            research behind human-recognizable visual identities.
+          <p className="text-muted-foreground mt-4 max-w-2xl">
+            Discover how Entropretty powers Polkadot&apos;s Project
+            Individuality—three years of research into proving personhood
+            without compromising privacy. Learn about DIMs, Proof of Ink, and
+            the vision for Web3 citizenship.
           </p>
         </motion.div>
 
         {/* Large Video - edge to edge on mobile */}
         <motion.div
-          className="relative aspect-video w-full overflow-hidden border-y border-border sm:mx-6 sm:w-auto sm:border lg:mx-0 lg:border"
+          className="border-border relative aspect-video w-full overflow-hidden border-y sm:mx-6 sm:w-auto sm:border lg:mx-0 lg:border"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -60,7 +65,7 @@ export function VideoSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h3 className="text-sm uppercase tracking-wider text-muted-foreground">
+          <h3 className="text-muted-foreground text-sm uppercase tracking-wider">
             Related Resources
           </h3>
           <ul className="mt-4 space-y-3">
@@ -70,7 +75,7 @@ export function VideoSection() {
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-2 text-foreground transition-colors hover:text-muted-foreground"
+                  className="text-foreground hover:text-muted-foreground group flex items-start gap-2 transition-colors"
                 >
                   <span className="text-muted-foreground">→</span>
                   <span className="underline-offset-4 group-hover:underline">
@@ -83,5 +88,5 @@ export function VideoSection() {
         </motion.div>
       </div>
     </section>
-  );
+  )
 }
