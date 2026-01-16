@@ -1,7 +1,7 @@
-import { FamilyKind } from "@entropretty/utils"
-import { cn, familyKindLabel } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { useTheme } from "../contexts/theme-context"
+import { FamilyKind } from '@entropretty/utils'
+import { cn, familyKindLabel } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
+import { useTheme } from '@/contexts/theme-context'
 
 interface FamilyKindBadgeProps {
   familyKind: FamilyKind | null
@@ -18,8 +18,8 @@ export function FamilyKindBadge({
   return (
     <Badge
       className={cn(className, {
-        "text-background": theme === "dark",
-        "text-foreground": theme === "dark" && familyKind === "Procedural",
+        'text-background': theme === 'dark',
+        'text-foreground': theme === 'dark' && familyKind === 'Procedural',
       })}
       variant={familyKind}
     >

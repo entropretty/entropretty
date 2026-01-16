@@ -1,11 +1,12 @@
-"use client"
+'use client'
 
-import { createContext, useContext, useEffect, useState } from "react"
-import { User } from "@supabase/supabase-js"
-import { supabase } from "@/lib/supabase"
+import { createContext, useContext, useEffect, useState } from 'react'
+import { User } from '@supabase/supabase-js'
+import { getSupabase } from '@/lib/supabase'
 
 type AuthContextType = {
   user: User | null
+  isLoading: boolean
   signIn: (
     email: string,
     password: string,
@@ -23,16 +24,35 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
-      },
-    )
+    // Only run on client side
+    if (typeof window === 'undefined') return
 
-    return () => {
-      authListener.subscription.unsubscribe()
+    try {
+      const supabase = getSupabase()
+
+      // Check for existing session first
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        setUser(user ?? null)
+        setIsLoading(false)
+      })
+
+      const { data: authListener } = supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          setUser(session?.user ?? null)
+          setIsLoading(false)
+        },
+      )
+
+      return () => {
+        authListener.subscription.unsubscribe()
+      }
+    } catch {
+      // Supabase not configured, ignore
+      console.warn('Supabase not configured')
+      setIsLoading(false)
     }
   }, [])
 
@@ -41,6 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     captchaToken: string,
   ) => {
+    const supabase = getSupabase()
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -56,11 +77,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     captchaToken: string,
   ) => {
+    const supabase = getSupabase()
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: "https://app.entropretty.com/login",
+        emailRedirectTo: 'https://app.entropretty.com/login',
         captchaToken,
       },
     })
@@ -68,12 +90,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    const supabase = getSupabase()
     await supabase.auth.signOut()
     setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )
@@ -82,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
 }

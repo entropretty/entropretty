@@ -11,3 +11,4 @@ type MakeNotNull<T> = {
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"]
 
 export type Like = Database["public"]["Tables"]["likes"]["Row"]
+

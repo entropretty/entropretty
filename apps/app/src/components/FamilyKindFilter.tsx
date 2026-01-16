@@ -1,14 +1,14 @@
-import { familyKindFilterAtom } from "@/atoms/family-kind-filter"
+import { familyKindFilterAtom } from '@/atoms/family-kind-filter'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { cn, familyKindColor } from "@/lib/utils"
-import { FamilyKind } from "@entropretty/utils"
-import { useAtom } from "jotai"
+} from '@/components/ui/select'
+import { cn, familyKindColor } from '@/lib/utils'
+import { FamilyKind } from '@entropretty/utils'
+import { useAtom } from 'jotai'
 
 interface FamilyKindFilterProps {
   className?: string
@@ -18,21 +18,21 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
   const [value, setValue] = useAtom(familyKindFilterAtom)
 
   const handleValueChange = (newValue: string) => {
-    setValue(newValue as FamilyKind | "All")
+    setValue(newValue as FamilyKind | 'All')
   }
 
   return (
-    <div className={cn("w-[200px]", className)}>
+    <div className={cn('w-[200px]', className)}>
       <Select value={value} onValueChange={handleValueChange}>
         <SelectTrigger
           className={cn(
-            "hover:cursor-pointer",
-            value !== "All" && familyKindColor(value as FamilyKind),
-            value === "Procedural"
-              ? "text-primary-foreground"
-              : value !== "All"
-                ? "text-primary-background"
-                : "",
+            'hover:cursor-pointer',
+            value !== 'All' && familyKindColor(value as FamilyKind),
+            value === 'Procedural'
+              ? 'text-primary-foreground'
+              : value !== 'All'
+                ? 'text-primary-background'
+                : '',
           )}
         >
           <SelectValue placeholder="Filter by Category" />
@@ -47,8 +47,8 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
           <SelectItem
             value="Procedural"
             className={cn(
-              familyKindColor("Procedural"),
-              "text-primary-foreground hover:cursor-pointer",
+              familyKindColor('Procedural'),
+              'text-primary-foreground hover:cursor-pointer',
             )}
           >
             Entropy
@@ -56,10 +56,10 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
           <SelectItem
             value="ProceduralPersonal"
             className={cn(
-              familyKindColor("ProceduralPersonal"),
-              "text-primary-background",
-              "",
-              "hover:cursor-pointer",
+              familyKindColor('ProceduralPersonal'),
+              'text-primary-background',
+              '',
+              'hover:cursor-pointer',
             )}
           >
             Personal Id
@@ -67,10 +67,10 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
           <SelectItem
             value="ProceduralAccount"
             className={cn(
-              familyKindColor("ProceduralAccount"),
-              "text-primary-background",
-              "",
-              "hover:cursor-pointer",
+              familyKindColor('ProceduralAccount'),
+              'text-primary-background',
+              '',
+              'hover:cursor-pointer',
             )}
           >
             Account Id

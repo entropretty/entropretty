@@ -1,12 +1,12 @@
-import { AlgorithmView } from "@/lib/helper.types"
-import { Link } from "react-router"
+import { AlgorithmView } from '@/lib/helper.types'
+import { Link } from '@tanstack/react-router'
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
   return (
     <div className="flex flex-col text-sm text-gray-600">
       <div>
         <span>
-          {`${algorithm.name || "Untitled"} `}
+          {`${algorithm.name || 'Untitled'} `}
           <Link
             className="text-muted-foreground underline"
             to={`/a/${algorithm.id}`}
@@ -27,9 +27,9 @@ export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
         {`by `}
         <Link
           className="text-muted-foreground underline"
-          to={`/u/${algorithm.username || "Anonymous"}`}
+          to={`/u/${algorithm.username || 'Anonymous'}`}
         >
-          {algorithm.username || "Anonymous"}
+          {algorithm.username || 'Anonymous'}
         </Link>
       </div>
     </div>

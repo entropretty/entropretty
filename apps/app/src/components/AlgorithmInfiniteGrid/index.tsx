@@ -1,24 +1,26 @@
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
-import { AlgorithmView } from "@/lib/helper.types"
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { AlgorithmView } from '@/lib/helper.types'
 import {
   deriveSeedFamily,
   FamilyKind,
   getSeed,
   seedToKey,
-} from "@entropretty/utils"
-import { useCallback, useEffect, useState } from "react"
-import { useInView } from "react-intersection-observer"
-import { Link } from "react-router"
-import { LikeButton } from "../AlgorithmCard/LikeButton"
-import { AlgorithmInfo } from "../AlgorithmInfo"
-import { AutoScrollButton } from "../AutoScrollButton"
-import { FamilyKindBadge } from "../FamilyKindBadge"
+} from '@entropretty/utils'
+import { useCallback, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
+import { Link } from '@tanstack/react-router'
+import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
+import { AlgorithmInfo } from '@/components/AlgorithmInfo'
+import { AutoScrollButton } from '@/components/AutoScrollButton'
+import { FamilyKindBadge } from '@/components/FamilyKindBadge'
+
 interface AlgorithmInfiniteGridProps {
   algorithm: AlgorithmView
   className?: string
+  hideBottomBar?: boolean
 }
 
 const getSeedFamily = (kind: FamilyKind, amount: number) => {
@@ -33,12 +35,13 @@ const getSeedFamily = (kind: FamilyKind, amount: number) => {
 
 export function AlgorithmInfiniteGrid({
   algorithm,
-  className = "",
+  className = '',
+  hideBottomBar = false,
 }: AlgorithmInfiniteGridProps) {
   const [seeds, setSeeds] = useState<number[][]>([])
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "400px", // Start loading more content before reaching the bottom
+    rootMargin: '400px', // Start loading more content before reaching the bottom
   })
 
   const { infinite } = useDisplaySizes()
@@ -86,14 +89,16 @@ export function AlgorithmInfiniteGrid({
             <div ref={ref} className="h-4 w-full" />
           </div>
         </div>
-        <div className="bg-background border-background-200 fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
-          <FamilyKindBadge
-            familyKind={algorithm.family_kind}
-            className="absolute left-[-1px] top-0 translate-y-[calc(-100%-1px)]"
-          />
-          <AlgorithmInfo algorithm={algorithm} />
-          <AlgorithmActions algorithm={algorithm} />
-        </div>
+        {!hideBottomBar && (
+          <div className="bg-background border-border fixed bottom-0 left-0 right-0 flex w-full items-center justify-between gap-8 gap-y-2 border p-4 pb-8 text-gray-600 sm:pb-4">
+            <FamilyKindBadge
+              familyKind={algorithm.family_kind}
+              className="absolute left-[-1px] top-0 translate-y-[calc(-100%-1px)]"
+            />
+            <AlgorithmInfo algorithm={algorithm} />
+            <AlgorithmActions algorithm={algorithm} />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -104,13 +109,13 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
 
   return (
     <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-auto">
-      <AutoScrollButton className="hidden md:block" scrollAmount={2000} />
+      {/* <AutoScrollButton className="hidden md:block" scrollAmount={2000} /> */}
       <Button className="hidden md:block" asChild variant="link">
         <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
       </Button>
       {user && (
         <Button asChild variant="link">
-          <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
+          <Link to={`/create`} search={{ remix: algorithm.id }}>{`REMIX`}</Link>
         </Button>
       )}
 

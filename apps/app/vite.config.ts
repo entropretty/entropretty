@@ -1,44 +1,29 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
-import path from "path"
-import { visualizer } from "rollup-plugin-visualizer"
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact from '@vitejs/plugin-react'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
+import { nitro } from 'nitro/vite'
 
-const ReactCompilerConfig = {
-  /* ... */
-}
-
-const pluginsWithReactCompiler = [
-  react({
-    babel: {
-      plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
-    },
-  }),
-]
-
-// import reactSwc from "@vitejs/plugin-react-swc"
-// const pluginsWithSWC = [reactSwc()]
-
-export default defineConfig(({ mode }) => ({
+const config = defineConfig({
   plugins: [
-    ...pluginsWithReactCompiler,
-    mode === "analyze" &&
-      visualizer({
-        open: true,
-        filename: "dist/stats.html",
-        gzipSize: true,
-        brotliSize: true,
-      }),
+    devtools(),
+    nitro({
+      preset: 'netlify',
+    }),
+
+    // this is the plugin that enables path aliases
+    viteTsConfigPaths({
+      projects: ['./tsconfig.json'],
+    }),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
   ],
-  build: {
-    target: "esnext",
-    sourcemap: mode === "analyze",
+  optimizeDeps: {
+    exclude: ['@entropretty/opengraph'],
   },
-  worker: {
-    format: "es",
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-}))
+})
+
+export default config

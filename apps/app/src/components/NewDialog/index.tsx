@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -6,11 +6,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { cn, familyKindColor } from "@/lib/utils"
-import { FamilyKind } from "@entropretty/utils"
-import { ArrowUpRight, PlusIcon } from "lucide-react"
-import { Link, useNavigate } from "react-router"
+} from '@/components/ui/dialog'
+import { cn, familyKindColor } from '@/lib/utils'
+import { FamilyKind } from '@entropretty/utils'
+import { ArrowUpRight, PlusIcon } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 interface SeedTypeCardProps {
   kind: FamilyKind
@@ -18,25 +18,25 @@ interface SeedTypeCardProps {
 
 function SeedTypeCard({ kind }: SeedTypeCardProps) {
   const navigate = useNavigate()
-  const isProceduralKind = kind === "Procedural"
+  const isProceduralKind = kind === 'Procedural'
   const colorClass = familyKindColor(kind)
 
   return (
-    <div className={cn("relative", isProceduralKind && "pb-2")}>
+    <div className={cn('relative', isProceduralKind && 'pb-2')}>
       {isProceduralKind && (
         <>
           <div
             className={cn(
-              "absolute inset-0 -m-2 -mb-3 border",
+              'absolute inset-0 -m-2 -mb-3 border',
               colorClass,
-              "z-0 bg-transparent",
+              'z-0 bg-transparent',
             )}
           ></div>
           <div
             className={cn(
-              "absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-7 px-4 py-0.5",
+              'absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-7 px-4 py-0.5',
               colorClass,
-              "font-jersey whitespace-nowrap text-white",
+              'font-jersey whitespace-nowrap text-white',
             )}
           >
             START HERE
@@ -44,22 +44,22 @@ function SeedTypeCard({ kind }: SeedTypeCardProps) {
         </>
       )}
       <button
-        onClick={() => navigate(`/create?type=${kind}`)}
+        onClick={() => navigate({ to: '/create', search: { type: kind } })}
         className={cn(
-          "z-5 relative flex aspect-square w-full flex-col items-center justify-center gap-2 p-4 transition-colors",
+          'z-5 relative flex aspect-square w-full flex-col items-center justify-center gap-2 p-4 transition-colors',
           colorClass,
-          isProceduralKind ? "text-white" : "text-black",
+          isProceduralKind ? 'text-white' : 'text-black',
         )}
       >
         <div className="font-jersey text-xl">
-          {kind === "Procedural" && "Entropy"}
-          {kind === "ProceduralPersonal" && "Personal Id"}
-          {kind === "ProceduralAccount" && "Account Id"}
+          {kind === 'Procedural' && 'Entropy'}
+          {kind === 'ProceduralPersonal' && 'Personal Id'}
+          {kind === 'ProceduralAccount' && 'Account Id'}
         </div>
         <div className="text-sm">
-          {kind === "Procedural" && "4 random bytes for creative designs"}
-          {kind === "ProceduralPersonal" && "8 bytes for personal identifiers"}
-          {kind === "ProceduralAccount" && "32 bytes for account-based designs"}
+          {kind === 'Procedural' && '4 random bytes for creative designs'}
+          {kind === 'ProceduralPersonal' && '8 bytes for personal identifiers'}
+          {kind === 'ProceduralAccount' && '32 bytes for account-based designs'}
         </div>
       </button>
     </div>
@@ -83,21 +83,6 @@ export function NewDialog() {
             Choose your Seed Category
           </DialogTitle>
         </DialogHeader>
-        {/* <Alert variant="info">
-          <AlertDescription className="text-xs">
-            Remember:{" "}
-            <Link
-              className="hover:text-brand-blue/80 underline"
-              to="https://entropretty.com/rules#2-determinism-uniqueness"
-              target="_blank"
-            >
-              Rule 2.3 Determinism & Uniqueness{" "}
-            </Link>
-            <br />
-            Every byte of the seed should be encoded into the design. Not using
-            all bytes will result in a poor uniqueness rating.
-          </AlertDescription>
-        </Alert> */}
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-2">
@@ -113,14 +98,15 @@ export function NewDialog() {
 
         <DialogFooter>
           <Button variant="link" asChild>
-            <Link
-              to="https://entropretty.com/rules#seed-details"
+            <a
+              href="https://entropretty.com/rules#seed-details"
               target="_blank"
+              rel="noreferrer"
               className="text-primary hover:underline"
             >
               Learn about seed types & meaning
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            </a>
           </Button>
         </DialogFooter>
       </DialogContent>

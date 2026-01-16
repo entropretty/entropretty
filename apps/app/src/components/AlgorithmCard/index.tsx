@@ -1,14 +1,14 @@
-import { LikeButton } from "@/components/AlgorithmCard/LikeButton"
-import { AlgorithmInfo } from "@/components/AlgorithmInfo"
-import { FamilyKindBadge } from "@/components/FamilyKindBadge"
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
-import { AlgorithmView } from "@/lib/helper.types"
-import { getSeedFamily, seedToKey } from "@entropretty/utils"
-import { Dispatch, SetStateAction, useCallback, useState } from "react"
-import { Link } from "react-router"
+import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
+import { AlgorithmInfo } from '@/components/AlgorithmInfo'
+import { FamilyKindBadge } from '@/components/FamilyKindBadge'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { AlgorithmView } from '@/lib/helper.types'
+import { getSeedFamily, seedToKey } from '@entropretty/utils'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { Link } from '@tanstack/react-router'
 
 interface AlgorithmCardProps {
   algorithm: AlgorithmView
@@ -26,9 +26,9 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   if (!algorithm.id) return null
 
   return (
-    <div className="border-background-200 flex w-full flex-col border">
+    <div className="border-border flex w-full flex-col border sm:w-card-algorithm">
       <Link to={`/a/${algorithm.id}`}>
-        <div className="relative flex flex-col items-center justify-center gap-4 p-4 md:flex-row">
+        <div className="relative flex flex-col items-center justify-center gap-4 p-4 sm:flex-row">
           <div className={`flex aspect-square items-center justify-center`}>
             <AlgorithmBitmap
               key={seedToKey(seedFamily[0])}
@@ -58,7 +58,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
       </Link>
 
       {/* Bottom Part */}
-      <div className="border-background-200 relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
+      <div className="border-border relative flex flex-row items-center justify-between gap-y-2 border-t p-4">
         <FamilyKindBadge
           familyKind={algorithm.family_kind}
           className="absolute left-0 top-0 translate-y-[calc(-100%-1px)]"

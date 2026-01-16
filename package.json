@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:app": "pnpm --filter app-tanstack dev",
+    "dev:app": "pnpm --filter app dev",
     "dev:website": "pnpm --filter website dev",
     "watch": "pnpm run --r --filter \"./packages/**\" watch",
     "build": "pnpm run --r --filter \"./packages/**\" build",

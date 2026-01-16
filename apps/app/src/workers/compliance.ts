@@ -1,23 +1,23 @@
-import { blake2b256 as blake2b256Hasher } from "@multiformats/blake2/blake2b"
-import { bytesToHex } from "@noble/hashes/utils"
-import * as Comlink from "comlink"
-import { expose } from "comlink"
+import { blake2b256 as blake2b256Hasher } from '@multiformats/blake2/blake2b'
+import { bytesToHex } from '@noble/hashes/utils'
+import * as Comlink from 'comlink'
+import { expose } from 'comlink'
 import type {
   CheckMetadata,
   ComplianceResult as RuleComplianceResult,
   SingleImageRule,
-} from "@entropretty/compliance/browser"
-import { colorIslandsRule } from "@entropretty/compliance/browser"
+} from '@entropretty/compliance/browser'
+import { colorIslandsRule } from '@entropretty/compliance/browser'
 import {
   type FamilyKind,
   type AlgorithmId,
   RenderCore,
   type Seed,
-} from "@entropretty/utils"
+} from '@entropretty/utils'
 import {
   BenchmarkCore,
   type BenchmarkResult,
-} from "@entropretty/benchmark-core"
+} from '@entropretty/benchmark-core'
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
@@ -71,7 +71,7 @@ const workerAPI = {
   async updateAlgorithm(
     algorithmId: AlgorithmId,
     algorithm: string,
-    kind: FamilyKind = "Procedural",
+    kind: FamilyKind = 'Procedural',
   ) {
     renderCore.updateAlgorithm(algorithmId, algorithm, kind)
   },
@@ -152,7 +152,7 @@ const workerAPI = {
     )
 
     if (index !== -1) {
-      complianceQueue[index].reject(new Error("Compliance check cancelled"))
+      complianceQueue[index].reject(new Error('Compliance check cancelled'))
       complianceQueue.splice(index, 1)
     }
   },
@@ -203,7 +203,7 @@ async function processQueue() {
     const rulesWithIssues = new Set<string>()
 
     for (const result of ruleResults) {
-      if (result.status !== "pass" && result.metadata) {
+      if (result.status !== 'pass' && result.metadata) {
         issues.push(...result.metadata)
         isCompliant = false
 
@@ -218,7 +218,7 @@ async function processQueue() {
     let issueOverlayImageData: ImageData | undefined = undefined
     if (withOverlay) {
       if (!overlaySize) {
-        reject(new Error("Overlay size is required"))
+        reject(new Error('Overlay size is required'))
         isProcessing = false
         processQueue()
         return
@@ -230,13 +230,13 @@ async function processQueue() {
       ) {
         // Create a new canvas for the overlay with the target size
         const overlayCanvas = new OffscreenCanvas(overlaySize, overlaySize)
-        const overlayCtx = overlayCanvas.getContext("2d")
+        const overlayCtx = overlayCanvas.getContext('2d')
 
         if (overlayCtx) {
           // Set up the context for drawing red rectangles
-          overlayCtx.fillStyle = "rgba(0, 0, 0, 0)" // Transparent background
+          overlayCtx.fillStyle = 'rgba(0, 0, 0, 0)' // Transparent background
           overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height) // Clear the canvas
-          overlayCtx.strokeStyle = "rgba(255, 0, 0, 0.7)" // Red with some transparency
+          overlayCtx.strokeStyle = 'rgba(255, 0, 0, 0.7)' // Red with some transparency
           overlayCtx.lineWidth = 4
 
           // Calculate scaling factor from reference size to target size
@@ -320,3 +320,4 @@ function compareNumberArrays(a: Seed, b: Seed): boolean {
 
 export type ComplianceWorker = typeof workerAPI
 expose(workerAPI)
+

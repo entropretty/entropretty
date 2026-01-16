@@ -1,10 +1,10 @@
-import type { ComplianceWorker as ComplianceWorkerType } from "@/workers/compliance"
-import ComplianceWorker from "@/workers/compliance?worker"
-import type { RenderWorker as RenderWorkerType } from "@/workers/render"
-import RenderWorker from "@/workers/render?worker"
-import { proxy, Remote, wrap } from "comlink"
-import type { FamilyKind, Seed } from "@entropretty/utils"
-import PQueue from "p-queue"
+import type { ComplianceWorker as ComplianceWorkerType } from '@/workers/compliance'
+import ComplianceWorker from '@/workers/compliance?worker'
+import type { RenderWorker as RenderWorkerType } from '@/workers/render'
+import RenderWorker from '@/workers/render?worker'
+import { proxy, Remote, wrap } from 'comlink'
+import type { FamilyKind, Seed } from '@entropretty/utils'
+import PQueue from 'p-queue'
 
 export class AlgorithmService {
   private complianceWorker: Remote<ComplianceWorkerType>
@@ -64,7 +64,7 @@ export class AlgorithmService {
         },
       )
       .catch((error) => {
-        if (error.name === "AbortError") {
+        if (error.name === 'AbortError') {
           return null
         }
 
@@ -92,7 +92,7 @@ export class AlgorithmService {
         },
       )
       .catch((error) => {
-        if (error.name === "AbortError") {
+        if (error.name === 'AbortError') {
           return null
         }
 
