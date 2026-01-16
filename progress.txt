@@ -1,0 +1,41 @@
+# AI Chat Feature Implementation Progress
+
+## Completed Tasks
+
+### 2026-01-16: Foundation - Install and configure required dependencies
+
+**Task:** Install and configure required dependencies for AI chat feature
+
+**Changes Made:**
+- Added `@ai-sdk/google` (^1.0.0) - Google AI SDK provider for Gemini models
+- Added `@assistant-ui/react` (^0.7.0) - Assistant UI React components
+- Added `@assistant-ui/react-ai-sdk` (^0.7.0) - Assistant UI AI SDK integration
+- Added `ai` (^4.0.0) - Vercel AI SDK core
+- Added `nanoid` (^5.0.0) - Session ID generation
+
+**Verification:**
+- `zod` is already present in dependencies (^3.23.8)
+- `GOOGLE_GENERATIVE_AI_API_KEY` exists in .env file
+- Dependencies added to apps/app/package.json
+
+**Note:** Run `pnpm install` to install the new dependencies before proceeding with the next tasks.
+
+**Verification Status:**
+- package.json is valid JSON and parses correctly
+- All new dependencies are present with correct versions
+- Dev/build could not be tested in CI environment due to node_modules platform mismatch (macOS -> Linux)
+- User should run `pnpm install && pnpm dev` to verify locally
+
+**Git Commit:** 48eb9fa - feat(chat): add AI chat dependencies for assistant feature
+
+---
+
+## Pending Tasks (by priority)
+
+1. Create Session types and data model definitions
+2. Create session management Jotai atoms
+3. Implement useSessionHistory hook for localStorage persistence
+4. Create TanStack server function for AI chat communication
+5. Add AI tab to the create page tab navigation
+6. Create ChatTab container component
+7. (remaining tasks per PRD)
