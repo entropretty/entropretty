@@ -21,3 +21,5 @@ export {
   chatLoadingAtom,
   attachmentsAtom,
 } from './atoms'
+
+export { useSessionHistory } from './useSessionHistory'

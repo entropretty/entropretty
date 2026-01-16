@@ -79,10 +79,51 @@
 - `apps/app/src/features/create/Session/atoms.ts` (new)
 - `apps/app/src/features/create/Session/index.ts` (updated exports)
 
+**Git Commit:** 0d116a6 - feat(chat): add session management Jotai atoms
+
 **Verification Status:**
 - TypeScript check shows no errors in Session atoms (verified via `npx tsc --noEmit | grep Session` returning 0 matches)
+- ESLint passes with no errors (only pre-existing warnings in other files)
 - Atoms follow existing codebase patterns from `features/create/atoms.ts`
-- Pre-existing TypeScript errors exist in codebase (not related to this change)
+- Pre-commit hooks passed (lint-staged + full lint + typecheck)
+- Dev/build cannot be tested in CI environment due to node_modules platform mismatch (macOS -> Linux)
+- User should run `pnpm install && pnpm dev:app` to verify locally
+
+---
+
+### 2026-01-16: Foundation - Implement useSessionHistory hook for localStorage persistence
+
+**Task:** Implement useSessionHistory hook for localStorage persistence
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Session/useSessionHistory.ts` with complete hook implementation:
+  - `useSessionHistory` - main hook that manages session lifecycle
+  - Session ID generation on mount using `nanoid` if no existing session
+  - `loadSessionFromStorage` - reads session from localStorage key `entropretty:session:{id}`
+  - `saveCheckpoint` - adds HistoryEntry to session with code, timestamp, and source
+  - History pruning when entries exceed 100 (FIFO - oldest removed first)
+  - Initial checkpoint creation with source 'initial' on first load
+  - Session restoration from localStorage on subsequent visits
+  - Tracks current session ID in `entropretty:currentSessionId` localStorage key
+- Updated `apps/app/src/features/create/Session/index.ts` to export the hook
+
+**Hook Return Values:**
+- `sessionId` - Current session ID (null before initialization)
+- `saveCheckpoint(code, source)` - Save a new code checkpoint to history
+- `getSession()` - Get the current session data
+- `currentHistory` - Array of history entries
+- `historyIndex` - Current position in history
+
+**Files Created/Modified:**
+- `apps/app/src/features/create/Session/useSessionHistory.ts` (new)
+- `apps/app/src/features/create/Session/index.ts` (updated exports)
+
+**Git Commit:** 9dc6b30 - feat(chat): add useSessionHistory hook for localStorage persistence
+
+**Verification Status:**
+- ESLint passes with no errors on Session directory
+- TypeScript shows only expected "Cannot find module 'nanoid'" error due to dependencies not installed in CI environment
+- Hook follows existing codebase patterns from `features/create/useFormatCode.ts` and uses Jotai atoms
 - Dev/build cannot be tested in CI environment due to node_modules platform mismatch (macOS -> Linux)
 - User should run `pnpm install && pnpm dev:app` to verify locally
 
@@ -90,8 +131,7 @@
 
 ## Pending Tasks (by priority)
 
-1. Implement useSessionHistory hook for localStorage persistence
-2. Create TanStack server function for AI chat communication
-3. Add AI tab to the create page tab navigation
-4. Create ChatTab container component
-5. (remaining tasks per PRD)
+1. Create TanStack server function for AI chat communication
+2. Add AI tab to the create page tab navigation
+3. Create ChatTab container component
+4. (remaining tasks per PRD)
