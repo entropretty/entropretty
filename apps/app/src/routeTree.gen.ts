@@ -20,6 +20,7 @@ import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as DemoAlgorithmIdRouteImport } from './routes/demo.$algorithmId'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AAlgorithmIdRouteImport } from './routes/a.$algorithmId'
 import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
 import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
@@ -79,6 +80,11 @@ const DemoAlgorithmIdRoute = DemoAlgorithmIdRouteImport.update({
   path: '/demo/$algorithmId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
   id: '/a/$algorithmId',
   path: '/a/$algorithmId',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/api/chat': typeof ApiChatRoute
   '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/api/chat': typeof ApiChatRoute
   '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/a/$algorithmId': typeof AAlgorithmIdRoute
+  '/api/chat': typeof ApiChatRoute
   '/demo/$algorithmId': typeof DemoAlgorithmIdRoute
   '/u/$username': typeof UUsernameRoute
   '/api/og/$algorithmId': typeof ApiOgAlgorithmIdRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/api/chat'
     | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/api/chat'
     | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/signup'
     | '/a/$algorithmId'
+    | '/api/chat'
     | '/demo/$algorithmId'
     | '/u/$username'
     | '/api/og/$algorithmId'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SignupRoute: typeof SignupRoute
   AAlgorithmIdRoute: typeof AAlgorithmIdRoute
+  ApiChatRoute: typeof ApiChatRoute
   DemoAlgorithmIdRoute: typeof DemoAlgorithmIdRoute
   UUsernameRoute: typeof UUsernameRoute
   ApiOgAlgorithmIdRoute: typeof ApiOgAlgorithmIdRoute
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoAlgorithmIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/a/$algorithmId': {
       id: '/a/$algorithmId'
       path: '/a/$algorithmId'
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SignupRoute: SignupRoute,
   AAlgorithmIdRoute: AAlgorithmIdRoute,
+  ApiChatRoute: ApiChatRoute,
   DemoAlgorithmIdRoute: DemoAlgorithmIdRoute,
   UUsernameRoute: UUsernameRoute,
   ApiOgAlgorithmIdRoute: ApiOgAlgorithmIdRoute,

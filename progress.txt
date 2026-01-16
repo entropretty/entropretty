@@ -129,9 +129,58 @@
 
 ---
 
+### 2026-01-16: Foundation - Create TanStack server function for AI chat communication
+
+**Task:** Create TanStack server function for AI chat communication
+
+**Changes Made:**
+- Created `apps/app/src/routes/api/chat.ts` with complete server function implementation:
+  - `aiResponseSchema` - Zod schema for structured AI output (explanation, hasCode, code)
+  - `buildSystemPrompt(context)` - Builds comprehensive system prompt with:
+    - Entropretty canvas environment details (100x100 canvas, ctx, seed)
+    - Seed type documentation (Procedural, ProceduralPersonal, ProceduralAccount)
+    - Code requirements (determinism, no Math.random, self-contained)
+    - Current user state (seed type, existing code, errors)
+    - Response guidelines and common code patterns
+  - `convertMessages(messages, attachments)` - Converts chat messages to AI SDK format, handles multimodal (image) attachments
+  - POST handler that:
+    - Validates request body (messages required)
+    - Checks for GOOGLE_GENERATIVE_AI_API_KEY
+    - Streams structured response using `streamObject()` with `gemini-2.5-flash`
+    - Returns streaming response via `toTextStreamResponse()`
+    - Handles errors gracefully (SyntaxError, generic errors)
+
+**Files Created:**
+- `apps/app/src/routes/api/chat.ts`
+
+**API Endpoint:**
+- `POST /api/chat`
+- Request body:
+  ```typescript
+  {
+    messages: Array<{ role: 'user' | 'assistant'; content: string }>
+    context: { code: string; seedType: string; error?: string | null }
+    attachments?: Array<Attachment>
+  }
+  ```
+- Response: Streaming text with structured JSON chunks (explanation, hasCode, code)
+
+**Git Commit:** 2bd7eee - feat(chat): add TanStack server function for AI chat communication
+
+**Verification Status:**
+- TypeScript check passes with no errors in chat.ts
+- ESLint passes with no errors
+- Dev server starts successfully (`pnpm dev`)
+- Production build completes successfully (`pnpm build`)
+- Route is properly registered in TanStack Router file-based routing
+- Pre-commit hooks passed (lint-staged + full lint + typecheck)
+
+---
+
 ## Pending Tasks (by priority)
 
-1. Create TanStack server function for AI chat communication
-2. Add AI tab to the create page tab navigation
-3. Create ChatTab container component
-4. (remaining tasks per PRD)
+1. Add AI tab to the create page tab navigation
+2. Create ChatTab container component
+3. Create WelcomeMessage component with suggested prompts
+4. Create Composer component for message input
+5. (remaining tasks per PRD)
