@@ -177,10 +177,39 @@
 
 ---
 
+### 2026-01-16: Core UI - Add AI tab to the create page tab navigation
+
+**Task:** Add AI tab to the create page tab navigation
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Chat/index.tsx` with minimal ChatTab component placeholder:
+  - Exports `ChatTab` component as both named and default export
+  - Placeholder UI with "AI Chat coming soon..." message
+  - Uses flex layout to fill available space
+- Modified `apps/app/src/features/create/index.tsx` to add AI tab:
+  - Added lazy import for ChatTab component
+  - Added `<TabsTrigger value="ai">AI</TabsTrigger>` after the "code" tab
+  - Added `<TabsContent value="ai">` with Suspense-wrapped ChatTab component
+  - Chat tab uses `overflow-hidden` class for proper scrolling behavior later
+
+**Files Created/Modified:**
+- `apps/app/src/features/create/Chat/index.tsx` (new)
+- `apps/app/src/features/create/index.tsx` (modified)
+
+**Verification Status:**
+- TypeScript check passes with no errors in modified files
+- ESLint passes with no errors
+- Dev server starts successfully (`pnpm dev:app`)
+- Production build completes successfully (`pnpm build`)
+- Tab navigation order: Code → AI → Check → Settings
+- AI tab is lazy-loaded with Suspense fallback
+
+---
+
 ## Pending Tasks (by priority)
 
-1. Add AI tab to the create page tab navigation
-2. Create ChatTab container component
-3. Create WelcomeMessage component with suggested prompts
-4. Create Composer component for message input
+1. Create ChatTab container component (flesh out the placeholder)
+2. Create WelcomeMessage component with suggested prompts
+3. Create Composer component for message input
+4. Create MessageBubble component for displaying chat messages
 5. (remaining tasks per PRD)

@@ -17,6 +17,7 @@ import {
 import { FeedbackDialog } from '@/components/FeedbackDialog'
 
 const MonacoEditor = lazy(() => import('./MonacoEditor'))
+const ChatTab = lazy(() => import('./Chat'))
 
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
@@ -75,6 +76,7 @@ export const CreateFeature = () => {
               {/* <Separator orientation="vertical" /> */}
               <TabsList>
                 <TabsTrigger value="code">Code</TabsTrigger>
+                <TabsTrigger value="ai">AI</TabsTrigger>
                 <TabsTrigger className="border-foreground border" value="check">
                   Check
                 </TabsTrigger>
@@ -84,6 +86,12 @@ export const CreateFeature = () => {
             <TabsContent value="code" className="flex-1">
               <Suspense fallback={<div className="p-8">Loading code...</div>}>
                 <MonacoEditor />
+              </Suspense>
+            </TabsContent>
+
+            <TabsContent value="ai" className="flex-1 overflow-hidden">
+              <Suspense fallback={<div className="p-8">Loading chat...</div>}>
+                <ChatTab />
               </Suspense>
             </TabsContent>
 
