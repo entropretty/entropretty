@@ -291,9 +291,54 @@
 - ✅ Step 8: Handle suggestion click to trigger onSuggestionClick callback
 - ✅ Step 9: Apply design tokens for welcome padding and typography
 
+**Git Commit:** ba42d58 - feat(chat): add WelcomeMessage component with suggested prompts
+
 **Verification Status:**
 - TypeScript check shows no errors in Chat components
 - Pre-existing TypeScript errors exist in codebase (not related to this change)
+- ESLint/lint passes with no errors (only pre-existing warnings)
+- Dev server starts successfully (`pnpm dev:app`)
+- Production build completes successfully (`pnpm build`)
+- Pre-commit hooks passed (lint-staged + prettier + full lint + typecheck)
+
+---
+
+### 2026-01-16: Core UI - Create Composer component for message input
+
+**Task:** Create Composer component for message input (PRD lines 126-138)
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Chat/Composer.tsx` as a separate component file:
+  - Auto-growing textarea that expands with content up to 120px max height
+  - Send button using the `Button` component with `size="icon"` variant
+  - Enter key to send message (Shift+Enter for newlines)
+  - Placeholder text "Type a message..."
+  - Disabled state when `chatLoadingAtom` is true
+  - Input cleared after successful send (handled by parent)
+  - Accessible with aria-labels for textarea and button
+  - Can send if there's text OR attachments (for future attachment support)
+- Updated `apps/app/src/features/create/Chat/index.tsx`:
+  - Removed inline Composer component definition
+  - Imported Composer from separate file
+  - Simplified code by delegating all composer logic to the component
+
+**Files Created/Modified:**
+- `apps/app/src/features/create/Chat/Composer.tsx` (new)
+- `apps/app/src/features/create/Chat/index.tsx` (updated to use imported Composer)
+
+**PRD Checklist (lines 126-138):**
+- ✅ Step 1: Create features/create/Chat/Composer.tsx file
+- ✅ Step 2: Add TextArea with auto-grow up to max height (120px)
+- ✅ Step 3: Add SendButton that is disabled when input is empty
+- ✅ Step 4: Handle Enter key to send message (Shift+Enter for newline)
+- ✅ Step 5: Add placeholder text 'Type a message...'
+- ✅ Step 6: Disable composer when chatLoadingAtom is true
+- ✅ Step 7: Clear input after successful send (parent handles via value prop)
+- ✅ Step 8: Apply design tokens for composer styling (uses Button component, cn utility)
+- ✅ Step 9: Add aria-labels for accessibility
+
+**Verification Status:**
+- TypeScript check passes with no errors in Chat components
 - ESLint/lint passes with no errors
 - Dev server starts successfully (`pnpm dev:app`)
 - Production build completes successfully (`pnpm build`)
@@ -302,10 +347,9 @@
 
 ## Pending Tasks (by priority)
 
-1. Create Composer component for message input (separate file with full functionality)
-2. Create MessageBubble component for displaying chat messages
-3. Create CodeBlock component with Applied badge
-4. Create LoadingIndicator component for AI response loading state
-5. Implement useChat hook for AI communication
-6. Implement auto-apply code from AI response
-7. (remaining tasks per PRD)
+1. Create MessageBubble component for displaying chat messages
+2. Create CodeBlock component with Applied badge
+3. Create LoadingIndicator component for AI response loading state
+4. Implement useChat hook for AI communication
+5. Implement auto-apply code from AI response
+6. (remaining tasks per PRD)
