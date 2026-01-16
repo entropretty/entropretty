@@ -1,4 +1,4 @@
-import { Button } from "./ui/button"
+import { Button } from './ui/button'
 
 function Content() {
   return (
@@ -11,24 +11,24 @@ function Content() {
 
         <ol className="ml-6 list-decimal space-y-1 pl-5">
           <li>
-            <b>Faerjan</b>{" "}
+            <b>Faerjan</b>{' '}
             <a href="/a/205" className="text-blue-400 hover:underline">
               /a/205
-            </a>{" "}
+            </a>{' '}
             by <b>Jumalauta Faerjan Committee</b>
           </li>
           <li>
-            <b>Scary faces</b>{" "}
+            <b>Scary faces</b>{' '}
             <a href="/a/238" className="text-blue-400 hover:underline">
               /a/238
-            </a>{" "}
+            </a>{' '}
             by <b>blueflame/Ananasmurska</b>
           </li>
           <li>
-            <b>Lines & Circles</b>{" "}
+            <b>Lines & Circles</b>{' '}
             <a href="/a/211" className="text-blue-400 hover:underline">
               /a/211
-            </a>{" "}
+            </a>{' '}
             by <b>LLB</b>
           </li>
         </ol>
@@ -38,7 +38,7 @@ function Content() {
         </p>
       </div>
       <div className="flex flex-col gap-2 text-gray-300">
-        <Button asChild variant={"link"} className="text-base">
+        <Button asChild variant={'link'} className="text-base">
           <a
             className="text-white"
             href="https://www.pouet.net/party_results.php?which=1550&when=2025&font=1"

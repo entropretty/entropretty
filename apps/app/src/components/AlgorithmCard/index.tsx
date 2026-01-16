@@ -1,3 +1,8 @@
+import { getSeedFamily, seedToKey } from '@entropretty/utils'
+import { useCallback, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import type { Dispatch, SetStateAction } from 'react'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
 import { AlgorithmInfo } from '@/components/AlgorithmInfo'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
@@ -5,10 +10,6 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSeedFamily, seedToKey } from '@entropretty/utils'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
-import { Link } from '@tanstack/react-router'
 
 interface AlgorithmCardProps {
   algorithm: AlgorithmView
@@ -17,10 +18,10 @@ interface AlgorithmCardProps {
 export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   const { single, grid } = useDisplaySizes()
 
-  const [seedFamily, setSeedFamily] = useState<number[][]>([
-    ...getSeedFamily(algorithm.family_kind!, 4),
-    ...getSeedFamily(algorithm.family_kind!, 3),
-    ...getSeedFamily(algorithm.family_kind!, 3),
+  const [seedFamily, setSeedFamily] = useState<Array<Array<number>>>([
+    ...getSeedFamily(algorithm.family_kind, 4),
+    ...getSeedFamily(algorithm.family_kind, 3),
+    ...getSeedFamily(algorithm.family_kind, 3),
   ])
 
   if (!algorithm.id) return null
@@ -44,7 +45,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
               {seedFamily.slice(1, 10).map((seed) => (
                 <AlgorithmBitmap
                   key={seedToKey(seed)}
-                  algorithmId={algorithm.id!}
+                  algorithmId={algorithm.id}
                   seed={seed}
                   size={grid}
                   scale={2}
@@ -77,11 +78,11 @@ const AlgorithmActions = ({
   setSeedFamily,
 }: {
   algorithm: AlgorithmView
-  setSeedFamily: Dispatch<SetStateAction<number[][]>>
+  setSeedFamily: Dispatch<SetStateAction<Array<Array<number>>>>
 }) => {
   const { user } = useAuth()
   const reroll = useCallback(() => {
-    setSeedFamily([...getSeedFamily(algorithm.family_kind!).map((s) => [...s])])
+    setSeedFamily([...getSeedFamily(algorithm.family_kind).map((s) => [...s])])
   }, [algorithm.family_kind, setSeedFamily])
 
   return (

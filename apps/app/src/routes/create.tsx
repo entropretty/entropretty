@@ -3,15 +3,15 @@ import { useAtom, useSetAtom } from 'jotai'
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { z } from 'zod'
 
+import type { FamilyKind } from '@entropretty/utils'
+import type { AlgorithmView } from '@/lib/helper.types'
 import {
   editorCodeAtom,
   editorSeedTypeAtom,
   generateNewSeedAtom,
   remixAtom,
 } from '@/features/create/atoms'
-import { AlgorithmView } from '@/lib/helper.types'
 import { supabase } from '@/lib/supabase'
-import { FamilyKind } from '@entropretty/utils'
 import RequireUser from '@/layouts/RequireUser'
 import RequireUsername from '@/layouts/RequireUsername'
 
@@ -83,7 +83,7 @@ function CreatePage() {
       generateNewSeed()
       setRemix(null)
     } else {
-      setRemix(data as AlgorithmView)
+      setRemix(data)
 
       setEditorCode(data.content || '')
       setSeedType(data.family_kind || 'Procedural')

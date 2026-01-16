@@ -1,14 +1,14 @@
-import { useAlgorithmService } from '@/contexts/service-context'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSupabase } from '@/lib/supabase'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { useAlgorithmService } from '@/contexts/service-context'
+import { getSupabase } from '@/lib/supabase'
 
 const PAGE_SIZE = 3
 
 export function useUserAlgorithms(username: string | undefined) {
   const algorithmService = useAlgorithmService()
 
-  return useInfiniteQuery<AlgorithmView[]>({
+  return useInfiniteQuery<Array<AlgorithmView>>({
     queryKey: ['algorithms', 'user', username],
     enabled: !!username && typeof window !== 'undefined',
     initialPageParam: 0,
@@ -35,7 +35,7 @@ export function useUserAlgorithms(username: string | undefined) {
       }
 
       if (error) throw error
-      return data as AlgorithmView[]
+      return data as Array<AlgorithmView>
     },
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === PAGE_SIZE ? allPages.length : undefined

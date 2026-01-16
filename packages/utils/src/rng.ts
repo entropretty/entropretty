@@ -1,8 +1,6 @@
 import { bits } from "./helpers.js"
 import type { Seed } from "./types"
 
-
-
 export function cheapRandomGenerator(seed: Seed) {
   let a = bits(seed)
   let b = bits(seed)

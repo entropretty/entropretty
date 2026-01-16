@@ -1,17 +1,13 @@
+import { deriveSeedFamily, getSeed, seedToKey } from '@entropretty/utils'
+import { Link } from '@tanstack/react-router'
+import { useMemo } from 'react'
+import type { FamilyKind } from '@entropretty/utils'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
-import { AlgorithmView } from '@/lib/helper.types'
-import {
-  deriveSeedFamily,
-  FamilyKind,
-  getSeed,
-  seedToKey,
-} from '@entropretty/utils'
-import { Link } from '@tanstack/react-router'
-import { useMemo } from 'react'
 import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
 
 interface AlgorithmHeroProps {
@@ -19,8 +15,8 @@ interface AlgorithmHeroProps {
   onScrollDown?: () => void
 }
 
-const getHeroSeeds = (kind: FamilyKind): number[][] => {
-  const seeds: number[][] = []
+const getHeroSeeds = (kind: FamilyKind): Array<Array<number>> => {
+  const seeds: Array<Array<number>> = []
   for (let i = 0; i < 8; i++) {
     const initial = getSeed(kind)
     const family = deriveSeedFamily(initial, {
@@ -110,7 +106,7 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
             <Button asChild variant="link" className="px-0">
               <Link
                 to="/demo/$algorithmId"
-                params={{ algorithmId: algorithm.id!.toString() }}
+                params={{ algorithmId: algorithm.id.toString() }}
               >
                 DEMO
               </Link>
@@ -160,7 +156,7 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
               }}
             >
               <AlgorithmBitmap
-                algorithmId={algorithm.id!}
+                algorithmId={algorithm.id}
                 seed={seed}
                 size={hero}
                 scale={2}

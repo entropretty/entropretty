@@ -1,15 +1,15 @@
-import { useAlgorithmService } from "@/contexts/service-context"
-import { AlgorithmView } from "@/lib/helper.types"
-import { supabase } from "@/lib/supabase"
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from '@tanstack/react-query'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { useAlgorithmService } from '@/contexts/service-context'
+import { supabase } from '@/lib/supabase'
 
 const PAGE_SIZE = 3
 
 export function useUserIdAlgorithms(userId: string | undefined) {
   const algorithmService = useAlgorithmService()
 
-  return useInfiniteQuery<AlgorithmView[]>({
-    queryKey: ["algorithms", "user-id", userId],
+  return useInfiniteQuery<Array<AlgorithmView>>({
+    queryKey: ['algorithms', 'user-id', userId],
     enabled: !!userId,
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
@@ -17,10 +17,10 @@ export function useUserIdAlgorithms(userId: string | undefined) {
       const to = from + PAGE_SIZE - 1
 
       const { data, error } = await supabase
-        .from("algorithms_with_user_profile")
+        .from('algorithms_with_user_profile')
         .select()
-        .eq("user_id", userId!)
-        .order("created_at", { ascending: false })
+        .eq('user_id', userId!)
+        .order('created_at', { ascending: false })
         .range(from, to)
 
       if (data) {
@@ -34,7 +34,7 @@ export function useUserIdAlgorithms(userId: string | undefined) {
       }
 
       if (error) throw error
-      return data as AlgorithmView[]
+      return data as Array<AlgorithmView>
     },
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === PAGE_SIZE ? allPages.length : undefined

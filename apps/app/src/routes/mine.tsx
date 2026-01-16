@@ -43,7 +43,9 @@ function MinePage() {
 
   if (isLoading) {
     return (
-      <div className="flex w-full max-w-4xl flex-col gap-4 px-4 sm:px-0 py-4">Loading...</div>
+      <div className="flex w-full max-w-4xl flex-col gap-4 px-4 sm:px-0 py-4">
+        Loading...
+      </div>
     )
   }
 

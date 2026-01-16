@@ -1,8 +1,8 @@
-import { useAlgorithmServiceSafe } from '@/contexts/service-context'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSupabase } from '@/lib/supabase'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { useAlgorithmServiceSafe } from '@/contexts/service-context'
+import { getSupabase } from '@/lib/supabase'
 
 export function useAlgorithm(algorithmId: number) {
   const algorithmService = useAlgorithmServiceSafe()
@@ -31,9 +31,9 @@ export function useAlgorithm(algorithmId: number) {
   useEffect(() => {
     if (algorithmService && query.data) {
       algorithmService.addAlgorithm(
-        query.data.id!,
-        query.data.content!,
-        query.data.family_kind!,
+        query.data.id,
+        query.data.content,
+        query.data.family_kind,
       )
     }
   }, [algorithmService, query.data])

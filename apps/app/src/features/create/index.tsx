@@ -1,22 +1,22 @@
-import { FeedbackDialog } from "@/components/FeedbackDialog"
+import { useAtom } from 'jotai'
+import { Suspense, lazy } from 'react'
+import { FamilyKindBadge } from '../../components/FamilyKindBadge'
+import { AlgorithmNameInput } from './AlgorithmNameInput'
+import { AlgorithmPreview } from './AlgorithmPreview'
+import { editorSeedTypeAtom, scriptErrorAtom } from './atoms'
+import { Benchmarking } from './Benchmarking'
+import { PostButton } from './PostButton'
+import { RerollBadge } from './RerollBadge'
+import { SeedTools } from './SeedTools'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useAtom } from "jotai"
-import { Suspense, lazy } from "react"
-import { FamilyKindBadge } from "../../components/FamilyKindBadge"
-import { AlgorithmNameInput } from "./AlgorithmNameInput"
-import { AlgorithmPreview } from "./AlgorithmPreview"
-import { editorSeedTypeAtom, scriptErrorAtom } from "./atoms"
-import { Benchmarking } from "./Benchmarking"
-import { PostButton } from "./PostButton"
-import { RerollBadge } from "./RerollBadge"
-import { SeedTools } from "./SeedTools"
+} from '@/components/ui/resizable'
+import { FeedbackDialog } from '@/components/FeedbackDialog'
 
-const MonacoEditor = lazy(() => import("./MonacoEditor"))
+const MonacoEditor = lazy(() => import('./MonacoEditor'))
 
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)

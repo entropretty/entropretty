@@ -1,4 +1,4 @@
-export const preludeScriptString=`
+export const preludeScriptString = `
   const black = "#000000"
   const white = "#fff"
   const light = "#aaa"

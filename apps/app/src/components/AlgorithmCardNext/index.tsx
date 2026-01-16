@@ -1,13 +1,14 @@
+import { getSeedFamily, seedToKey } from '@entropretty/utils'
+import { useCallback, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { SaveButton } from './SaveButton'
+import type { Dispatch, SetStateAction } from 'react'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { AlgorithmBitmap } from '@/features/create/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSeedFamily, seedToKey } from '@entropretty/utils'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
-import { Link } from '@tanstack/react-router'
-import { SaveButton } from './SaveButton'
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
   return (
@@ -51,10 +52,10 @@ interface AlgorithmCardProps {
 export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
   const { grid } = useDisplaySizes()
 
-  const [seedFamily, setSeedFamily] = useState<number[][]>([
-    ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
-    ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
-    ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
+  const [seedFamily, setSeedFamily] = useState<Array<Array<number>>>([
+    ...getSeedFamily(algorithm.family_kind).slice(0, 3),
+    ...getSeedFamily(algorithm.family_kind).slice(0, 3),
+    ...getSeedFamily(algorithm.family_kind).slice(0, 3),
   ])
 
   if (!algorithm.id) return null
@@ -68,7 +69,7 @@ export function AlgorithmCard({ algorithm }: AlgorithmCardProps) {
               {seedFamily.slice(0, 9).map((seed) => (
                 <AlgorithmBitmap
                   key={seedToKey(seed)}
-                  algorithmId={algorithm.id!}
+                  algorithmId={algorithm.id}
                   seed={seed}
                   size={grid}
                   scale={2}
@@ -102,14 +103,14 @@ const AlgorithmActions = ({
   setSeedFamily,
 }: {
   algorithm: AlgorithmView
-  setSeedFamily: Dispatch<SetStateAction<number[][]>>
+  setSeedFamily: Dispatch<SetStateAction<Array<Array<number>>>>
 }) => {
   const { user } = useAuth()
   const reroll = useCallback(() => {
     setSeedFamily([
-      ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
-      ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
-      ...getSeedFamily(algorithm.family_kind!).slice(0, 3),
+      ...getSeedFamily(algorithm.family_kind).slice(0, 3),
+      ...getSeedFamily(algorithm.family_kind).slice(0, 3),
+      ...getSeedFamily(algorithm.family_kind).slice(0, 3),
     ])
   }, [algorithm.family_kind, setSeedFamily])
 

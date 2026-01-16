@@ -1,3 +1,5 @@
+import { useAtom } from 'jotai'
+import type { FamilyKind } from '@entropretty/utils'
 import { familyKindFilterAtom } from '@/atoms/family-kind-filter'
 import {
   Select,
@@ -7,8 +9,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { cn, familyKindColor } from '@/lib/utils'
-import { FamilyKind } from '@entropretty/utils'
-import { useAtom } from 'jotai'
 
 interface FamilyKindFilterProps {
   className?: string
@@ -27,7 +27,7 @@ export function FamilyKindFilter({ className }: FamilyKindFilterProps) {
         <SelectTrigger
           className={cn(
             'hover:cursor-pointer',
-            value !== 'All' && familyKindColor(value as FamilyKind),
+            value !== 'All' && familyKindColor(value),
             value === 'Procedural'
               ? 'text-primary-foreground'
               : value !== 'All'

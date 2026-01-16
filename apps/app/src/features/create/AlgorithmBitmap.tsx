@@ -1,11 +1,12 @@
-import { cn } from "@/lib/utils"
-import { seedToKey, type AlgorithmId } from "@entropretty/utils"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useAlgorithmService } from "@/contexts/service-context"
+import { seedToKey } from '@entropretty/utils'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { AlgorithmId } from '@entropretty/utils'
+import { cn } from '@/lib/utils'
+import { useAlgorithmService } from '@/contexts/service-context'
 
 interface Props {
   algorithmId: AlgorithmId
-  seed: number[]
+  seed: Array<number>
   size: number
   scale?: number
   onClick?: () => void
@@ -33,9 +34,9 @@ export const AlgorithmBitmap: React.FC<Props> = ({
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (e.altKey && canvasRef.current) {
-        const link = document.createElement("a")
-        link.download = `${algorithmId}_${seed.join("-")}.png`
-        link.href = canvasRef.current.toDataURL("image/png")
+        const link = document.createElement('a')
+        link.download = `${algorithmId}_${seed.join('-')}.png`
+        link.href = canvasRef.current.toDataURL('image/png')
         link.click()
         setTimeout(() => {
           link.remove()
@@ -59,14 +60,14 @@ export const AlgorithmBitmap: React.FC<Props> = ({
       })
       .then((bitmap) => {
         if (!bitmap) return
-        const context = canvasRef.current!.getContext("2d")!
+        const context = canvasRef.current!.getContext('2d')!
         context.clearRect(0, 0, drawingSize, drawingSize)
         context.drawImage(bitmap, 0, 0, drawingSize, drawingSize)
         setIsReady(true)
       })
       .catch((error) => {
-        if (error.name === "AbortError") {
-          console.log("abort error")
+        if (error.name === 'AbortError') {
+          console.log('abort error')
         }
       })
     return () => {
@@ -77,10 +78,10 @@ export const AlgorithmBitmap: React.FC<Props> = ({
   return (
     <canvas
       className={cn(
-        "bg-white transition-opacity",
+        'bg-white transition-opacity',
         {
-          "opacity-0": !ready,
-          "cursor-pointer": !!onClick,
+          'opacity-0': !ready,
+          'cursor-pointer': !!onClick,
         },
         className,
       )}

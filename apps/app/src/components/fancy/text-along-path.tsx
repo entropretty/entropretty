@@ -1,23 +1,25 @@
-import { RefObject, useEffect, useRef } from "react"
-import { useScroll, UseScrollOptions, useTransform } from "motion/react"
+import { useEffect, useRef } from 'react'
+import { useScroll, useTransform } from 'motion/react'
+import type { RefObject } from 'react'
+import type { UseScrollOptions } from 'motion/react'
 
 type PreserveAspectRatioAlign =
-  | "none"
-  | "xMinYMin"
-  | "xMidYMin"
-  | "xMaxYMin"
-  | "xMinYMid"
-  | "xMidYMid"
-  | "xMaxYMid"
-  | "xMinYMax"
-  | "xMidYMax"
-  | "xMaxYMax"
+  | 'none'
+  | 'xMinYMin'
+  | 'xMidYMin'
+  | 'xMaxYMin'
+  | 'xMinYMid'
+  | 'xMidYMid'
+  | 'xMaxYMid'
+  | 'xMinYMax'
+  | 'xMidYMax'
+  | 'xMaxYMax'
 
-type PreserveAspectRatioMeetOrSlice = "meet" | "slice"
+type PreserveAspectRatioMeetOrSlice = 'meet' | 'slice'
 
 type PreserveAspectRatio =
   | PreserveAspectRatioAlign
-  | `${Exclude<PreserveAspectRatioAlign, "none">} ${PreserveAspectRatioMeetOrSlice}`
+  | `${Exclude<PreserveAspectRatioAlign, 'none'>} ${PreserveAspectRatioMeetOrSlice}`
 
 interface AnimatedPathTextProps {
   // Path properties
@@ -36,14 +38,14 @@ interface AnimatedPathTextProps {
   // Text properties
   text: string
   textClassName?: string
-  textAnchor?: "start" | "middle" | "end"
+  textAnchor?: 'start' | 'middle' | 'end'
 
   // Animation properties
-  animationType?: "auto" | "scroll"
+  animationType?: 'auto' | 'scroll'
 
   // Animation properties if animationType is auto
   duration?: number
-  repeatCount?: number | "indefinite"
+  repeatCount?: number | 'indefinite'
   easingFunction?: {
     calcMode?: string
     keyTimes?: string
@@ -52,7 +54,7 @@ interface AnimatedPathTextProps {
 
   // Scroll animation properties if animationType is scroll
   scrollContainer?: RefObject<HTMLElement>
-  scrollOffset?: UseScrollOptions["offset"]
+  scrollOffset?: UseScrollOptions['offset']
   scrollTransformValues?: [number, number]
 }
 
@@ -61,36 +63,36 @@ const AnimatedPathText = ({
   path,
   pathId,
   pathClassName,
-  preserveAspectRatio = "xMidYMid meet",
+  preserveAspectRatio = 'xMidYMid meet',
   showPath = false,
 
   // SVG defaults
-  width = "100%",
-  height = "100%",
-  viewBox = "0 0 100 100",
+  width = '100%',
+  height = '100%',
+  viewBox = '0 0 100 100',
   svgClassName,
 
   // Text defaults
   text,
   textClassName,
-  textAnchor = "start",
+  textAnchor = 'start',
 
   // Animation type
-  animationType = "auto",
+  animationType = 'auto',
 
   // Animation defaults
   duration = 4,
-  repeatCount = "indefinite",
+  repeatCount = 'indefinite',
 
   easingFunction = {},
 
   // Scroll animation defaults
   scrollContainer,
-  scrollOffset = ["start end", "end end"],
+  scrollOffset = ['start end', 'end end'],
   scrollTransformValues = [0, 100],
 }: AnimatedPathTextProps) => {
   const container = useRef<HTMLDivElement>(null)
-  const textPathRefs = useRef<SVGTextPathElement[]>([])
+  const textPathRefs = useRef<Array<SVGTextPathElement>>([])
 
   // naive id for the path. you should rather use yours :)
   const id =
@@ -108,12 +110,12 @@ const AnimatedPathText = ({
     const handleChange = () => {
       textPathRefs.current.forEach((textPath) => {
         if (textPath) {
-          textPath.setAttribute("startOffset", `${t.get()}%`)
+          textPath.setAttribute('startOffset', `${t.get()}%`)
         }
       })
     }
 
-    scrollYProgress.on("change", handleChange)
+    scrollYProgress.on('change', handleChange)
 
     return () => {
       scrollYProgress.clearListeners()
@@ -121,11 +123,11 @@ const AnimatedPathText = ({
   }, [scrollYProgress, t])
 
   const animationProps =
-    animationType === "auto"
+    animationType === 'auto'
       ? {
-          from: "0%",
-          to: "100%",
-          begin: "0s",
+          from: '0%',
+          to: '100%',
+          begin: '0s',
           dur: `${duration}s`,
           repeatCount: repeatCount,
           ...(easingFunction && easingFunction),
@@ -145,7 +147,7 @@ const AnimatedPathText = ({
         id={id}
         className={pathClassName}
         d={path}
-        stroke={showPath ? "currentColor" : "none"}
+        stroke={showPath ? 'currentColor' : 'none'}
         fill="none"
       />
 
@@ -154,12 +156,12 @@ const AnimatedPathText = ({
         <textPath
           className={textClassName}
           href={`#${id}`}
-          startOffset={"0%"}
+          startOffset={'0%'}
           ref={(ref) => {
             if (ref) textPathRefs.current[0] = ref
           }}
         >
-          {animationType === "auto" && (
+          {animationType === 'auto' && (
             <animate attributeName="startOffset" {...animationProps} />
           )}
           {text}
@@ -167,17 +169,17 @@ const AnimatedPathText = ({
       </text>
 
       {/* Second text element (offset to hide the jump) */}
-      {animationType === "auto" && (
+      {animationType === 'auto' && (
         <text textAnchor={textAnchor} fill="currentColor">
           <textPath
             className={textClassName}
             href={`#${id}`}
-            startOffset={"-100%"}
+            startOffset={'-100%'}
             ref={(ref) => {
               if (ref) textPathRefs.current[1] = ref
             }}
           >
-            {animationType === "auto" && (
+            {animationType === 'auto' && (
               <animate
                 attributeName="startOffset"
                 {...animationProps}

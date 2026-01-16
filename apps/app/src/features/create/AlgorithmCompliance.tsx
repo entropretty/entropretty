@@ -1,9 +1,9 @@
-import { useAlgorithmService } from "@/contexts/service-context"
-import { cn } from "@/lib/utils"
-import { CheckMetadata } from "@entropretty/compliance/browser"
-import { AlgorithmId } from "@entropretty/utils"
-import { useEffect, useMemo, useRef, useState } from "react"
-import { AlgorithmBitmap } from "./AlgorithmBitmap"
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { AlgorithmBitmap } from './AlgorithmBitmap'
+import type { CheckMetadata } from '@entropretty/compliance/browser'
+import type { AlgorithmId } from '@entropretty/utils'
+import { cn } from '@/lib/utils'
+import { useAlgorithmService } from '@/contexts/service-context'
 
 // Extend the CheckMetadata type to include the details property with colors
 interface ExtendedCheckMetadata extends CheckMetadata {
@@ -24,7 +24,7 @@ interface ExtendedCheckMetadata extends CheckMetadata {
 
 interface Props {
   algorithmId: AlgorithmId
-  seed: number[]
+  seed: Array<number>
   size: number
   scale?: number
   version?: number
@@ -45,7 +45,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
   const [overlayImageData, setOverlayImageData] = useState<ImageData | null>(
     null,
   )
-  const [issues, setIssues] = useState<ExtendedCheckMetadata[]>([])
+  const [issues, setIssues] = useState<Array<ExtendedCheckMetadata>>([])
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawingSize = useMemo(() => size * scale, [size, scale])
@@ -55,7 +55,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
     () =>
       issues.find((issue) =>
         // Look for messages about "distinct colors" which is specific to colorCount
-        issue.message?.includes("distinct colors"),
+        issue.message?.includes('distinct colors'),
       ),
     [issues],
   )
@@ -64,7 +64,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
   const colorIslandIssues = useMemo(() => {
     return issues.filter((issue) =>
       // Look for "color island" in the message which is specific to colorIsland issues
-      issue.message?.includes("color island"),
+      issue.message?.includes('color island'),
     )
   }, [issues])
 
@@ -83,7 +83,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
       })
       .then((result) => {
         if (result) {
-          setIssues(result.issues as ExtendedCheckMetadata[])
+          setIssues(result.issues as Array<ExtendedCheckMetadata>)
           if (result.issueOverlayImageData) {
             setOverlayImageData(result.issueOverlayImageData)
           } else {
@@ -107,7 +107,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
   // Draw overlay on canvas when overlayImageData changes
   useEffect(() => {
     if (canvasRef.current && overlayImageData) {
-      const ctx = canvasRef.current.getContext("2d")
+      const ctx = canvasRef.current.getContext('2d')
       if (ctx) {
         canvasRef.current.width = overlayImageData.width
         canvasRef.current.height = overlayImageData.height
@@ -187,7 +187,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
           <canvas
             ref={canvasRef}
             className={cn(
-              "absolute left-0 top-0 h-full w-full cursor-pointer touch-none transition-opacity hover:opacity-0",
+              'absolute left-0 top-0 h-full w-full cursor-pointer touch-none transition-opacity hover:opacity-0',
               className,
             )}
             onClick={onClick}

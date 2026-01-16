@@ -1,17 +1,17 @@
-import Image from "next/image";
+import Image from "next/image"
 
 export interface EventCardProps {
-  title: string;
-  subtitle: string;
-  description: string[];
-  imageSrc: string;
-  logoSrc: string;
-  logoAlt: string;
-  date: string;
-  location: string;
-  linkUrl: string;
-  linkText: string;
-  isPast?: boolean;
+  title: string
+  subtitle: string
+  description: string[]
+  imageSrc: string
+  logoSrc: string
+  logoAlt: string
+  date: string
+  location: string
+  linkUrl: string
+  linkText: string
+  isPast?: boolean
 }
 
 export function EventCard({
@@ -27,7 +27,7 @@ export function EventCard({
   isPast = false,
 }: EventCardProps) {
   return (
-    <div className="group flex h-full flex-col overflow-hidden border border-border bg-card transition-colors hover:bg-secondary/50">
+    <div className="border-border bg-card hover:bg-secondary/50 group flex h-full flex-col overflow-hidden border transition-colors">
       <div className="relative h-48 sm:h-56">
         <Image
           src={imageSrc}
@@ -46,11 +46,11 @@ export function EventCard({
           />
         </div>
         {isPast && (
-          <div className="absolute right-2 top-2 border border-border bg-background px-2 py-1 text-xs">
+          <div className="border-border bg-background absolute right-2 top-2 border px-2 py-1 text-xs">
             Past Event
           </div>
         )}
-        <div className="absolute bottom-0 left-0 bg-primary px-3 py-1.5 text-xs text-primary-foreground">
+        <div className="bg-primary text-primary-foreground absolute bottom-0 left-0 px-3 py-1.5 text-xs">
           {date}
         </div>
       </div>
@@ -58,24 +58,24 @@ export function EventCard({
       <div className="flex flex-grow flex-col p-4 sm:p-6">
         <div className="flex-grow">
           <h3 className="text-lg font-medium leading-tight">{title}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+          <p className="text-muted-foreground mt-1 text-sm">{subtitle}</p>
 
           {description.map((line, index) => (
             <p
               key={index}
-              className="mt-3 hidden text-sm text-muted-foreground sm:block"
+              className="text-muted-foreground mt-3 hidden text-sm sm:block"
             >
               {line}
             </p>
           ))}
         </div>
 
-        <div className="mt-4 pt-4 border-t border-border">
+        <div className="border-border mt-4 border-t pt-4">
           <a
             href={linkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-foreground underline-offset-4 hover:underline"
+            className="text-foreground inline-flex items-center gap-2 text-sm underline-offset-4 hover:underline"
           >
             {linkText}
             <span>→</span>
@@ -83,5 +83,5 @@ export function EventCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

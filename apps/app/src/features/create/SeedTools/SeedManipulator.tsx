@@ -1,11 +1,11 @@
-import { ByteManipulator } from "@/components/ByteManipulator"
-import { editorSeedFamilyAtom } from "@/features/create/atoms"
-import { useAtom } from "jotai"
+import { useAtom } from 'jotai'
+import { ByteManipulator } from '@/components/ByteManipulator'
+import { editorSeedFamilyAtom } from '@/features/create/atoms'
 
 export const SeedManipulator = () => {
   const [seedFamily, setSeedFamily] = useAtom(editorSeedFamilyAtom)
 
-  const handleSeedChange = (newSeed: number[]) => {
+  const handleSeedChange = (newSeed: Array<number>) => {
     setSeedFamily((prev) => {
       const newFamily = [...prev]
       newFamily[0] = newSeed

@@ -2,22 +2,16 @@ import { blake2b256 as blake2b256Hasher } from '@multiformats/blake2/blake2b'
 import { bytesToHex } from '@noble/hashes/utils'
 import * as Comlink from 'comlink'
 import { expose } from 'comlink'
+import { colorIslandsRule } from '@entropretty/compliance/browser'
+import { RenderCore } from '@entropretty/utils'
+import { BenchmarkCore } from '@entropretty/benchmark-core'
+import type { AlgorithmId, FamilyKind, Seed } from '@entropretty/utils'
+import type { BenchmarkResult } from '@entropretty/benchmark-core'
 import type {
   CheckMetadata,
   ComplianceResult as RuleComplianceResult,
   SingleImageRule,
 } from '@entropretty/compliance/browser'
-import { colorIslandsRule } from '@entropretty/compliance/browser'
-import {
-  type FamilyKind,
-  type AlgorithmId,
-  RenderCore,
-  type Seed,
-} from '@entropretty/utils'
-import {
-  BenchmarkCore,
-  type BenchmarkResult,
-} from '@entropretty/benchmark-core'
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
@@ -39,9 +33,9 @@ type ComplianceJob = {
 export interface ComplianceResult {
   imageHash: string
   isCompliant: boolean
-  issues: CheckMetadata[]
+  issues: Array<CheckMetadata>
   issueOverlayImageData?: ImageData
-  ruleTypesFailed: string[]
+  ruleTypesFailed: Array<string>
 }
 
 // Re-export BenchmarkResult for use in other files
@@ -56,14 +50,14 @@ export interface ComplianceRequest {
 }
 
 // Centralized registry of all compliance rules
-const complianceRules: SingleImageRule[] = [
+const complianceRules: Array<SingleImageRule> = [
   // colorCountRule,
   colorIslandsRule,
   // Add new rules here
 ]
 
 const renderCore = new RenderCore(COMPLIANCE_TIMEOUT_MS)
-const complianceQueue: ComplianceJob[] = []
+const complianceQueue: Array<ComplianceJob> = []
 let isProcessing = false
 let progressCallback: ((progress: number) => void) | undefined = undefined
 
@@ -196,7 +190,7 @@ async function processQueue() {
     const ruleResults = await runAllComplianceRules(buffer)
 
     // Extract all issues from rule results
-    const issues: CheckMetadata[] = []
+    const issues: Array<CheckMetadata> = []
     let isCompliant = true
 
     // Keep track of rule types with issues
@@ -309,7 +303,7 @@ async function processQueue() {
  */
 async function runAllComplianceRules(
   buffer: ArrayBuffer,
-): Promise<RuleComplianceResult[]> {
+): Promise<Array<RuleComplianceResult>> {
   return Promise.all(complianceRules.map((rule) => rule.check(buffer)))
 }
 
@@ -320,4 +314,3 @@ function compareNumberArrays(a: Seed, b: Seed): boolean {
 
 export type ComplianceWorker = typeof workerAPI
 expose(workerAPI)
-

@@ -9,17 +9,30 @@
     "build:app": "pnpm --filter app build",
     "build:website": "pnpm --filter website build",
     "lint": "pnpm run --r --filter \"./packages/**\" lint",
+    "lint:all": "pnpm lint && pnpm --filter website lint && pnpm --filter app lint",
+    "typecheck": "pnpm run --r --parallel --filter \"./packages/**\" --filter website typecheck",
+    "typecheck:all": "pnpm run --r --parallel typecheck",
+    "format:check": "prettier --check .",
+    "check:all": "pnpm format:check && pnpm lint:all && pnpm typecheck",
     "local-release": "pnpm build && changeset version && changeset publish",
     "prettier": "prettier . --write",
-    "supabase": "supabase login"
+    "supabase": "supabase login",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,md,css,scss,yaml,yml}": [
+      "prettier --write"
+    ]
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@changesets/cli": "^2.27.7",
     "eslint": "^9.9.0",
-    "prettier-plugin-tailwindcss": "^0.6.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "typescript": "^5.5.4"
   },
   "packageManager": "pnpm@10.27.0+sha512.72d699da16b1179c14ba9e64dc71c9a40988cbdc65c264cb0e489db7de917f20dcf4d64d8723625f2969ba52d4b7e2a1170682d9ac2a5dcaeaab732b7e16f04a"

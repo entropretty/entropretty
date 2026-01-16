@@ -21,8 +21,8 @@ import {
   colorCountRule,
   colorIslandsRule,
   colorContrastRule,
-  imageHashRule
-} from '@entropretty/compliance';
+  imageHashRule,
+} from "@entropretty/compliance"
 
 // Create a checker with desired rules
 const checker = new ComplianceChecker([
@@ -31,19 +31,22 @@ const checker = new ComplianceChecker([
   colorIslandsRule,
   colorContrastRule,
   imageHashRule,
-]);
+])
 
 // Check an image
-const imageBuffer = await readImage('path/to/image.jpg');
-const results = await checker.checkImage(imageBuffer);
+const imageBuffer = await readImage("path/to/image.jpg")
+const results = await checker.checkImage(imageBuffer)
 
 // Compare two images
-const baseImage = await readImage('base.jpg');
-const compareImage = await readImage('compare.jpg');
-const comparisonResults = await checker.compareImages(baseImage, compareImage);
+const baseImage = await readImage("base.jpg")
+const compareImage = await readImage("compare.jpg")
+const comparisonResults = await checker.compareImages(baseImage, compareImage)
 
 // Check a single rule
-const singleRuleResult = await checker.checkSingleRule('colorCount', imageBuffer);
+const singleRuleResult = await checker.checkSingleRule(
+  "colorCount",
+  imageBuffer,
+)
 ```
 
 ## Available Rules
@@ -59,24 +62,24 @@ const singleRuleResult = await checker.checkSingleRule('colorCount', imageBuffer
 You can configure rule behavior through a configuration object:
 
 ```typescript
-import { updateConfig } from '@entropretty/compliance';
+import { updateConfig } from "@entropretty/compliance"
 
 updateConfig({
   rules: {
     colorCount: {
       maxColors: 3,
-      tolerance: 50
+      tolerance: 50,
     },
     colorIslands: {
       minIslandSize: 50,
-      errorThreshold: 20
+      errorThreshold: 20,
     },
     imageHash: {
       warningThreshold: 10,
-      errorThreshold: 20
-    }
-  }
-});
+      errorThreshold: 20,
+    },
+  },
+})
 ```
 
 ## Preprocessors
@@ -84,8 +87,8 @@ updateConfig({
 The library includes image preprocessing utilities:
 
 ```typescript
-import { mergeColors } from '@entropretty/compliance';
+import { mergeColors } from "@entropretty/compliance"
 
 // Merge similar colors
-const processedImage = await mergeColors(imageBuffer, { tolerance: 25 });
+const processedImage = await mergeColors(imageBuffer, { tolerance: 25 })
 ```

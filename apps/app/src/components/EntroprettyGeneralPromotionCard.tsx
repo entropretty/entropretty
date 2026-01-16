@@ -1,5 +1,5 @@
-import { Link } from "react-router"
-import { useEffect, useState } from "react"
+import { Link } from 'react-router'
+import { useEffect, useState } from 'react'
 
 function PromotionContent() {
   return (
@@ -13,7 +13,7 @@ function PromotionContent() {
         using blockchain technology.
       </div>
       <div className="text-sm text-white">
-        Learn more at{" "}
+        Learn more at{' '}
         <Link
           to="https://entropretty.com"
           target="_blank"
@@ -28,18 +28,18 @@ function PromotionContent() {
 
 export function EntroprettyGeneralPromotionCard() {
   const [isDismissed, setIsDismissed] = useState(false)
-  const storageKey = "promocard-v1"
+  const storageKey = 'promocard-v1'
 
   useEffect(() => {
     // Check if card was previously dismissed
     const dismissedStatus = localStorage.getItem(storageKey)
-    if (dismissedStatus === "dismissed") {
+    if (dismissedStatus === 'dismissed') {
       setIsDismissed(true)
     }
   }, [])
 
   const handleDismiss = () => {
-    localStorage.setItem(storageKey, "dismissed")
+    localStorage.setItem(storageKey, 'dismissed')
     setIsDismissed(true)
   }
 

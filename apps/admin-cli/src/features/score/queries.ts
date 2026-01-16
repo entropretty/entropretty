@@ -1,4 +1,8 @@
-import { supabase, type Algorithm, type AlgorithmScore } from "../../lib/supabase"
+import {
+  supabase,
+  type Algorithm,
+  type AlgorithmScore,
+} from "../../lib/supabase"
 
 export async function getUnscoredAlgorithms(): Promise<Algorithm[]> {
   // First get all scored algorithm IDs

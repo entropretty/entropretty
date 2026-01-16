@@ -37,4 +37,3 @@ console.log(`Quality score: ${scored.qualityScore}`)
   - 0% warnings = 100 points
   - ~5% warnings = ~80 points
   - ~15% warnings = ~30 points
-

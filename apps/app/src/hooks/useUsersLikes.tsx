@@ -1,7 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/contexts/auth-context'
 import { AlgorithmView } from '@/lib/helper.types'
 import { getSupabase } from '@/lib/supabase'
-import { useQuery } from '@tanstack/react-query'
 
 export function useUsersLikes() {
   const { user } = useAuth()
@@ -18,7 +18,7 @@ export function useUsersLikes() {
         .eq('user_id', user.id)
 
       if (error) throw error
-      return data.map((like) => like.algorithm_id) as AlgorithmView['id'][]
+      return data.map((like) => like.algorithm_id)
     },
     enabled: !!user && typeof window !== 'undefined',
   })

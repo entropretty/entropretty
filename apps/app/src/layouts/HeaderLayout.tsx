@@ -1,3 +1,5 @@
+import { Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router'
+import { Moon, Sun } from 'lucide-react'
 import { EntroprettyLogo } from '@/components/EntroprettyLogo'
 import { HelpMenu } from '@/components/HelpMenu'
 import { DiscordIcon } from '@/components/icons/DiscordIcon'
@@ -9,8 +11,6 @@ import { useTheme } from '@/contexts/theme-context'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { FEATURES } from '@/lib/features'
 import { cn } from '@/lib/utils'
-import { Link, Outlet, useLocation, useNavigate } from '@tanstack/react-router'
-import { Moon, Sun } from 'lucide-react'
 
 function HeaderLogo({ pathname }: { pathname: string }) {
   // const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
@@ -38,11 +38,16 @@ export default function HeaderLayout() {
   const isAlgorithmPage = location.pathname.startsWith('/a/')
 
   return (
-    <div id="main-scroll-container" className="flex h-screen w-screen flex-col relative overflow-y-scroll">
-      <nav className={cn(
-        "z-20 border-border border-b flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md",
-        !isAlgorithmPage && "sticky top-0"
-      )}>
+    <div
+      id="main-scroll-container"
+      className="flex h-screen w-screen flex-col relative overflow-y-scroll"
+    >
+      <nav
+        className={cn(
+          'z-20 border-border border-b flex flex-row items-center justify-between gap-2 px-0 sm:px-6 py-2 sm:py-5 backdrop-blur-md',
+          !isAlgorithmPage && 'sticky top-0',
+        )}
+      >
         <div className="flex flex-1 flex-row items-center justify-around md:justify-between gap-2">
           <HeaderLogo pathname={location.pathname} />
           {!FEATURES.isCompetition && (

@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 export type BrowserType =
   | "Firefox"
@@ -9,35 +8,35 @@ export type BrowserType =
   | "Edge"
   | "Chrome"
   | "Safari"
-  | "unknown";
+  | "unknown"
 
 export default function useDetectBrowser(): BrowserType {
-  if (typeof window === "undefined") return "unknown";
+  if (typeof window === "undefined") return "unknown"
 
-  const [browserName, setBrowserName] = useState<BrowserType>("unknown");
+  const [browserName, setBrowserName] = useState<BrowserType>("unknown")
 
   useEffect(() => {
-    const sUsrAg = navigator.userAgent;
-    let detectedBrowser: BrowserType = "unknown";
+    const sUsrAg = navigator.userAgent
+    let detectedBrowser: BrowserType = "unknown"
 
     if (sUsrAg.indexOf("Firefox") > -1) {
-      detectedBrowser = "Firefox";
+      detectedBrowser = "Firefox"
     } else if (sUsrAg.indexOf("SamsungBrowser") > -1) {
-      detectedBrowser = "Samsung Internet";
+      detectedBrowser = "Samsung Internet"
     } else if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) {
-      detectedBrowser = "Opera";
+      detectedBrowser = "Opera"
     } else if (sUsrAg.indexOf("Trident") > -1) {
-      detectedBrowser = "IE";
+      detectedBrowser = "IE"
     } else if (sUsrAg.indexOf("Edge") > -1) {
-      detectedBrowser = "Edge";
+      detectedBrowser = "Edge"
     } else if (sUsrAg.indexOf("Chrome") > -1) {
-      detectedBrowser = "Chrome";
+      detectedBrowser = "Chrome"
     } else if (sUsrAg.indexOf("Safari") > -1) {
-      detectedBrowser = "Safari";
+      detectedBrowser = "Safari"
     }
 
-    setBrowserName(detectedBrowser);
-  }, []);
+    setBrowserName(detectedBrowser)
+  }, [])
 
-  return browserName;
+  return browserName
 }

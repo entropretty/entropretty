@@ -1,5 +1,5 @@
-import { FEATURES } from '@/lib/features'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { FEATURES } from '@/lib/features'
 
 type Theme = 'light' | 'dark'
 
@@ -145,4 +145,3 @@ export const useTheme = () => {
 
   return context
 }
-

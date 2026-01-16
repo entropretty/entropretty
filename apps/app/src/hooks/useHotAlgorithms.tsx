@@ -1,8 +1,8 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { useAlgorithmService } from '@/contexts/service-context'
 import { getSupabase } from '@/lib/supabase'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { AlgorithmView } from '@/lib/helper.types'
-import { useAtomValue } from 'jotai'
 import { familyKindFilterAtom } from '@/atoms/family-kind-filter'
 
 const PAGE_SIZE = 3
@@ -11,7 +11,7 @@ export function useHotAlgorithms() {
   const algorithmService = useAlgorithmService()
   const familyKindFilter = useAtomValue(familyKindFilterAtom)
 
-  return useInfiniteQuery<AlgorithmView[]>({
+  return useInfiniteQuery<Array<AlgorithmView>>({
     queryKey: ['algorithms', 'hot', familyKindFilter],
     enabled: typeof window !== 'undefined',
     initialPageParam: 0,
@@ -44,7 +44,7 @@ export function useHotAlgorithms() {
       }
 
       if (error) throw error
-      return data as AlgorithmView[]
+      return data as Array<AlgorithmView>
     },
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === PAGE_SIZE ? allPages.length : undefined

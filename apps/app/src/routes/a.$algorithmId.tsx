@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Database } from '@/lib/database.types'
 import { AlgorithmInfiniteGrid } from '@/components/AlgorithmInfiniteGrid'
 import { AlgorithmHero } from '@/components/AlgorithmHero'
@@ -8,7 +9,6 @@ import { AlgorithmHeroSkeleton } from '@/components/AlgorithmHero/AlgorithmHeroS
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAlgorithm } from '@/hooks/useAlgorithm'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
-import { useRef, useCallback, useEffect } from 'react'
 
 // Server function to fetch algorithm data for meta tags
 const fetchAlgorithmMeta = createServerFn().handler(

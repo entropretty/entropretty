@@ -1,13 +1,13 @@
+import { getSeed, seedToKey } from '@entropretty/utils'
+import { useMemo } from 'react'
+import { Link } from '@tanstack/react-router'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { AlgorithmInfo } from '@/components/AlgorithmInfo'
 import { DeleteButton } from '@/components/AlgorithmRow/DeleteButton'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSeed, seedToKey } from '@entropretty/utils'
-import { useMemo } from 'react'
-import { Link } from '@tanstack/react-router'
 
 interface AlgorithmRowProps {
   algorithm: AlgorithmView
@@ -16,7 +16,7 @@ interface AlgorithmRowProps {
 export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
   const { user } = useAuth()
   const seed = useMemo(() => {
-    return [...getSeed(algorithm.family_kind!)]
+    return [...getSeed(algorithm.family_kind)]
   }, [algorithm.family_kind])
 
   if (!algorithm.id) return null

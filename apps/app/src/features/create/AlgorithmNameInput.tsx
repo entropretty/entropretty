@@ -1,6 +1,6 @@
-import { Input } from "@/components/ui/input"
-import { useAtom } from "jotai"
-import { algorithmNameAtom } from "./atoms"
+import { useAtom } from 'jotai'
+import { algorithmNameAtom } from './atoms'
+import { Input } from '@/components/ui/input'
 
 export const AlgorithmNameInput = () => {
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)

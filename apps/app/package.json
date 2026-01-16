@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix"
   },

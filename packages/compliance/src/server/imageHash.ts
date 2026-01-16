@@ -1,22 +1,22 @@
-import type { ComparisonRule, ComplianceResult } from "../types";
-import sharp from "sharp";
-import { getConfig } from "../config";
+import type { ComparisonRule, ComplianceResult } from "../types"
+import sharp from "sharp"
+import { getConfig } from "../config"
 
 // Calculate Hamming distance between two hashes
 function hammingDistance(hash1: number[], hash2: number[]): number {
-  let distance = 0;
-  const len = Math.min(hash1.length, hash2.length);
+  let distance = 0
+  const len = Math.min(hash1.length, hash2.length)
 
   for (let i = 0; i < len; i++) {
     if (hash1[i] !== hash2[i]) {
-      distance++;
+      distance++
     }
   }
 
   // Add remaining length difference to distance if hashes are different lengths
-  distance += Math.abs(hash1.length - hash2.length);
+  distance += Math.abs(hash1.length - hash2.length)
 
-  return distance;
+  return distance
 }
 
 export const imageHashRule: ComparisonRule = {
@@ -26,10 +26,10 @@ export const imageHashRule: ComparisonRule = {
   type: "comparison",
   compare: async (
     baseImage: Buffer,
-    compareImage: Buffer
+    compareImage: Buffer,
   ): Promise<ComplianceResult> => {
     try {
-      const config = getConfig().rules.imageHash;
+      const config = getConfig().rules.imageHash
 
       // Generate pHashes for both images
       const [baseHash, compareHash] = await Promise.all([
@@ -40,11 +40,10 @@ export const imageHashRule: ComparisonRule = {
           .toBuffer()
           .then((data): number[] => {
             // Convert Uint8Array to regular array
-            const array = Array.from(data);
+            const array = Array.from(data)
             // Convert raw pixel data to binary hash array
-            const mean =
-              array.reduce((sum, val) => sum + val, 0) / array.length;
-            return array.map((val) => (val > mean ? 1 : 0));
+            const mean = array.reduce((sum, val) => sum + val, 0) / array.length
+            return array.map((val) => (val > mean ? 1 : 0))
           }),
         sharp(compareImage)
           .resize(32, 32, { fit: "fill" })
@@ -53,33 +52,32 @@ export const imageHashRule: ComparisonRule = {
           .toBuffer()
           .then((data): number[] => {
             // Convert Uint8Array to regular array
-            const array = Array.from(data);
-            const mean =
-              array.reduce((sum, val) => sum + val, 0) / array.length;
-            return array.map((val) => (val > mean ? 1 : 0));
+            const array = Array.from(data)
+            const mean = array.reduce((sum, val) => sum + val, 0) / array.length
+            return array.map((val) => (val > mean ? 1 : 0))
           }),
-      ]);
+      ])
 
       // Calculate hash distance
-      const distance = hammingDistance(baseHash, compareHash);
+      const distance = hammingDistance(baseHash, compareHash)
 
       // Store string representation for display
-      const baseHashString = baseHash.join("");
-      const compareHashString = compareHash.join("");
+      const baseHashString = baseHash.join("")
+      const compareHashString = compareHash.join("")
 
       // Determine status based on thresholds
-      let status: "pass" | "warn" | "error";
+      let status: "pass" | "warn" | "error"
       if (distance <= config.warningThreshold) {
-        status = "pass";
+        status = "pass"
       } else if (distance <= config.errorThreshold) {
-        status = "warn";
+        status = "warn"
       } else {
-        status = "error";
+        status = "error"
       }
 
       // Calculate similarity percentage
-      const maxDistance = baseHash.length; // Maximum possible distance
-      const similarity = ((maxDistance - distance) / maxDistance) * 100;
+      const maxDistance = baseHash.length // Maximum possible distance
+      const similarity = ((maxDistance - distance) / maxDistance) * 100
 
       return {
         status,
@@ -88,10 +86,10 @@ export const imageHashRule: ComparisonRule = {
             message:
               status === "pass"
                 ? `Images are visually similar (${similarity.toFixed(
-                    2
+                    2,
                   )}% match)`
                 : `Images differ significantly (${similarity.toFixed(
-                    2
+                    2,
                   )}% match)`,
             details: {
               hashDistance: distance,
@@ -103,7 +101,7 @@ export const imageHashRule: ComparisonRule = {
             },
           },
         ],
-      };
+      }
     } catch (error: unknown) {
       return {
         status: "error",
@@ -114,7 +112,7 @@ export const imageHashRule: ComparisonRule = {
             }`,
           },
         ],
-      };
+      }
     }
   },
-};
+}

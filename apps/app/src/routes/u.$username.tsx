@@ -1,9 +1,9 @@
-import { AlgorithmCard } from '@/components/AlgorithmCard'
-import { AlgorithmCardSkeleton } from '@/components/AlgorithmCard/AlgorithmCardSkeleton'
-import { useUserAlgorithms } from '@/hooks/useUserAlgorithms'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { AlgorithmCard } from '@/components/AlgorithmCard'
+import { AlgorithmCardSkeleton } from '@/components/AlgorithmCard/AlgorithmCardSkeleton'
+import { useUserAlgorithms } from '@/hooks/useUserAlgorithms'
 
 export const Route = createFileRoute('/u/$username')({
   component: UserPage,

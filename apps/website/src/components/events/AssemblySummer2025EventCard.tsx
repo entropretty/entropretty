@@ -1,4 +1,4 @@
-import { EventCard } from "./EventCard";
+import { EventCard } from "./EventCard"
 
 export function AssemblySummer2025EventCard() {
   return (
@@ -18,5 +18,5 @@ export function AssemblySummer2025EventCard() {
       linkText="Event Overview"
       isPast={true}
     />
-  );
+  )
 }

@@ -1,17 +1,13 @@
+import { deriveSeedFamily, getSeed, seedToKey } from '@entropretty/utils'
+import { useCallback, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
+import { Link } from '@tanstack/react-router'
+import type { FamilyKind } from '@entropretty/utils'
+import type { AlgorithmView } from '@/lib/helper.types'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
 import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
-import { AlgorithmView } from '@/lib/helper.types'
-import {
-  deriveSeedFamily,
-  FamilyKind,
-  getSeed,
-  seedToKey,
-} from '@entropretty/utils'
-import { useCallback, useEffect, useState } from 'react'
-import { useInView } from 'react-intersection-observer'
-import { Link } from '@tanstack/react-router'
 import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
 import { AlgorithmInfo } from '@/components/AlgorithmInfo'
 import { AutoScrollButton } from '@/components/AutoScrollButton'
@@ -30,7 +26,7 @@ const getSeedFamily = (kind: FamilyKind, amount: number) => {
     minBits: 1,
     maxBits: 1,
   })
-  return family as number[][]
+  return family as Array<Array<number>>
 }
 
 export function AlgorithmInfiniteGrid({
@@ -38,7 +34,7 @@ export function AlgorithmInfiniteGrid({
   className = '',
   hideBottomBar = false,
 }: AlgorithmInfiniteGridProps) {
-  const [seeds, setSeeds] = useState<number[][]>([])
+  const [seeds, setSeeds] = useState<Array<Array<number>>>([])
   const { ref, inView } = useInView({
     threshold: 0,
     rootMargin: '400px', // Start loading more content before reaching the bottom
@@ -48,7 +44,7 @@ export function AlgorithmInfiniteGrid({
 
   useEffect(() => {
     const families = Array.from({ length: 8 }, () =>
-      getSeedFamily(algorithm.family_kind!, 8),
+      getSeedFamily(algorithm.family_kind, 8),
     )
     const combinedFamily = families.reduce((acc, curr) => acc.concat(curr), [])
     setSeeds(combinedFamily)
@@ -58,7 +54,7 @@ export function AlgorithmInfiniteGrid({
     if (seeds.length === 0) return
 
     const families = Array.from({ length: 3 }, () =>
-      getSeedFamily(algorithm.family_kind!, 8),
+      getSeedFamily(algorithm.family_kind, 8),
     )
     const combinedFamily = families.reduce((acc, curr) => acc.concat(curr), [])
 
@@ -79,7 +75,7 @@ export function AlgorithmInfiniteGrid({
             {seeds.map((seed) => (
               <AlgorithmBitmap
                 key={seedToKey(seed)}
-                algorithmId={algorithm.id!}
+                algorithmId={algorithm.id}
                 seed={seed}
                 size={infinite}
                 scale={2}

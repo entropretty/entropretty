@@ -1,5 +1,5 @@
-import { AlgorithmView } from '@/lib/helper.types'
 import { Link } from '@tanstack/react-router'
+import type { AlgorithmView } from '@/lib/helper.types'
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
   return (

@@ -1,2 +1,5 @@
 dist
+.next
+.netlify
+pnpm-lock.yaml
 apps/entropretty-gallery/schemas

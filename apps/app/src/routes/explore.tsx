@@ -1,8 +1,8 @@
-import { GalleryAlgorithm } from '@/components/GalleryAlgorithm'
-import { useTopAlgorithmIds } from '@/hooks/useTopAlgorithmIds'
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { useTopAlgorithmIds } from '@/hooks/useTopAlgorithmIds'
+import { GalleryAlgorithm } from '@/components/GalleryAlgorithm'
 
 export const Route = createFileRoute('/explore')({
   component: ExplorePage,
@@ -17,7 +17,7 @@ export const Route = createFileRoute('/explore')({
 })
 
 function ExploreGallery() {
-  const [algorithmIds, setAlgorithmIds] = useState<number[]>([])
+  const [algorithmIds, setAlgorithmIds] = useState<Array<number>>([])
   const { ref, inView } = useInView({
     threshold: 0,
     rootMargin: '400px', // Start loading more content before reaching the bottom
@@ -73,4 +73,3 @@ function ExplorePage() {
     </div>
   )
 }
-

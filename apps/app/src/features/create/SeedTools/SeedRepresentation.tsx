@@ -1,9 +1,9 @@
-import { editorSeedTypeAtom } from "@/features/create/atoms"
-import { numeric } from "@entropretty/utils"
-import { useAtomValue } from "jotai"
+import { numeric } from '@entropretty/utils'
+import { useAtomValue } from 'jotai'
+import { editorSeedTypeAtom } from '@/features/create/atoms'
 
 interface SeedRepresentationProps {
-  seed: number[]
+  seed: Array<number>
 }
 
 export const SeedRepresentation = ({ seed }: SeedRepresentationProps) => {
@@ -11,21 +11,21 @@ export const SeedRepresentation = ({ seed }: SeedRepresentationProps) => {
 
   const numericValue = numeric(seed).toString()
   const hexValues = seed
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("")
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
     .toUpperCase()
 
   return (
     <div className="flex flex-col gap-2">
-      {seedType === "ProceduralAccount" && (
-        <div className="font-mono text-sm">{"0x" + hexValues}</div>
+      {seedType === 'ProceduralAccount' && (
+        <div className="font-mono text-sm">{'0x' + hexValues}</div>
       )}
-      {seedType === "ProceduralPersonal" && (
+      {seedType === 'ProceduralPersonal' && (
         <div className="font-mono text-sm">{numericValue}</div>
       )}
       {/* <Input disabled type="text" value={seedToKey(seed)} /> */}
       <div className="text-muted-foreground break-all font-mono text-xs">
-        [{seed.join(",")}]
+        [{seed.join(',')}]
       </div>
     </div>
   )
