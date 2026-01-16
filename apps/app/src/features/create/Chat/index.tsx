@@ -4,33 +4,32 @@
  */
 
 import { useAtom } from 'jotai'
+import { useCallback, useState } from 'react'
 import { chatLoadingAtom, chatMessagesAtom } from '../Session/atoms'
-
-/**
- * WelcomeMessage - Shown when chat has no messages
- * Displays greeting and suggested prompts
- */
-const WelcomeMessage = () => {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
-      <h2 className="mb-2 text-xl font-semibold">How can I help?</h2>
-      <p className="text-muted-foreground mb-6 max-w-md text-sm">
-        I can help you create and modify visual algorithms. Describe what you
-        want to create or ask questions about the seed system.
-      </p>
-      {/* Suggestion buttons will be added in a later task */}
-    </div>
-  )
-}
+import { editorCodeAtom } from '../atoms'
+import { WelcomeMessage } from './WelcomeMessage'
 
 /**
  * ThreadContainer - Displays chat messages or welcome screen
  */
-const ThreadContainer = () => {
+interface ThreadContainerProps {
+  onSuggestionClick: (text: string) => void
+}
+
+const ThreadContainer = ({ onSuggestionClick }: ThreadContainerProps) => {
   const [messages] = useAtom(chatMessagesAtom)
+  const [editorCode] = useAtom(editorCodeAtom)
+
+  // Consider code "custom" if it's non-empty and not just whitespace
+  const hasCustomCode = editorCode.trim().length > 0
 
   if (messages.length === 0) {
-    return <WelcomeMessage />
+    return (
+      <WelcomeMessage
+        hasCustomCode={hasCustomCode}
+        onSuggestionClick={onSuggestionClick}
+      />
+    )
   }
 
   return (
@@ -47,8 +46,30 @@ const ThreadContainer = () => {
  * Composer - Message input area with send button
  * Sticky at the bottom of the chat panel
  */
-const Composer = () => {
+interface ComposerProps {
+  value: string
+  onChange: (value: string) => void
+  onSend: () => void
+}
+
+const Composer = ({ value, onChange, onSend }: ComposerProps) => {
   const [isLoading] = useAtom(chatLoadingAtom)
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Send on Enter, but allow Shift+Enter for newlines
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      if (value.trim() && !isLoading) {
+        onSend()
+      }
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onChange(e.target.value)
+  }
+
+  const canSend = value.trim().length > 0 && !isLoading
 
   return (
     <div className="border-t bg-background p-4">
@@ -58,12 +79,16 @@ const Composer = () => {
           placeholder="Type a message..."
           disabled={isLoading}
           rows={1}
+          value={value}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
           aria-label="Chat message input"
         />
         <button
           type="button"
           className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-[44px] w-[44px] items-center justify-center rounded-md disabled:pointer-events-none disabled:opacity-50"
-          disabled={isLoading}
+          disabled={!canSend}
+          onClick={onSend}
           aria-label="Send message"
         >
           <svg
@@ -91,10 +116,28 @@ const Composer = () => {
  * Renders the full chat interface with thread and composer
  */
 export const ChatTab = () => {
+  const [inputValue, setInputValue] = useState('')
+
+  const handleSuggestionClick = useCallback((text: string) => {
+    setInputValue(text)
+  }, [])
+
+  const handleSend = useCallback(() => {
+    if (!inputValue.trim()) return
+    // For now, just clear the input - actual sending will be implemented with useChat hook
+    // TODO: Implement message sending with useChat hook
+    console.log('Sending message:', inputValue)
+    setInputValue('')
+  }, [inputValue])
+
   return (
     <div className="flex h-full flex-col">
-      <ThreadContainer />
-      <Composer />
+      <ThreadContainer onSuggestionClick={handleSuggestionClick} />
+      <Composer
+        value={inputValue}
+        onChange={setInputValue}
+        onSend={handleSend}
+      />
     </div>
   )
 }

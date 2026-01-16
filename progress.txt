@@ -206,10 +206,106 @@
 
 ---
 
+### 2026-01-16: Core UI - Create ChatTab container component
+
+**Task:** Create ChatTab container component with full layout structure
+
+**Changes Made:**
+- Expanded `apps/app/src/features/create/Chat/index.tsx` from placeholder to full container component:
+  - `ChatTab` - Main container with flex column layout filling available height
+  - `ThreadContainer` - Displays chat messages with overflow-y-auto, or shows welcome screen when empty
+  - `WelcomeMessage` - Centered welcome text with heading "How can I help?" and brief intro
+  - `Composer` - Message input area with textarea and send button, sticky at bottom
+- Integrated with Jotai atoms:
+  - Reads `chatMessagesAtom` to determine welcome vs message display
+  - Reads `chatLoadingAtom` to disable composer during AI response
+- Applied design tokens consistent with existing UI components:
+  - Uses `border-input`, `text-muted-foreground`, `bg-primary`, etc.
+  - Matches textarea styling from `@/components/ui/textarea`
+  - Matches button styling from `@/components/ui/button`
+- Added accessibility attributes (aria-labels for input and button)
+
+**Files Modified:**
+- `apps/app/src/features/create/Chat/index.tsx` (expanded from placeholder)
+
+**PRD Checklist (lines 93-106):**
+- ✅ Step 1: Create features/create/Chat/index.tsx file (already existed, expanded)
+- ✅ Step 2: Create ChatTab component with flex column layout
+- ✅ Step 3: Add ThreadContainer div with flex-1 and overflow-y-auto
+- ✅ Step 4: Add Composer section with sticky bottom positioning (border-t for visual separation)
+- ✅ Step 5: Read chatMessagesAtom to determine if showing welcome or messages
+- ✅ Step 6: Apply design tokens for background and spacing
+- ✅ Step 7: Verify component renders without errors
+- ✅ Step 8: Verify layout fills available tab content height
+
+**Git Commit:** 6a7d428 - feat(chat): implement ChatTab container with thread and composer
+
+**Verification Status:**
+- TypeScript check passes with no errors in Chat directory
+- Pre-existing TypeScript errors exist in codebase (not related to this change)
+- Dev server starts successfully (`pnpm dev:app`)
+- Production build completes successfully (`pnpm build`)
+- Component properly imports and uses session atoms
+- Pre-commit hooks passed (lint-staged + prettier + full lint + typecheck)
+
+---
+
+### 2026-01-16: Core UI - Create WelcomeMessage component with suggested prompts
+
+**Task:** Create WelcomeMessage component with suggested prompts
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Chat/SuggestionButton.tsx`:
+  - Reusable button component for suggested prompts
+  - Uses `Button` component with `variant="outline"` for consistent styling
+  - Props: `text` (display text) and `onClick` (callback with text value)
+  - Accessible click handler that passes text to parent
+- Created `apps/app/src/features/create/Chat/WelcomeMessage.tsx`:
+  - Welcome screen component shown when chat has no messages
+  - Displays heading "How can I help?" with intro text
+  - Shows default suggestions: "Create a geometric mandala pattern" and "Help me understand the seed system"
+  - Conditionally shows "Make my design more tattoo-friendly" when `hasCustomCode` prop is true
+  - Props: `hasCustomCode` (boolean) and `onSuggestionClick` (callback)
+- Updated `apps/app/src/features/create/Chat/index.tsx`:
+  - Imported and integrated new `WelcomeMessage` component
+  - Added `editorCodeAtom` read to determine if user has custom code
+  - Added `inputValue` state to track composer text
+  - Implemented `handleSuggestionClick` to populate composer with suggestion text
+  - Enhanced `Composer` with controlled input (value/onChange props)
+  - Added Enter key handling for send (Shift+Enter for newlines)
+  - Send button now properly disabled when input is empty
+
+**Files Created/Modified:**
+- `apps/app/src/features/create/Chat/SuggestionButton.tsx` (new)
+- `apps/app/src/features/create/Chat/WelcomeMessage.tsx` (new)
+- `apps/app/src/features/create/Chat/index.tsx` (updated)
+
+**PRD Checklist (lines 108-122):**
+- ✅ Step 1: Create features/create/Chat/WelcomeMessage.tsx file
+- ✅ Step 2: Display welcome title 'How can I help?'
+- ✅ Step 3: Add brief intro text about the AI assistant
+- ✅ Step 4: Create SuggestionButton component in features/create/Chat/SuggestionButton.tsx
+- ✅ Step 5: Display suggestion 'Create a geometric mandala pattern'
+- ✅ Step 6: Display suggestion 'Help me understand the seed system'
+- ✅ Step 7: Conditionally show 'Make my design more tattoo-friendly' based on hasCustomCode prop
+- ✅ Step 8: Handle suggestion click to trigger onSuggestionClick callback
+- ✅ Step 9: Apply design tokens for welcome padding and typography
+
+**Verification Status:**
+- TypeScript check shows no errors in Chat components
+- Pre-existing TypeScript errors exist in codebase (not related to this change)
+- ESLint/lint passes with no errors
+- Dev server starts successfully (`pnpm dev:app`)
+- Production build completes successfully (`pnpm build`)
+
+---
+
 ## Pending Tasks (by priority)
 
-1. Create ChatTab container component (flesh out the placeholder)
-2. Create WelcomeMessage component with suggested prompts
-3. Create Composer component for message input
-4. Create MessageBubble component for displaying chat messages
-5. (remaining tasks per PRD)
+1. Create Composer component for message input (separate file with full functionality)
+2. Create MessageBubble component for displaying chat messages
+3. Create CodeBlock component with Applied badge
+4. Create LoadingIndicator component for AI response loading state
+5. Implement useChat hook for AI communication
+6. Implement auto-apply code from AI response
+7. (remaining tasks per PRD)
