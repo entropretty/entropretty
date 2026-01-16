@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
+import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 
 interface CountdownProps {
   targetDate: Date
@@ -54,7 +54,7 @@ export function Countdown({ targetDate, className }: CountdownProps) {
 
   if (isExpired) {
     return (
-      <div className={cn("text-center", className)}>
+      <div className={cn('text-center', className)}>
         <p className="text-destructive text-xl font-medium uppercase">
           Entries are closed
         </p>
@@ -63,23 +63,23 @@ export function Countdown({ targetDate, className }: CountdownProps) {
   }
 
   return (
-    <div className={cn("text-center", className)}>
+    <div className={cn('text-center', className)}>
       <p className="text-muted-foreground mb-2 text-xs uppercase tracking-wide">
         Submission Deadline
       </p>
       <p className="text-foreground mb-3 text-sm font-medium">
-        {targetDate.toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
+        {targetDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         })}
-        ,{" "}
-        {targetDate.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          timeZoneName: "short",
-          timeZone: "UTC",
+        ,{' '}
+        {targetDate.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          timeZoneName: 'short',
+          timeZone: 'UTC',
         })}
       </p>
       <div className="flex justify-center gap-4">

@@ -13,11 +13,17 @@ export function registerScoreCommand(cli: CAC) {
     )
     .action(async (options) => {
       // Lazy load canvas polyfills and scoring dependencies
-      const { installCanvasPolyfills } = await import("../../lib/canvas-polyfill")
+      const { installCanvasPolyfills } = await import(
+        "../../lib/canvas-polyfill"
+      )
       installCanvasPolyfills()
 
-      const { getAllAlgorithms, getAlgorithmById } = await import("../../lib/database")
-      const { getUnscoredAlgorithms, getAlgorithmsOlderThan } = await import("./queries")
+      const { getAllAlgorithms, getAlgorithmById } = await import(
+        "../../lib/database"
+      )
+      const { getUnscoredAlgorithms, getAlgorithmsOlderThan } = await import(
+        "./queries"
+      )
       const { scoreAlgorithm } = await import("./scorer")
 
       let algorithms: Algorithm[] = []

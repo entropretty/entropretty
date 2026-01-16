@@ -1,4 +1,4 @@
-import { FamilyKind } from '@entropretty/utils'
+import type { FamilyKind } from '@entropretty/utils'
 import { cn, familyKindLabel } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { useTheme } from '@/contexts/theme-context'

@@ -1,4 +1,4 @@
-import { EventCard } from "./EventCard";
+import { EventCard } from "./EventCard"
 
 export function PastRevision2025EventCard() {
   return (
@@ -17,5 +17,5 @@ export function PastRevision2025EventCard() {
       linkText="View Competition Results"
       isPast={true}
     />
-  );
+  )
 }

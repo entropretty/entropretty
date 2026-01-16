@@ -1,9 +1,9 @@
-import { useAlgorithmService } from "@/contexts/service-context"
-import { AlgorithmView } from "@/lib/helper.types"
-import { supabase } from "@/lib/supabase"
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { useAtomValue } from "jotai"
-import { familyKindFilterAtom } from "@/atoms/family-kind-filter"
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { useAlgorithmService } from '@/contexts/service-context'
+import { supabase } from '@/lib/supabase'
+import { familyKindFilterAtom } from '@/atoms/family-kind-filter'
 
 const PAGE_SIZE = 3
 
@@ -11,20 +11,20 @@ export function useGalleryAlgorithms() {
   const algorithmService = useAlgorithmService()
   const familyKindFilter = useAtomValue(familyKindFilterAtom)
 
-  return useInfiniteQuery<AlgorithmView[]>({
-    queryKey: ["algorithms", "gallery", familyKindFilter],
+  return useInfiniteQuery<Array<AlgorithmView>>({
+    queryKey: ['algorithms', 'gallery', familyKindFilter],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const from = (pageParam as number) * PAGE_SIZE
       const to = from + PAGE_SIZE - 1
 
       let query = supabase
-        .from("algorithms_with_user_profile")
+        .from('algorithms_with_user_profile')
         .select()
-        .order("random()", { ascending: true })
+        .order('random()', { ascending: true })
 
-      if (familyKindFilter !== "All") {
-        query = query.eq("family_kind", familyKindFilter)
+      if (familyKindFilter !== 'All') {
+        query = query.eq('family_kind', familyKindFilter)
       }
 
       const { data, error } = await query.range(from, to)
@@ -40,7 +40,7 @@ export function useGalleryAlgorithms() {
       }
 
       if (error) throw error
-      return data as AlgorithmView[]
+      return data as Array<AlgorithmView>
     },
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === PAGE_SIZE ? allPages.length : undefined

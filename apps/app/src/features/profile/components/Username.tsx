@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import type { Profile } from '@/lib/helper.types'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/contexts/auth-context'
 import { getSupabase } from '@/lib/supabase'
-import { Profile } from '@/lib/helper.types'
 
 const usernameSchema = z.object({
   username: z

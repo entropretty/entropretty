@@ -1,13 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/auth-context'
-import { useUsersLikes } from '@/hooks/useUsersLikes'
-import { AlgorithmView } from '@/lib/helper.types'
-import { getSupabase } from '@/lib/supabase'
-import { cn } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { ArrowUp } from 'lucide-react'
 import { useCallback, useMemo } from 'react'
 import { toast } from 'sonner'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/auth-context'
+import { useUsersLikes } from '@/hooks/useUsersLikes'
+import { getSupabase } from '@/lib/supabase'
+import { cn } from '@/lib/utils'
 
 interface LikeButtonProps {
   algorithm: AlgorithmView
@@ -28,7 +28,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
     const supabase = getSupabase()
     const queryKey = ['user-likes', user.id]
     const previousLikes =
-      queryClient.getQueryData<AlgorithmView['id'][]>(queryKey) ?? []
+      queryClient.getQueryData<Array<AlgorithmView['id']>>(queryKey) ?? []
 
     if (!isLiked) {
       // Optimistically add like
@@ -36,7 +36,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
 
       const { error } = await supabase
         .from('likes')
-        .insert([{ algorithm_id: algorithm.id!, user_id: user.id }])
+        .insert([{ algorithm_id: algorithm.id, user_id: user.id }])
 
       if (error) {
         // Revert optimistic update on error
@@ -54,7 +54,7 @@ export function LikeButton({ algorithm }: LikeButtonProps) {
       const { error } = await supabase
         .from('likes')
         .delete()
-        .eq('algorithm_id', algorithm.id!)
+        .eq('algorithm_id', algorithm.id)
         .eq('user_id', user.id)
 
       if (error) {

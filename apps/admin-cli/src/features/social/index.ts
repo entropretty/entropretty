@@ -4,15 +4,22 @@ const DEFAULT_DELAY_MS = 1000
 
 export function registerSocialCommand(cli: CAC) {
   cli
-    .command("social", "Generate social media images (OpenGraph & Twitter) for algorithms")
+    .command(
+      "social",
+      "Generate social media images (OpenGraph & Twitter) for algorithms",
+    )
     .option("--id <id>", "Generate for specific algorithm by ID")
-    .option("--delay <ms>", "Delay between requests in milliseconds (default: 1000)")
+    .option(
+      "--delay <ms>",
+      "Delay between requests in milliseconds (default: 1000)",
+    )
     .option("--og-only", "Only generate OpenGraph images")
     .option("--twitter-only", "Only generate Twitter images")
     .action(async (options) => {
       // Lazy load dependencies
       const { getAllAlgorithmIds } = await import("../../lib/database")
-      const { generateSocialImages, generateOGImage, generateTwitterImage } = await import("./api")
+      const { generateSocialImages, generateOGImage, generateTwitterImage } =
+        await import("./api")
 
       const delayMs = options.delay ? parseInt(options.delay) : DEFAULT_DELAY_MS
 
@@ -38,7 +45,9 @@ export function registerSocialCommand(cli: CAC) {
             ? "Twitter only"
             : "OpenGraph + Twitter"
 
-        console.log(`Generating ${imageType} images for ${total} algorithm(s) (mode: ${mode})`)
+        console.log(
+          `Generating ${imageType} images for ${total} algorithm(s) (mode: ${mode})`,
+        )
         console.log(`Delay between requests: ${delayMs}ms`)
         console.log("")
 
@@ -60,25 +69,40 @@ export function registerSocialCommand(cli: CAC) {
               console.log(`✓ OG: ${result.status} (${remaining} remaining)`)
               completed++
             } else {
-              console.log(`✗ OG failed: ${result.error || result.status} (${remaining} remaining)`)
+              console.log(
+                `✗ OG failed: ${result.error || result.status} (${remaining} remaining)`,
+              )
               failed++
             }
           } else if (options.twitterOnly) {
             const result = await generateTwitterImage(algorithmId)
             if (result.success) {
-              console.log(`✓ Twitter: ${result.status} (${remaining} remaining)`)
+              console.log(
+                `✓ Twitter: ${result.status} (${remaining} remaining)`,
+              )
               completed++
             } else {
-              console.log(`✗ Twitter failed: ${result.error || result.status} (${remaining} remaining)`)
+              console.log(
+                `✗ Twitter failed: ${result.error || result.status} (${remaining} remaining)`,
+              )
               failed++
             }
           } else {
-            const { og, twitter } = await generateSocialImages(algorithmId, delayMs)
+            const { og, twitter } = await generateSocialImages(
+              algorithmId,
+              delayMs,
+            )
 
-            const ogStatus = og.success ? `✓ ${og.status}` : `✗ ${og.error || og.status}`
-            const twitterStatus = twitter.success ? `✓ ${twitter.status}` : `✗ ${twitter.error || twitter.status}`
+            const ogStatus = og.success
+              ? `✓ ${og.status}`
+              : `✗ ${og.error || og.status}`
+            const twitterStatus = twitter.success
+              ? `✓ ${twitter.status}`
+              : `✗ ${twitter.error || twitter.status}`
 
-            console.log(`OG: ${ogStatus}, Twitter: ${twitterStatus} (${remaining} remaining)`)
+            console.log(
+              `OG: ${ogStatus}, Twitter: ${twitterStatus} (${remaining} remaining)`,
+            )
 
             if (og.success && twitter.success) {
               completed++

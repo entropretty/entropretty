@@ -1,10 +1,11 @@
-import type { ComplianceWorker as ComplianceWorkerType } from '@/workers/compliance'
-import ComplianceWorker from '@/workers/compliance?worker'
-import type { RenderWorker as RenderWorkerType } from '@/workers/render'
-import RenderWorker from '@/workers/render?worker'
-import { proxy, Remote, wrap } from 'comlink'
-import type { FamilyKind, Seed } from '@entropretty/utils'
+import { proxy, wrap } from 'comlink'
 import PQueue from 'p-queue'
+import type { Remote } from 'comlink'
+import type { ComplianceWorker as ComplianceWorkerType } from '@/workers/compliance'
+import type { RenderWorker as RenderWorkerType } from '@/workers/render'
+import type { FamilyKind, Seed } from '@entropretty/utils'
+import RenderWorker from '@/workers/render?worker'
+import ComplianceWorker from '@/workers/compliance?worker'
 
 export class AlgorithmService {
   private complianceWorker: Remote<ComplianceWorkerType>
@@ -54,9 +55,7 @@ export class AlgorithmService {
     return this.queue
       .add(
         () => {
-          return this.renderWorker.renderBitmap(algorithmId, size, [
-            ...seed,
-          ]) as Promise<ImageBitmap>
+          return this.renderWorker.renderBitmap(algorithmId, size, [...seed])
         },
         {
           priority: 100,

@@ -1,8 +1,9 @@
-import { clsx, type ClassValue } from 'clsx'
-import { FamilyKind } from '@entropretty/utils'
+import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import type { ClassValue } from 'clsx'
+import type { FamilyKind } from '@entropretty/utils'
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
 }
 

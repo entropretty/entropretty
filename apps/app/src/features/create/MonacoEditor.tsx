@@ -1,14 +1,14 @@
-import { useTheme } from "@/contexts/theme-context"
-import { FEATURES } from "@/lib/features"
-import Editor, { useMonaco } from "@monaco-editor/react"
-import { useAtom, useAtomValue } from "jotai"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { useDebouncedCallback } from "use-debounce"
-import type { editor } from "monaco-editor"
-import { editorCodeAtom, formatOnSaveAtom } from "./atoms"
-import initialCode from "./initialCode"
-import poimandresTheme from "./PoimandresTheme"
-import { useFormatCode } from "./useFormatCode"
+import Editor, { useMonaco } from '@monaco-editor/react'
+import { useAtom, useAtomValue } from 'jotai'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
+import { editorCodeAtom, formatOnSaveAtom } from './atoms'
+import initialCode from './initialCode'
+import poimandresTheme from './PoimandresTheme'
+import { useFormatCode } from './useFormatCode'
+import type { editor } from 'monaco-editor'
+import { FEATURES } from '@/lib/features'
+import { useTheme } from '@/contexts/theme-context'
 
 const MonacoEditor = () => {
   const monaco = useMonaco()
@@ -33,13 +33,13 @@ const MonacoEditor = () => {
     if (monaco) {
       // Define theme first
       if (FEATURES.isCompetition) {
-        monaco.editor.defineTheme("poimandres", poimandresTheme)
+        monaco.editor.defineTheme('poimandres', poimandresTheme)
 
         // Set theme based on current theme context
-        if (theme === "dark") {
-          monaco.editor.setTheme("poimandres")
+        if (theme === 'dark') {
+          monaco.editor.setTheme('poimandres')
         } else {
-          monaco.editor.setTheme("vs") // Monaco's default light theme
+          monaco.editor.setTheme('vs') // Monaco's default light theme
         }
       }
 
@@ -75,7 +75,7 @@ const MonacoEditor = () => {
       editorRef.current = editor
 
       if (!code) {
-        console.log("setting initial code as no code", code)
+        console.log('setting initial code as no code', code)
         setLocalCode(initialCode)
         setEditorCode(initialCode)
       }
@@ -115,10 +115,10 @@ const MonacoEditor = () => {
 
   // Determine which theme to use for the Editor component
   const getEditorTheme = () => {
-    if (FEATURES.isCompetition && theme === "dark") {
-      return "poimandres"
+    if (FEATURES.isCompetition && theme === 'dark') {
+      return 'poimandres'
     }
-    return "vs" // Monaco's default light theme
+    return 'vs' // Monaco's default light theme
   }
 
   return (
@@ -132,7 +132,7 @@ const MonacoEditor = () => {
       value={localCode}
       options={{
         minimap: { enabled: false },
-        lineNumbers: "on",
+        lineNumbers: 'on',
         fontSize: 12,
       }}
     />

@@ -1,11 +1,12 @@
-import { cn } from '@/lib/utils'
-import { seedToKey, type AlgorithmId } from '@entropretty/utils'
+import { seedToKey } from '@entropretty/utils'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { AlgorithmId } from '@entropretty/utils'
+import { cn } from '@/lib/utils'
 import { useAlgorithmServiceSafe } from '@/contexts/service-context'
 
 interface Props {
   algorithmId: AlgorithmId
-  seed: number[]
+  seed: Array<number>
   size: number
   scale?: number
   onClick?: () => void
@@ -93,4 +94,3 @@ export const AlgorithmBitmap: React.FC<Props> = ({
     />
   )
 }
-

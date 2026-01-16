@@ -1,7 +1,7 @@
-import { useAlgorithm } from "../hooks/useAlgorithm"
+import { useAlgorithm } from '../hooks/useAlgorithm'
 
-import { AlgorithmCard } from "./AlgorithmCardNext"
-import { AlgorithmCardSkeleton } from "./AlgorithmCardNext/AlgorithmCardSkeleton"
+import { AlgorithmCard } from './AlgorithmCardNext'
+import { AlgorithmCardSkeleton } from './AlgorithmCardNext/AlgorithmCardSkeleton'
 
 interface GalleryAlgorithmProps {
   algorithmId: number

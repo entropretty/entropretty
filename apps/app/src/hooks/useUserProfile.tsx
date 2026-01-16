@@ -1,7 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+import type { Profile } from '@/lib/helper.types'
 import { useAuth } from '@/contexts/auth-context'
 import { getSupabase } from '@/lib/supabase'
-import { useQuery } from '@tanstack/react-query'
-import { Profile } from '@/lib/helper.types'
 
 export function useUserProfile() {
   const { user } = useAuth()

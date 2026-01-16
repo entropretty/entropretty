@@ -1,12 +1,12 @@
-import type { CanvasAdapter, CanvasLike } from './types'
+import type { CanvasAdapter, CanvasLike } from "./types"
 
 // Type definitions for @napi-rs/canvas
 // Using loose types since the actual types come from the package
 interface NapiCanvas {
   width: number
   height: number
-  getContext(type: '2d'): CanvasRenderingContext2D
-  toBuffer(mimeType: 'image/png'): Buffer
+  getContext(type: "2d"): CanvasRenderingContext2D
+  toBuffer(mimeType: "image/png"): Buffer
 }
 
 type CreateCanvasFn = (width: number, height: number) => NapiCanvas
@@ -26,12 +26,12 @@ class NodeCanvas implements CanvasLike {
     return this.canvas.height
   }
 
-  getContext(type: '2d'): CanvasRenderingContext2D | null {
+  getContext(type: "2d"): CanvasRenderingContext2D | null {
     return this.canvas.getContext(type) as CanvasRenderingContext2D | null
   }
 
   async toBuffer(): Promise<Uint8Array> {
-    const buffer = this.canvas.toBuffer('image/png')
+    const buffer = this.canvas.toBuffer("image/png")
     return new Uint8Array(buffer)
   }
 }
@@ -57,7 +57,8 @@ export class NodeCanvasAdapter implements CanvasAdapter {
  * import { createCanvas } from '@napi-rs/canvas'
  * const adapter = createNodeCanvasAdapter(createCanvas)
  */
-export function createNodeCanvasAdapter(createCanvasFn: CreateCanvasFn): CanvasAdapter {
+export function createNodeCanvasAdapter(
+  createCanvasFn: CreateCanvasFn,
+): CanvasAdapter {
   return new NodeCanvasAdapter(createCanvasFn)
 }
-

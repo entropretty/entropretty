@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, {
   useCallback,
@@ -6,24 +6,24 @@ import React, {
   useRef,
   RefObject,
   useEffect,
-} from "react";
-import { motion, useAnimationControls } from "motion/react";
-import { v4 as uuidv4 } from "uuid";
+} from "react"
+import { motion, useAnimationControls } from "motion/react"
+import { v4 as uuidv4 } from "uuid"
 
-import { cn } from "@/lib/utils";
-import { useDimensions } from "@/hooks/use-dimensions";
+import { cn } from "@/lib/utils"
+import { useDimensions } from "@/hooks/use-dimensions"
 
 // Add interface for elements with animate pixel
 interface ElementWithAnimatePixel extends HTMLDivElement {
-  __animatePixel?: () => void;
+  __animatePixel?: () => void
 }
 
 interface PixelTrailProps {
-  pixelSize: number; // px
-  fadeDuration?: number; // ms
-  delay?: number; // ms
-  className?: string;
-  pixelClassName?: string;
+  pixelSize: number // px
+  fadeDuration?: number // ms
+  delay?: number // ms
+  className?: string
+  pixelClassName?: string
 }
 
 const PixelTrail: React.FC<PixelTrailProps> = ({
@@ -33,58 +33,58 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   className,
   pixelClassName,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dimensions = useDimensions(containerRef as RefObject<HTMLElement>);
-  const trailId = useRef(uuidv4());
+  const containerRef = useRef<HTMLDivElement>(null)
+  const dimensions = useDimensions(containerRef as RefObject<HTMLElement>)
+  const trailId = useRef(uuidv4())
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!containerRef.current) return;
+      if (!containerRef.current) return
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left) / pixelSize);
-      const y = Math.floor((e.clientY - rect.top) / pixelSize);
+      const rect = containerRef.current.getBoundingClientRect()
+      const x = Math.floor((e.clientX - rect.left) / pixelSize)
+      const y = Math.floor((e.clientY - rect.top) / pixelSize)
 
       const pixelElement = document.getElementById(
-        `${trailId.current}-pixel-${x}-${y}`
-      ) as ElementWithAnimatePixel | null;
+        `${trailId.current}-pixel-${x}-${y}`,
+      ) as ElementWithAnimatePixel | null
 
       if (pixelElement && pixelElement.__animatePixel) {
-        pixelElement.__animatePixel();
+        pixelElement.__animatePixel()
       }
     },
-    [pixelSize]
-  );
+    [pixelSize],
+  )
 
   useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [handleMouseMove])
 
   const columns = useMemo(
     () =>
       Math.max(
         Math.ceil((dimensions?.width || window.innerWidth) / pixelSize),
-        1
+        1,
       ),
-    [dimensions?.width, pixelSize]
-  );
+    [dimensions?.width, pixelSize],
+  )
 
   const rows = useMemo(
     () =>
       Math.max(
         Math.ceil((dimensions?.height || window.innerHeight) / pixelSize),
-        1
+        1,
       ),
-    [dimensions?.height, pixelSize]
-  );
+    [dimensions?.height, pixelSize],
+  )
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "absolute inset-0 w-full h-full overflow-hidden pointer-events-none",
-        className
+        "pointer-events-none absolute inset-0 h-full w-full overflow-hidden",
+        className,
       )}
       style={{ minHeight: "100vh" }}
     >
@@ -99,8 +99,8 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
         }}
       >
         {Array.from({ length: rows * columns }).map((_, index) => {
-          const rowIndex = Math.floor(index / columns);
-          const colIndex = index % columns;
+          const rowIndex = Math.floor(index / columns)
+          const colIndex = index % columns
           return (
             <PixelDot
               key={`${colIndex}-${rowIndex}`}
@@ -109,28 +109,28 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
               delay={delay}
               className={pixelClassName}
             />
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PixelTrail;
+export default PixelTrail
 
 interface PixelDotProps {
-  id: string;
-  fadeDuration: number;
-  delay: number;
-  className?: string;
+  id: string
+  fadeDuration: number
+  delay: number
+  className?: string
 }
 
 const PixelDot: React.FC<PixelDotProps> = React.memo(
   ({ id, fadeDuration, delay, className }) => {
-    const controls = useAnimationControls();
+    const controls = useAnimationControls()
 
     const animatePixel = useCallback(() => {
-      controls.set({ opacity: 0 });
+      controls.set({ opacity: 0 })
       controls.start({
         opacity: [1, 0],
         transition: {
@@ -138,23 +138,23 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(
           delay: delay / 1000,
           ease: "easeOut",
         },
-      });
-    }, [controls, fadeDuration, delay]);
+      })
+    }, [controls, fadeDuration, delay])
 
     const ref = useCallback(
       (node: HTMLDivElement | null) => {
         if (node) {
-          (node as ElementWithAnimatePixel).__animatePixel = animatePixel;
+          ;(node as ElementWithAnimatePixel).__animatePixel = animatePixel
         }
       },
-      [animatePixel]
-    );
+      [animatePixel],
+    )
 
     return (
       <motion.div
         id={id}
         ref={ref}
-        className={cn("rounded-sm pointer-events-none", className)}
+        className={cn("pointer-events-none rounded-sm", className)}
         style={{
           width: "100%",
           height: "100%",
@@ -162,8 +162,8 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(
         initial={{ opacity: 0 }}
         animate={controls}
       />
-    );
-  }
-);
+    )
+  },
+)
 
-PixelDot.displayName = "PixelDot";
+PixelDot.displayName = "PixelDot"

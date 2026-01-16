@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react"
+import { useCallback, useEffect } from 'react'
 
 interface UseNavigationProtectionOptions {
   when?: boolean
@@ -14,8 +14,8 @@ export const useNavigationProtection = ({
 
       // This triggers the native "Leave page?" dialog
       event.preventDefault()
-      event.returnValue = "" // Modern browsers ignore custom messages anyway
-      return ""
+      event.returnValue = '' // Modern browsers ignore custom messages anyway
+      return ''
     },
     [when],
   )
@@ -25,17 +25,17 @@ export const useNavigationProtection = ({
     if (!when) return
 
     // Push current state back to prevent navigation
-    window.history.pushState(null, "", window.location.href)
+    window.history.pushState(null, '', window.location.href)
 
     // Show a confirm dialog that looks similar to native
     const shouldLeave = window.confirm(
-      "Leave site?\n\nChanges you made may not be saved.",
+      'Leave site?\n\nChanges you made may not be saved.',
     )
 
     if (shouldLeave) {
       // User chose to leave - disable protection and navigate
-      window.removeEventListener("popstate", handlePopState)
-      window.removeEventListener("beforeunload", handleBeforeUnload)
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
       window.history.back()
     }
   }, [when, handleBeforeUnload])
@@ -43,15 +43,15 @@ export const useNavigationProtection = ({
   useEffect(() => {
     if (when) {
       // Push a state to catch back navigation
-      window.history.pushState(null, "", window.location.href)
+      window.history.pushState(null, '', window.location.href)
 
       // Handle different types of navigation
-      window.addEventListener("beforeunload", handleBeforeUnload) // refresh, close, external
-      window.addEventListener("popstate", handlePopState) // back/forward within app
+      window.addEventListener('beforeunload', handleBeforeUnload) // refresh, close, external
+      window.addEventListener('popstate', handlePopState) // back/forward within app
 
       return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload)
-        window.removeEventListener("popstate", handlePopState)
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+        window.removeEventListener('popstate', handlePopState)
       }
     }
   }, [when, handleBeforeUnload, handlePopState])

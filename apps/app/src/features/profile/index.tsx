@@ -1,8 +1,8 @@
 import { useNavigate } from '@tanstack/react-router'
 
+import { Username } from './components/Username'
 import { useAuth } from '@/contexts/auth-context'
 import { useUserProfile } from '@/hooks/useUserProfile'
-import { Username } from './components/Username'
 
 export function Profile() {
   const { user } = useAuth()

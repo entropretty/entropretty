@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import React from "react"
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 const byteSchema = z.object({
   decimal: z.string(),
@@ -15,9 +14,9 @@ const byteSchema = z.object({
 type ByteFormData = z.infer<typeof byteSchema>
 
 interface ByteManipulatorProps {
-  value?: number[]
-  placeholder?: number[]
-  onChange?: (bytes: number[]) => void
+  value?: Array<number>
+  placeholder?: Array<number>
+  onChange?: (bytes: Array<number>) => void
   className?: string
 }
 
@@ -54,7 +53,7 @@ export function ByteManipulator({
   }
 
   return (
-    <div className={cn("inline-flex flex-col", className)}>
+    <div className={cn('inline-flex flex-col', className)}>
       {bytes.map((byte, byteIndex) => (
         <ByteRow
           key={byteIndex}
@@ -88,14 +87,14 @@ function ByteRow({
     resolver: zodResolver(byteSchema),
     defaultValues: {
       decimal: value.toString(),
-      hex: value.toString(16).padStart(2, "0"),
+      hex: value.toString(16).padStart(2, '0'),
     },
   })
 
   // Update form values whenever the value prop changes
   React.useEffect(() => {
-    form.setValue("decimal", value.toString())
-    form.setValue("hex", value.toString(16).padStart(2, "0").toLowerCase())
+    form.setValue('decimal', value.toString())
+    form.setValue('hex', value.toString(16).padStart(2, '0').toLowerCase())
   }, [value, form])
 
   const hasError = Object.keys(form.formState.errors).length > 0
@@ -103,8 +102,8 @@ function ByteRow({
   return (
     <div
       className={cn(
-        "flex items-center space-x-2 border transition-colors",
-        hasError ? "border-destructive" : "border-transparent",
+        'flex items-center space-x-2 border transition-colors',
+        hasError ? 'border-destructive' : 'border-transparent',
       )}
     >
       <span className="font-mono text-xs">{index}:</span>
@@ -117,8 +116,8 @@ function ByteRow({
               onToggleBit(i)
             }}
             className={cn(
-              "hover:bg-border/25 aspect-square h-9 border transition-colors",
-              getBit(i) === 1 ? "bg-border" : "bg-transparent",
+              'hover:bg-border/25 aspect-square h-9 border transition-colors',
+              getBit(i) === 1 ? 'bg-border' : 'bg-transparent',
             )}
             aria-label={`Toggle bit ${i}`}
           >
@@ -145,13 +144,13 @@ function ByteRow({
                     onChange={(e) => {
                       let hex = e.target.value.toLowerCase()
                       // Allow only valid hex characters
-                      hex = hex.replace(/[^0-9a-f]/g, "")
+                      hex = hex.replace(/[^0-9a-f]/g, '')
 
                       // Always update the form value first
                       field.onChange(hex)
 
                       // If empty, treat as 0
-                      if (hex === "") {
+                      if (hex === '') {
                         onChange(0)
                         return
                       }
@@ -168,10 +167,10 @@ function ByteRow({
                       const currentValue = e.target.value.toLowerCase()
                       // On blur, if empty, set to "00"
                       if (!currentValue) {
-                        field.onChange("00")
+                        field.onChange('00')
                       } else {
                         // Ensure two digits on blur, but preserve user input
-                        field.onChange(currentValue.padStart(2, "0"))
+                        field.onChange(currentValue.padStart(2, '0'))
                       }
                     }}
                   />
@@ -197,7 +196,7 @@ function ByteRow({
                       field.onChange(inputValue)
 
                       // If empty, treat as 0
-                      if (inputValue === "") {
+                      if (inputValue === '') {
                         onChange(0)
                         return
                       }
@@ -211,7 +210,7 @@ function ByteRow({
                     onBlur={(e) => {
                       // On blur, if empty, set to "0"
                       if (!e.target.value) {
-                        field.onChange("0")
+                        field.onChange('0')
                       } else {
                         // Ensure valid number on blur
                         field.onChange(value.toString())

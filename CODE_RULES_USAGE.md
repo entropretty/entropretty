@@ -11,6 +11,7 @@ The system now supports code-based compliance rules that analyze algorithm sourc
 **Purpose**: Detects algorithms that contain the default example code pattern.
 
 **Pattern Detected**:
+
 ```javascript
 const row = Math.floor(i / grid)
 const col = i % grid
@@ -27,6 +28,7 @@ ctx.fillText(n.toString(), x + cellSize / 2, y + cellSize / 2)
 ```
 
 **Behavior**:
+
 - Normalizes code (removes extra whitespace) for comparison
 - Returns `error` status if pattern is found
 - Algorithm receives score of 0
@@ -40,6 +42,7 @@ pnpm score
 ```
 
 The scorer will:
+
 1. Check code rules first (before rendering)
 2. If code rule fails: immediate score 0, skip rendering
 3. If code rules pass: proceed with image-based rules
@@ -118,13 +121,13 @@ Then add it to the scorer:
 import {
   colorIslandsRule,
   exampleCodeRule,
-  myNewCodeRule  // Add your rule
+  myNewCodeRule, // Add your rule
 } from "@entropretty/compliance/browser"
 
 // In scoreAlgorithm():
 benchmark.addRule(colorIslandsRule)
 benchmark.addRule(exampleCodeRule)
-benchmark.addRule(myNewCodeRule)  // Add your rule
+benchmark.addRule(myNewCodeRule) // Add your rule
 ```
 
 ## Rule Status Types
@@ -141,12 +144,12 @@ To check if an algorithm failed due to code rules:
 ```typescript
 // Check if algorithm has code rule failures
 const hasCodeRuleFailure = result.ruleResults.some(
-  r => r.ruleType === "code" && r.status === "error"
+  (r) => r.ruleType === "code" && r.status === "error",
 )
 
 // Get specific rule failures
 const exampleCodeFailure = result.ruleResults.find(
-  r => r.ruleName === "example-code" && r.status === "error"
+  (r) => r.ruleName === "example-code" && r.status === "error",
 )
 
 if (exampleCodeFailure) {
@@ -161,4 +164,3 @@ if (exampleCodeFailure) {
 3. **Extensible**: Easy to add new code-based rules
 4. **Versioned**: Database results include version for future compatibility
 5. **Type-Safe**: Full TypeScript support with proper types
-

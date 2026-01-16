@@ -13,14 +13,14 @@ OpenGraph and Twitter Card image generation for Entropretty algorithms.
 ## Usage
 
 ```typescript
-import { generateOGImage } from '@entropretty/opengraph'
+import { generateOGImage } from "@entropretty/opengraph"
 
 const imageBuffer = await generateOGImage(
   algorithmId,
   algorithmContent,
   familyKind,
-  'Algorithm Name',
-  'Author Name',
-  'twitter' // or 'og'
+  "Algorithm Name",
+  "Author Name",
+  "twitter", // or 'og'
 )
 ```

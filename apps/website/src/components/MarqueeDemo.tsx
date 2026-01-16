@@ -1,21 +1,21 @@
-import { Marquee } from "@/components/magicui/marquee";
-import { useEffect, useState } from "react";
+import { Marquee } from "@/components/magicui/marquee"
+import { useEffect, useState } from "react"
 
 const useWebMTransparencySupport = () => {
-  const [isSupported, setIsSupported] = useState(true);
+  const [isSupported, setIsSupported] = useState(true)
 
   useEffect(() => {
     // Check if browser is Safari
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
     // Set support to false for Safari browsers
     if (isSafari) {
-      setIsSupported(false);
+      setIsSupported(false)
     }
-  }, []);
+  }, [])
 
-  return isSupported;
-};
+  return isSupported
+}
 
 const videos = [
   "inkflow.webm",
@@ -43,14 +43,14 @@ const videos = [
   "confusedeyeball.webm",
   "tilesoflisbon.webm",
   "musicalnotes.webm",
-];
+]
 
-const firstRow = videos.slice(0, Math.ceil(videos.length / 2));
-const secondRow = videos.slice(Math.ceil(videos.length / 2));
+const firstRow = videos.slice(0, Math.ceil(videos.length / 2))
+const secondRow = videos.slice(Math.ceil(videos.length / 2))
 
 const VideoCard = ({ filename }: { filename: string }) => {
   return (
-    <div className="relative h-32 w-32 cursor-pointer overflow-hidden mx-2">
+    <div className="relative mx-2 h-32 w-32 cursor-pointer overflow-hidden">
       <video
         className="h-full w-full object-cover"
         autoPlay
@@ -61,18 +61,18 @@ const VideoCard = ({ filename }: { filename: string }) => {
         <source src={`/design-videos/${filename}`} type="video/webm" />
       </video>
     </div>
-  );
-};
+  )
+}
 
 export function MarqueeDemo() {
-  const webMTransparencySupported = useWebMTransparencySupport();
+  const webMTransparencySupported = useWebMTransparencySupport()
 
   if (!webMTransparencySupported) {
-    return null;
+    return null
   }
 
   return (
-    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-4 py-8 bg-white ">
+    <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden bg-white py-8">
       <Marquee pauseOnHover className="[--duration:40s]">
         {firstRow.map((filename) => (
           <VideoCard key={filename} filename={filename} />
@@ -83,8 +83,8 @@ export function MarqueeDemo() {
           <VideoCard key={filename} filename={filename} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
+      <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r"></div>
+      <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l"></div>
     </div>
-  );
+  )
 }

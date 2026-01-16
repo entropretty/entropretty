@@ -1,3 +1,6 @@
+import { ArrowUpRight, PlusIcon } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import type { FamilyKind } from '@entropretty/utils'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -8,9 +11,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { cn, familyKindColor } from '@/lib/utils'
-import { FamilyKind } from '@entropretty/utils'
-import { ArrowUpRight, PlusIcon } from 'lucide-react'
-import { Link, useNavigate } from '@tanstack/react-router'
 
 interface SeedTypeCardProps {
   kind: FamilyKind

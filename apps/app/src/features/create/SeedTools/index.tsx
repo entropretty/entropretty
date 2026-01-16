@@ -1,24 +1,24 @@
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useAtom, useSetAtom } from 'jotai'
+import { useCallback } from 'react'
+import {
+  editorSeedFamilyAtom,
+  editorSeedTypeAtom,
+  formatOnSaveAtom,
+  generateNewSeedAtom,
+} from '../atoms'
+import { SeedManipulator } from './SeedManipulator'
+import { SeedRepresentation } from './SeedRepresentation'
+import type { SeedType } from '../atoms'
+import { Separator } from '@/components/ui/separator'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { useAtom, useSetAtom } from "jotai"
-import { useCallback } from "react"
-import {
-  editorSeedFamilyAtom,
-  editorSeedTypeAtom,
-  formatOnSaveAtom,
-  generateNewSeedAtom,
-  SeedType,
-} from "../atoms"
-import { SeedManipulator } from "./SeedManipulator"
-import { SeedRepresentation } from "./SeedRepresentation"
+} from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
 
 export const SeedTools = () => {
   const generateNewSeed = useSetAtom(generateNewSeedAtom)

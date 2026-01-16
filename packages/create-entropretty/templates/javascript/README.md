@@ -32,4 +32,4 @@ npm run test
 
 Once you are happy with your design feel free to contribute it to the public collection of Proof of Ink designs.
 
- [`Submit schema ↗`](https://github.com/peetzweg/entropretty-tools/issues/new)
+[`Submit schema ↗`](https://github.com/peetzweg/entropretty-tools/issues/new)

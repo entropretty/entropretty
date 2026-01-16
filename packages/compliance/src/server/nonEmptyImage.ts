@@ -1,6 +1,6 @@
-import type { SingleImageRule, ComplianceResult } from "../types";
-import sharp from "sharp";
-import { ChannelStats } from "sharp";
+import type { SingleImageRule, ComplianceResult } from "../types"
+import sharp from "sharp"
+import { ChannelStats } from "sharp"
 
 export const nonEmptyImageRule: SingleImageRule = {
   name: "non-empty-image",
@@ -9,13 +9,13 @@ export const nonEmptyImageRule: SingleImageRule = {
   type: "single",
   check: async (imageBuffer: Buffer): Promise<ComplianceResult> => {
     try {
-      const metadata = await sharp(imageBuffer).stats();
+      const metadata = await sharp(imageBuffer).stats()
 
       // Check if all channels have some values
       const hasContent = Object.values(metadata.channels).some(
         (channel: ChannelStats) =>
-          channel.min !== channel.max || channel.min !== 0
-      );
+          channel.min !== channel.max || channel.min !== 0,
+      )
 
       return {
         status: hasContent ? "pass" : "error",
@@ -26,7 +26,7 @@ export const nonEmptyImageRule: SingleImageRule = {
               : "Image appears to be empty (no variation in pixel values)",
           },
         ],
-      };
+      }
     } catch (error: unknown) {
       return {
         status: "error",
@@ -37,7 +37,7 @@ export const nonEmptyImageRule: SingleImageRule = {
             }`,
           },
         ],
-      };
+      }
     }
   },
-};
+}

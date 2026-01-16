@@ -32,18 +32,21 @@
     "build": "tsup && tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly --outDir dist --noEmit false",
     "generate-prelude": "bun run generatePreludeString.ts",
     "test": "vitest",
-    "lint": "tsc && eslint ."
+    "lint": "tsc && eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/node": "^22.13.16",
     "eslint": "^9.23.0",
     "tsup": "^8.4.0",
+    "typescript-eslint": "^8.53.0",
     "vitest": "^2.1.9"
   },
   "dependencies": {
-    "prando": "^6.0.1",
-    "p-queue": "^8.1.0",
     "@multiformats/blake2": "^2.0.2",
-    "@noble/hashes": "^1.8.0"
+    "@noble/hashes": "^1.8.0",
+    "p-queue": "^8.1.0",
+    "prando": "^6.0.1"
   }
 }

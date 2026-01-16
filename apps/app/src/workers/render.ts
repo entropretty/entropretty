@@ -1,5 +1,6 @@
 import { expose, transfer } from 'comlink'
-import { FamilyKind, RenderCore } from '@entropretty/utils'
+import { RenderCore } from '@entropretty/utils'
+import type { FamilyKind } from '@entropretty/utils'
 
 const core = new RenderCore(300) // 300ms timeout by default
 
@@ -8,12 +9,12 @@ const api = {
     return core.updateAlgorithm(id, script, kind)
   },
 
-  async render(id: number, size: number, seed: number[]) {
+  async render(id: number, size: number, seed: Array<number>) {
     const image = await core.render(id, size, seed)
     return transfer(image, [image]) // zero-copy back to main thread
   },
 
-  async renderBitmap(id: number, size: number, seed: number[]) {
+  async renderBitmap(id: number, size: number, seed: Array<number>) {
     const image = await core.renderBitmap(id, size, seed)
     return transfer(image, [image]) // zero-copy back to main thread
   },
@@ -34,4 +35,3 @@ const api = {
 export type RenderWorker = typeof api
 
 expose(api)
-

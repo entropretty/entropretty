@@ -1,17 +1,17 @@
-import { useAlgorithmService } from "@/contexts/service-context"
-import { seedToKey } from "@entropretty/utils"
-import { useAtom } from "jotai"
-import { useEffect, useState, useMemo } from "react"
-import useMeasure from "react-use-measure"
+import { seedToKey } from '@entropretty/utils'
+import { useAtom } from 'jotai'
+import { useEffect, useMemo, useState } from 'react'
+import useMeasure from 'react-use-measure'
 import {
   editorCodeAtom,
   editorCodeVersionAtom,
-  scriptErrorAtom,
   editorSeedFamilyAtom,
   editorSeedTypeAtom,
-} from "./atoms"
-import { AlgorithmCompliance } from "./AlgorithmCompliance"
-import { cn } from "@/lib/utils"
+  scriptErrorAtom,
+} from './atoms'
+import { AlgorithmCompliance } from './AlgorithmCompliance'
+import { useAlgorithmService } from '@/contexts/service-context'
+import { cn } from '@/lib/utils'
 
 const PREVIEW_SIZE = 128 // Smaller size for the grid previews
 
@@ -69,12 +69,12 @@ export const AlgorithmPreview = () => {
             setAlgorithmVersion((v) => v + 1)
           })
           .catch((e) => {
-            console.info("TestRenderError:", e)
+            console.info('TestRenderError:', e)
             setScriptError(e.message)
           })
       })
     } catch (e) {
-      console.error("UpdateAlgorithmError:", e)
+      console.error('UpdateAlgorithmError:', e)
     }
   }, [
     algorithmService,
@@ -101,8 +101,8 @@ export const AlgorithmPreview = () => {
             className="flex items-center justify-center"
           >
             <div
-              className={cn("relative border border-dashed", {
-                "blur-xs opacity-25": !ready,
+              className={cn('relative border border-dashed', {
+                'blur-xs opacity-25': !ready,
               })}
             >
               {!!editorCode && (

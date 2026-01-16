@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
-import { AlgorithmView } from "@/lib/helper.types"
-import { supabase } from "@/lib/supabase"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Loader2 } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
-import { toast } from "sonner"
-import { motion, AnimatePresence } from "motion/react"
-import useMeasure from "react-use-measure"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { AnimatePresence, motion } from 'motion/react'
+import useMeasure from 'react-use-measure'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/auth-context'
+import { Button } from '@/components/ui/button'
 
 interface DeleteButtonProps {
   algorithm: AlgorithmView
@@ -22,25 +22,25 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      if (!user || !canDelete) throw new Error("Unauthorized")
+      if (!user || !canDelete) throw new Error('Unauthorized')
 
       const { error } = await supabase
-        .from("algorithms")
+        .from('algorithms')
         .delete()
-        .eq("id", algorithm.id!)
-        .eq("user_id", user.id)
+        .eq('id', algorithm.id)
+        .eq('user_id', user.id)
 
       if (error) throw error
       return algorithm.id
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["algorithms"] })
-      toast.success("Algorithm deleted successfully")
+      queryClient.invalidateQueries({ queryKey: ['algorithms'] })
+      toast.success('Algorithm deleted successfully')
       setIsConfirming(false)
     },
     onError: (error: Error) => {
-      console.error("Error deleting algorithm:", error)
-      toast.error("Error Deleting Algorithm: " + error.message)
+      console.error('Error deleting algorithm:', error)
+      toast.error('Error Deleting Algorithm: ' + error.message)
       setIsConfirming(false)
     },
   })
@@ -73,10 +73,10 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
       animate={{
         width: bounds.width,
       }}
-      transition={{ duration: 0.1, type: "spring" }}
+      transition={{ duration: 0.1, type: 'spring' }}
     >
       <Button
-        variant={isConfirming ? "destructive" : "ghost"}
+        variant={isConfirming ? 'destructive' : 'ghost'}
         onMouseDown={handleClick}
         ref={ref}
         disabled={deleteMutation.isPending}
@@ -88,13 +88,13 @@ export function DeleteButton({ algorithm }: DeleteButtonProps) {
           <AnimatePresence mode="wait">
             <motion.div
               layout
-              key={isConfirming ? "confirm" : "delete"}
-              initial={{ opacity: 0, width: "100%" }}
-              animate={{ opacity: 1, width: "auto" }}
-              exit={{ opacity: 0, width: "100%" }}
+              key={isConfirming ? 'confirm' : 'delete'}
+              initial={{ opacity: 0, width: '100%' }}
+              animate={{ opacity: 1, width: 'auto' }}
+              exit={{ opacity: 0, width: '100%' }}
               transition={{ duration: 0.2 }}
             >
-              {isConfirming ? "YES, DELETE!" : "DELETE"}
+              {isConfirming ? 'YES, DELETE!' : 'DELETE'}
             </motion.div>
           </AnimatePresence>
         )}

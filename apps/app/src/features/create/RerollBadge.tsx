@@ -1,8 +1,8 @@
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import { useAtom } from "jotai"
-import { Dices } from "lucide-react"
-import { generateNewSeedAtom } from "./atoms"
+import { useAtom } from 'jotai'
+import { Dices } from 'lucide-react'
+import { generateNewSeedAtom } from './atoms'
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 
 export function RerollBadge() {
   const [, generateNewSeed] = useAtom(generateNewSeedAtom)
@@ -11,7 +11,7 @@ export function RerollBadge() {
     <Badge
       onClick={generateNewSeed}
       className={cn(
-        "hover:bg-destructive text-foreground hover:text-destructive-foreground cursor-pointer select-none bg-transparent shadow-none",
+        'hover:bg-destructive text-foreground hover:text-destructive-foreground cursor-pointer select-none bg-transparent shadow-none',
         {},
       )}
     >

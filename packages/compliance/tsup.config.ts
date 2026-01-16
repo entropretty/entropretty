@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig({
   entry: ["src/index.ts", "src/browser.ts", "src/server.ts", "src/config.ts"],
@@ -11,4 +11,4 @@ export default defineConfig({
   target: "node18",
   outDir: "dist",
   treeshake: true,
-});
+})

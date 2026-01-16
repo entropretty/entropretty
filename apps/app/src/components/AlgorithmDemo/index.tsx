@@ -1,10 +1,10 @@
-import { AlgorithmBitmap } from "@/features/create/AlgorithmBitmap"
-import { useDisplaySizes } from "@/hooks/useDisplaySizes"
-import { AlgorithmView } from "@/lib/helper.types"
-import { deriveSeedFamily, getSeed, seedToKey } from "@entropretty/utils"
-import { AnimatePresence, motion } from "motion/react"
-import { useCallback, useEffect, useState } from "react"
-import { cn } from "@/lib/utils"
+import { deriveSeedFamily, getSeed, seedToKey } from '@entropretty/utils'
+import { AnimatePresence, motion } from 'motion/react'
+import { useCallback, useEffect, useState } from 'react'
+import type { AlgorithmView } from '@/lib/helper.types'
+import { AlgorithmBitmap } from '@/features/create/AlgorithmBitmap'
+import { useDisplaySizes } from '@/hooks/useDisplaySizes'
+import { cn } from '@/lib/utils'
 
 interface Props {
   algorithm: AlgorithmView
@@ -15,10 +15,10 @@ interface Props {
 
 export function AlgorithmDemo({
   algorithm,
-  className = "",
+  className = '',
   startDelay = 0,
 }: Props) {
-  const [seeds, setSeeds] = useState<number[][]>([])
+  const [seeds, setSeeds] = useState<Array<Array<number>>>([])
   const [index, setIndex] = useState(0)
   const [shouldStartCycling, setShouldStartCycling] = useState(false)
 
@@ -27,7 +27,7 @@ export function AlgorithmDemo({
   const loadMore = useCallback(() => {
     if (seeds.length === 0) return
 
-    const newSeed = getSeed(algorithm.family_kind!)
+    const newSeed = getSeed(algorithm.family_kind)
     const newFamily = deriveSeedFamily(newSeed, {
       size: 1,
       minBits: 2,
@@ -71,7 +71,7 @@ export function AlgorithmDemo({
   }, [index, loadMore, seeds, shouldStartCycling])
 
   useEffect(() => {
-    const initial = getSeed(algorithm.family_kind!)
+    const initial = getSeed(algorithm.family_kind)
     const family = deriveSeedFamily(initial, {
       size: 3,
       minBits: 1,
@@ -96,7 +96,7 @@ export function AlgorithmDemo({
     <div
       className={`flex flex-col items-center justify-center bg-white ${className}`}
     >
-      <div className={cn("flex w-full flex-col items-center justify-center")}>
+      <div className={cn('flex w-full flex-col items-center justify-center')}>
         <div className="relative aspect-square h-[70vh] overflow-visible">
           <AnimatePresence mode="sync">
             <motion.div
@@ -104,39 +104,39 @@ export function AlgorithmDemo({
               initial={{
                 opacity: 0.0,
                 scale: 1.8,
-                filter: "blur(2px)",
+                filter: 'blur(2px)',
               }}
               animate={{
                 opacity: 1,
                 scale: 1,
-                filter: "blur(0px)",
+                filter: 'blur(0px)',
                 transition: {
                   duration: 0.2,
-                  ease: "easeIn",
+                  ease: 'easeIn',
                 },
               }}
               exit={{
                 opacity: 0.0,
                 scale: 0.8,
-                filter: "blur(2px)",
+                filter: 'blur(2px)',
                 transition: {
                   duration: 0.5,
-                  ease: "easeOut",
+                  ease: 'easeOut',
                 },
               }}
               className="absolute inset-0 flex items-center justify-center"
             >
               <AlgorithmBitmap
-                algorithmId={algorithm.id!}
+                algorithmId={algorithm.id}
                 seed={seeds[index]}
                 size={demo}
                 scale={3}
                 style={{
                   padding: 0,
-                  width: "100%",
-                  height: "100%",
-                  display: "block",
-                  objectFit: "contain",
+                  width: '100%',
+                  height: '100%',
+                  display: 'block',
+                  objectFit: 'contain',
                 }}
               />
             </motion.div>

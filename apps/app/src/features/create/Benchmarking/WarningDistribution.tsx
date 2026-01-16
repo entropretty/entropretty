@@ -1,13 +1,13 @@
-import { BenchmarkResult } from "@/workers/compliance"
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts'
+import type { BenchmarkResult } from '@/workers/compliance'
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from "recharts"
+} from '@/components/ui/chart'
 
 interface WarningDistributionProps {
-  warningDistribution: BenchmarkResult["warningDistribution"]
+  warningDistribution: BenchmarkResult['warningDistribution']
 }
 
 export const WarningDistribution = ({
@@ -18,7 +18,7 @@ export const WarningDistribution = ({
     const entries = Object.entries(warningDistribution).map(
       ([warnings, count]) => ({
         warnings: parseInt(warnings, 10),
-        count: count as number,
+        count: count,
       }),
     )
 
@@ -35,8 +35,8 @@ export const WarningDistribution = ({
       .map(([warnings, count]) => ({
         warnings,
         count,
-        label: warnings >= 10 ? "10+" : warnings.toString(),
-        fill: warnings === 0 ? "hsl(142, 76%, 36%)" : "hsl(var(--foreground))",
+        label: warnings >= 10 ? '10+' : warnings.toString(),
+        fill: warnings === 0 ? 'hsl(142, 76%, 36%)' : 'hsl(var(--foreground))',
       }))
       .sort((a, b) => a.warnings - b.warnings)
 
@@ -60,7 +60,7 @@ export const WarningDistribution = ({
           warnings: i,
           count: 0,
           label: i.toString(),
-          fill: i === 0 ? "hsl(142, 76%, 36%)" : "hsl(var(--foreground))",
+          fill: i === 0 ? 'hsl(142, 76%, 36%)' : 'hsl(var(--foreground))',
         })
       }
     }
@@ -78,8 +78,8 @@ export const WarningDistribution = ({
   // Chart configuration
   const chartConfig = {
     count: {
-      label: "Tests",
-      color: "hsl(var(--foreground))",
+      label: 'Tests',
+      color: 'hsl(var(--foreground))',
     },
   }
 
@@ -133,18 +133,18 @@ export const WarningDistribution = ({
               <ChartTooltipContent
                 formatter={(value, _name, props) => {
                   const warnings = props?.payload?.warnings
-                  if (warnings === undefined) return [`${value} tests`, "Tests"]
+                  if (warnings === undefined) return [`${value} tests`, 'Tests']
 
                   let warningText
                   if (warnings >= 10) {
-                    warningText = "10+ warnings"
+                    warningText = '10+ warnings'
                   } else if (warnings === 1) {
-                    warningText = "1 warning"
+                    warningText = '1 warning'
                   } else {
                     warningText = `${warnings} warnings`
                   }
 
-                  return [`${value} outputs have ${warningText}`, ""]
+                  return [`${value} outputs have ${warningText}`, '']
                 }}
                 hideLabel={true}
               />

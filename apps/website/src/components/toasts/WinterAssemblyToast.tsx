@@ -1,22 +1,22 @@
-import { useCallback } from "react";
-import { toast } from "sonner";
-import { Button } from "../ui/button";
-import Image from "next/image";
+import { useCallback } from "react"
+import { toast } from "sonner"
+import { Button } from "../ui/button"
+import Image from "next/image"
 
 interface WinterAssemblyToastProps {
-  id: string | number;
+  id: string | number
 }
 
-export const TOAST_ID = "winter-assembly-toast-v2";
+export const TOAST_ID = "winter-assembly-toast-v2"
 
 export function WinterAssemblyToast({ id }: WinterAssemblyToastProps) {
   const onDismiss = useCallback(() => {
     // localStorage.setItem(TOAST_ID, Date.now().toString());
-    toast.dismiss(id);
-  }, [id]);
+    toast.dismiss(id)
+  }, [id])
 
   return (
-    <div className="overflow-hidden border bg-black font-sans text-md text-white">
+    <div className="text-md overflow-hidden border bg-black font-sans text-white">
       <div className="relative h-48 w-full">
         <Image
           src="/Assembly-Winter-25-640w.webp"
@@ -73,5 +73,5 @@ export function WinterAssemblyToast({ id }: WinterAssemblyToastProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,18 +1,18 @@
-import { supabase } from "@/lib/supabase"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from '@tanstack/react-query'
+import { supabase } from '@/lib/supabase'
 
 export function useTopAlgorithmIds() {
-  return useQuery<number[]>({
-    queryKey: ["algorithms", "ids", "top-scored"],
+  return useQuery<Array<number>>({
+    queryKey: ['algorithms', 'ids', 'top-scored'],
     queryFn: async () => {
       // Query algorithm_scores table directly and join to get algorithm details
       const { data, error } = await supabase
-        .from("algorithm_scores")
+        .from('algorithm_scores')
         .select(
-          "algorithm_id, quality_score, algorithms_with_user_profile!inner(id)",
+          'algorithm_id, quality_score, algorithms_with_user_profile!inner(id)',
         )
-        .order("quality_score", { ascending: false })
-        .order("algorithm_id", { ascending: false }) // tie-breaker: descending algorithm ID
+        .order('quality_score', { ascending: false })
+        .order('algorithm_id', { ascending: false }) // tie-breaker: descending algorithm ID
 
       if (error) throw error
 

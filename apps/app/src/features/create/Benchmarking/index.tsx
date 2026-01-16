@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button"
-import { useAlgorithmService } from "@/contexts/service-context"
-import { useCallback, useState } from "react"
-import { BenchmarkResult as BenchmarkResultType } from "@/workers/compliance"
-import { BenchmarkResults } from "./BenchmarkResults"
+import { useCallback, useState } from 'react'
+import { BenchmarkResults } from './BenchmarkResults'
+import type { BenchmarkResult as BenchmarkResultType } from '@/workers/compliance'
+import { Button } from '@/components/ui/button'
+import { useAlgorithmService } from '@/contexts/service-context'
 
 export const Benchmarking = () => {
   const algorithmService = useAlgorithmService()

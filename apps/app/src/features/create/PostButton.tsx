@@ -1,12 +1,3 @@
-import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { FEATURES } from '@/lib/features'
-import { supabase } from '@/lib/supabase'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
@@ -20,6 +11,15 @@ import {
   remixAtom,
   scriptErrorAtom,
 } from './atoms'
+import { supabase } from '@/lib/supabase'
+import { FEATURES } from '@/lib/features'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 
 const validateAlgorithmName = (
   name: string,

@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import { motion } from "motion/react";
-import { Button } from "./ui/button";
+import { motion } from "motion/react"
+import { Button } from "./ui/button"
 
 export function Hero() {
   const scrollToLearnMore = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const element = document.getElementById("learn-more");
+    e.preventDefault()
+    const element = document.getElementById("learn-more")
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: "smooth" })
     }
-  };
+  }
 
   return (
-    <section className="relative border-b border-border">
+    <section className="border-border relative border-b">
       <div className="mx-auto max-w-6xl lg:px-8">
         <div className="grid gap-0 lg:grid-cols-2 lg:gap-16 lg:py-32">
           {/* Left: Content */}
@@ -26,7 +26,7 @@ export function Hero() {
             <h1 className="font-jersey text-5xl sm:text-6xl lg:text-7xl">
               Entropretty
             </h1>
-            <p className="mt-4 max-w-lg text-lg text-muted-foreground sm:mt-6 sm:text-xl">
+            <p className="text-muted-foreground mt-4 max-w-lg text-lg sm:mt-6 sm:text-xl">
               Algorithmic art powering Polkadot&apos;s Proof of Ink. Generate
               billions of unique visual identities that prove you&apos;re human
               without revealing who you are.
@@ -45,7 +45,7 @@ export function Hero() {
 
           {/* Right: Video Preview */}
           <motion.div
-            className="relative aspect-square w-full overflow-hidden border-t border-border lg:aspect-auto lg:h-full lg:min-h-[400px] lg:border lg:border-t"
+            className="border-border relative aspect-square w-full overflow-hidden border-t lg:aspect-auto lg:h-full lg:min-h-[400px] lg:border lg:border-t"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -62,5 +62,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import type { CanvasAdapter, CanvasLike } from './types'
+import type { CanvasAdapter, CanvasLike } from "./types"
 
 class BrowserCanvas implements CanvasLike {
   private canvas: OffscreenCanvas
@@ -15,12 +15,12 @@ class BrowserCanvas implements CanvasLike {
     return this.canvas.height
   }
 
-  getContext(type: '2d'): CanvasRenderingContext2D | null {
+  getContext(type: "2d"): CanvasRenderingContext2D | null {
     return this.canvas.getContext(type) as CanvasRenderingContext2D | null
   }
 
   async toBuffer(): Promise<Uint8Array> {
-    const blob = await this.canvas.convertToBlob({ type: 'image/png' })
+    const blob = await this.canvas.convertToBlob({ type: "image/png" })
     const arrayBuffer = await blob.arrayBuffer()
     return new Uint8Array(arrayBuffer)
   }
@@ -41,9 +41,10 @@ export class BrowserCanvasAdapter implements CanvasAdapter {
  * Only use in browser environment
  */
 export function createBrowserCanvasAdapter(): CanvasAdapter {
-  if (typeof OffscreenCanvas === 'undefined') {
-    throw new Error('OffscreenCanvas is not available. Are you running in a browser?')
+  if (typeof OffscreenCanvas === "undefined") {
+    throw new Error(
+      "OffscreenCanvas is not available. Are you running in a browser?",
+    )
   }
   return new BrowserCanvasAdapter()
 }
-

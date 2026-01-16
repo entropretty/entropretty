@@ -1,12 +1,12 @@
-import { BenchmarkResult } from "@/workers/compliance"
-import { WarningDistribution } from "./WarningDistribution"
-import { CheckCircle, XCircle, AlertTriangle } from "lucide-react"
+import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
+import { WarningDistribution } from './WarningDistribution'
+import type { BenchmarkResult } from '@/workers/compliance'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from '@/components/ui/tooltip'
 
 interface BenchmarkResultsProps {
   benchmarkResult: BenchmarkResult

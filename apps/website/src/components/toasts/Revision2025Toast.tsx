@@ -1,21 +1,21 @@
-import { useCallback } from "react";
-import { toast } from "sonner";
-import { Button } from "../ui/button";
-import Image from "next/image";
+import { useCallback } from "react"
+import { toast } from "sonner"
+import { Button } from "../ui/button"
+import Image from "next/image"
 
 interface Revision2025ToastProps {
-  id: string | number;
+  id: string | number
 }
 
-export const TOAST_ID = "revision-2025-toast-v1";
+export const TOAST_ID = "revision-2025-toast-v1"
 
 export function Revision2025Toast({ id }: Revision2025ToastProps) {
   const onDismiss = useCallback(() => {
-    toast.dismiss(id);
-  }, [id]);
+    toast.dismiss(id)
+  }, [id])
 
   return (
-    <div className="overflow-hidden border w-full bg-black font-sans text-md text-white">
+    <div className="text-md w-full overflow-hidden border bg-black font-sans text-white">
       <div className="relative h-48 w-full">
         <Image
           src="/assets/revision-2025-bg.jpg"
@@ -42,16 +42,16 @@ export function Revision2025Toast({ id }: Revision2025ToastProps) {
             Entropretty @ REVISION 2025
           </h2>
 
-          <p className="text-gray-300 break-words">
+          <p className="break-words text-gray-300">
             Create and submit your Entropretty design NOW and be featured live
             at REVISION.
           </p>
-          <p className="text-gray-300 break-words">
+          <p className="break-words text-gray-300">
             Submit your design till 8PM CEST on April 19th, 2025.
           </p>
         </div>
 
-        <div className="flex items-center flex-col sm:flex-col gap-2 justify-between">
+        <div className="flex flex-col items-center justify-between gap-2 sm:flex-col">
           <Button
             variant="link"
             className="text-white hover:text-gray-300"
@@ -75,5 +75,5 @@ export function Revision2025Toast({ id }: Revision2025ToastProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { AlgorithmCard } from '@/components/AlgorithmCard'
 import { AlgorithmCardSkeleton } from '@/components/AlgorithmCard/AlgorithmCardSkeleton'
 import { FamilyKindFilter } from '@/components/FamilyKindFilter'
 import { FeedbackDialog } from '@/components/FeedbackDialog'
 import { useAuth } from '@/contexts/auth-context'
 import { useLatestAlgorithms } from '@/hooks/useLatestAlgorithms'
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { useInView } from 'react-intersection-observer'
 
 export const Route = createFileRoute('/')({
   component: IndexPage,
