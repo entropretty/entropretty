@@ -12,3 +12,12 @@ export type {
   AIResponse,
   ChatContext,
 } from './types'
+
+export {
+  sessionIdAtom,
+  sessionDataAtom,
+  historyIndexAtom,
+  chatMessagesAtom,
+  chatLoadingAtom,
+  attachmentsAtom,
+} from './atoms'

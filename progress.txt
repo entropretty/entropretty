@@ -61,11 +61,37 @@
 
 ---
 
+### 2026-01-16: Foundation - Create session management Jotai atoms
+
+**Task:** Create session management Jotai atoms
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Session/atoms.ts` with all session state atoms:
+  - `sessionIdAtom` - primitive atom for current session ID (string | null)
+  - `sessionDataAtom` - derived atom that reads session from localStorage based on sessionIdAtom
+  - `historyIndexAtom` - primitive atom for history navigation position (number)
+  - `chatMessagesAtom` - primitive atom for chat messages (Array<ChatMessage>)
+  - `chatLoadingAtom` - primitive atom for loading state (boolean)
+  - `attachmentsAtom` - primitive atom for pending attachments (Array<Attachment>)
+- Updated `apps/app/src/features/create/Session/index.ts` to export all atoms
+
+**Files Modified:**
+- `apps/app/src/features/create/Session/atoms.ts` (new)
+- `apps/app/src/features/create/Session/index.ts` (updated exports)
+
+**Verification Status:**
+- TypeScript check shows no errors in Session atoms (verified via `npx tsc --noEmit | grep Session` returning 0 matches)
+- Atoms follow existing codebase patterns from `features/create/atoms.ts`
+- Pre-existing TypeScript errors exist in codebase (not related to this change)
+- Dev/build cannot be tested in CI environment due to node_modules platform mismatch (macOS -> Linux)
+- User should run `pnpm install && pnpm dev:app` to verify locally
+
+---
+
 ## Pending Tasks (by priority)
 
-1. Create session management Jotai atoms
-3. Implement useSessionHistory hook for localStorage persistence
-4. Create TanStack server function for AI chat communication
-5. Add AI tab to the create page tab navigation
-6. Create ChatTab container component
-7. (remaining tasks per PRD)
+1. Implement useSessionHistory hook for localStorage persistence
+2. Create TanStack server function for AI chat communication
+3. Add AI tab to the create page tab navigation
+4. Create ChatTab container component
+5. (remaining tasks per PRD)

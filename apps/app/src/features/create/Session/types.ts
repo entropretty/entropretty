@@ -60,7 +60,7 @@ export interface ChatMessage {
   /** Code included in this message (for assistant messages with code) */
   code?: string
   /** Image attachments (for user messages) */
-  attachments?: Attachment[]
+  attachments?: Array<Attachment>
   /** When this message was created */
   createdAt: number
 }
@@ -74,7 +74,7 @@ export interface Session {
   /** When the session was created */
   createdAt: number
   /** Code history with checkpoints */
-  history: HistoryEntry[]
+  history: Array<HistoryEntry>
 }
 
 /**
