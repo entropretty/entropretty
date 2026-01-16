@@ -1,0 +1,660 @@
+[
+  {
+    "category": "foundation",
+    "description": "Install and configure required dependencies for AI chat feature",
+    "steps": [
+      "Step 1: Install @assistant-ui/react and @assistant-ui/react-ai-sdk packages",
+      "Step 2: Install ai (Vercel AI SDK) and @ai-sdk/google packages",
+      "Step 3: Install nanoid package for session ID generation",
+      "Step 4: Verify zod is available in the project",
+      "Step 5: Verify GOOGLE_GENERATIVE_AI_API_KEY exists in .env.local file",
+      "Step 6: Verify all dependencies resolve without conflicts",
+      "Step 7: Verify TypeScript types are available for all packages"
+    ],
+    "passes": false
+  },
+  {
+    "category": "foundation",
+    "description": "Create Session types and data model definitions",
+    "steps": [
+      "Step 1: Create features/create/Session/types.ts file",
+      "Step 2: Define Session interface with id, createdAt, history fields",
+      "Step 3: Define HistoryEntry interface with code, timestamp, source fields",
+      "Step 4: Define HistorySource enum with 'initial', 'user', 'ai' values",
+      "Step 5: Define ChatMessage interface with id, role, content, code, attachments, createdAt fields",
+      "Step 6: Define Attachment interface with id, name, type, size, data fields",
+      "Step 7: Define AIResponse type matching the structured output schema",
+      "Step 8: Export all types from the module"
+    ],
+    "passes": false
+  },
+  {
+    "category": "foundation",
+    "description": "Create session management Jotai atoms",
+    "steps": [
+      "Step 1: Create features/create/Session/atoms.ts file",
+      "Step 2: Create sessionIdAtom as a primitive atom (string | null)",
+      "Step 3: Create sessionDataAtom that derives from sessionIdAtom and reads localStorage",
+      "Step 4: Create historyIndexAtom as a primitive atom (number)",
+      "Step 5: Create chatMessagesAtom as a primitive atom (Array<ChatMessage>)",
+      "Step 6: Create chatLoadingAtom as a primitive atom (boolean)",
+      "Step 7: Create attachmentsAtom as a primitive atom (Array<Attachment>)",
+      "Step 8: Verify atoms integrate with existing Jotai provider"
+    ],
+    "passes": false
+  },
+  {
+    "category": "foundation",
+    "description": "Implement useSessionHistory hook for localStorage persistence",
+    "steps": [
+      "Step 1: Create features/create/Session/useSessionHistory.ts file",
+      "Step 2: Generate session ID on mount using nanoid if not exists",
+      "Step 3: Implement loadSession function to read from localStorage key 'entropretty:session:{id}'",
+      "Step 4: Implement saveCheckpoint function that adds HistoryEntry to session",
+      "Step 5: Implement history pruning when entries exceed 100",
+      "Step 6: Save session to localStorage on every checkpoint",
+      "Step 7: Create initial checkpoint with source 'initial' on first load",
+      "Step 8: Verify session persists across page refresh"
+    ],
+    "passes": false
+  },
+  {
+    "category": "foundation",
+    "description": "Create TanStack server function for AI chat communication",
+    "steps": [
+      "Step 1: Create app/functions/chat.ts file",
+      "Step 2: Define Zod schema aiResponseSchema with explanation, hasCode, code fields",
+      "Step 3: Create streamChat server function with POST method",
+      "Step 4: Define input validator for messages, context, and attachments",
+      "Step 5: Implement buildSystemPrompt function that includes editor context",
+      "Step 6: Call streamObject with google provider using gemini-2.5-flash model and aiResponseSchema",
+      "Step 7: Convert attachments to AI SDK image format for multimodal messages",
+      "Step 8: Return streaming response using toTextStreamResponse()",
+      "Step 9: Test server function returns valid streaming response"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Add AI tab to the create page tab navigation",
+    "steps": [
+      "Step 1: Open features/create/index.tsx",
+      "Step 2: Add 'ai' value to TabsTrigger after 'code'",
+      "Step 3: Add TabsContent with value='ai'",
+      "Step 4: Import ChatTab component (lazy load)",
+      "Step 5: Render ChatTab inside TabsContent for 'ai'",
+      "Step 6: Verify clicking AI tab shows chat interface",
+      "Step 7: Verify switching between tabs works correctly",
+      "Step 8: Verify preview panel remains visible when on AI tab"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create ChatTab container component",
+    "steps": [
+      "Step 1: Create features/create/Chat/index.tsx file",
+      "Step 2: Create ChatTab component with flex column layout",
+      "Step 3: Add ThreadContainer div with flex-1 and overflow-y-auto",
+      "Step 4: Add Composer section with sticky bottom positioning",
+      "Step 5: Read chatMessagesAtom to determine if showing welcome or messages",
+      "Step 6: Apply design tokens for background and spacing",
+      "Step 7: Verify component renders without errors",
+      "Step 8: Verify layout fills available tab content height"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create WelcomeMessage component with suggested prompts",
+    "steps": [
+      "Step 1: Create features/create/Chat/WelcomeMessage.tsx file",
+      "Step 2: Display welcome title 'How can I help?'",
+      "Step 3: Add brief intro text about the AI assistant",
+      "Step 4: Create SuggestionButton component in features/create/Chat/SuggestionButton.tsx",
+      "Step 5: Display suggestion 'Create a geometric mandala pattern'",
+      "Step 6: Display suggestion 'Help me understand the seed system'",
+      "Step 7: Conditionally show 'Make my design more tattoo-friendly' based on hasCustomCode prop",
+      "Step 8: Handle suggestion click to trigger onSuggestionClick callback",
+      "Step 9: Apply design tokens for welcome padding and typography"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create Composer component for message input",
+    "steps": [
+      "Step 1: Create features/create/Chat/Composer.tsx file",
+      "Step 2: Add TextArea with auto-grow up to max height",
+      "Step 3: Add SendButton that is disabled when input is empty",
+      "Step 4: Handle Enter key to send message (Shift+Enter for newline)",
+      "Step 5: Add placeholder text 'Type a message...'",
+      "Step 6: Disable composer when chatLoadingAtom is true",
+      "Step 7: Clear input after successful send",
+      "Step 8: Apply design tokens for composer styling",
+      "Step 9: Add aria-labels for accessibility"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create MessageBubble component for displaying chat messages",
+    "steps": [
+      "Step 1: Create features/create/Chat/MessageBubble.tsx file",
+      "Step 2: Accept role, content, code, attachments, isStreaming props",
+      "Step 3: Render user messages aligned right with primary background",
+      "Step 4: Render assistant messages aligned left with secondary background",
+      "Step 5: Render markdown content safely",
+      "Step 6: Show streaming cursor indicator when isStreaming is true",
+      "Step 7: Set max-width to 85% of container",
+      "Step 8: Apply design tokens for bubble colors and typography"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create CodeBlock component with Applied badge",
+    "steps": [
+      "Step 1: Create features/create/Chat/CodeBlock.tsx file",
+      "Step 2: Accept code, language, isApplied props",
+      "Step 3: Display code with syntax highlighting",
+      "Step 4: Show header with language label 'javascript'",
+      "Step 5: Show green 'Applied' badge when isApplied is true",
+      "Step 6: Apply design tokens for code block colors",
+      "Step 7: Use monospace font from design tokens"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Create LoadingIndicator component for AI response loading state",
+    "steps": [
+      "Step 1: Create features/create/Chat/LoadingIndicator.tsx file",
+      "Step 2: Display three dots in a row",
+      "Step 3: Implement staggered pulse animation on dots",
+      "Step 4: Apply design tokens for dot colors",
+      "Step 5: Use loadingPulse animation timing from tokens",
+      "Step 6: Show component when chatLoadingAtom is true"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Implement useChat hook for AI communication",
+    "steps": [
+      "Step 1: Create features/create/Chat/useChat.ts file",
+      "Step 2: Create sendMessage function that accepts message text",
+      "Step 3: Read editorCodeAtom for current code context",
+      "Step 4: Read editorSeedTypeAtom for seed type context",
+      "Step 5: Read scriptErrorAtom for error context",
+      "Step 6: Include attachmentsAtom in request",
+      "Step 7: Call streamChat server function with all context",
+      "Step 8: Update chatMessagesAtom with user message immediately",
+      "Step 9: Set chatLoadingAtom to true during request",
+      "Step 10: Stream response and update assistant message progressively"
+    ],
+    "passes": false
+  },
+  {
+    "category": "core-ui",
+    "description": "Implement auto-apply code from AI response",
+    "steps": [
+      "Step 1: In useChat hook, parse structured output for hasCode and code",
+      "Step 2: When hasCode is true and code is present, update editorCodeAtom",
+      "Step 3: Increment editorCodeVersionAtom to trigger preview re-render",
+      "Step 4: Call saveCheckpoint from useSessionHistory with source 'ai'",
+      "Step 5: Update historyIndexAtom to new checkpoint position",
+      "Step 6: Clear attachmentsAtom after successful send",
+      "Step 7: Set chatLoadingAtom to false when complete",
+      "Step 8: Verify preview updates after code is applied"
+    ],
+    "passes": false
+  },
+  {
+    "category": "chat-flow",
+    "description": "User can send a message and receive AI response with code",
+    "steps": [
+      "Step 1: Open the AI tab on the create page",
+      "Step 2: Type 'Create a simple circle pattern' in the composer",
+      "Step 3: Click the send button",
+      "Step 4: Verify user message appears in chat",
+      "Step 5: Verify loading indicator is shown",
+      "Step 6: Verify AI response streams progressively",
+      "Step 7: Verify AI explanation text is displayed",
+      "Step 8: Verify code is automatically applied to editor",
+      "Step 9: Verify preview shows the new algorithm rendering",
+      "Step 10: Verify 'Applied' badge appears on code block"
+    ],
+    "passes": false
+  },
+  {
+    "category": "chat-flow",
+    "description": "User can click suggested prompt to send message",
+    "steps": [
+      "Step 1: Open the AI tab on the create page",
+      "Step 2: Verify welcome message is displayed",
+      "Step 3: Click 'Create a geometric mandala pattern' suggestion",
+      "Step 4: Verify the prompt text is sent as a message",
+      "Step 5: Verify user message appears in chat",
+      "Step 6: Verify AI begins responding",
+      "Step 7: Verify welcome message is replaced by chat history"
+    ],
+    "passes": false
+  },
+  {
+    "category": "chat-flow",
+    "description": "AI receives current editor code as context",
+    "steps": [
+      "Step 1: Write custom spiral code in the Code tab editor",
+      "Step 2: Switch to AI tab",
+      "Step 3: Send message 'Add more spirals to my design'",
+      "Step 4: Verify AI response references the existing spiral code",
+      "Step 5: Verify generated code builds upon the existing implementation",
+      "Step 6: Verify the new code is applied and preview shows updated spirals"
+    ],
+    "passes": false
+  },
+  {
+    "category": "chat-flow",
+    "description": "AI responds without code when answering questions",
+    "steps": [
+      "Step 1: Open the AI tab",
+      "Step 2: Send message 'How does the seed system work?'",
+      "Step 3: Verify AI responds with explanation only",
+      "Step 4: Verify no code block is shown in response",
+      "Step 5: Verify editor code remains unchanged",
+      "Step 6: Verify no new history checkpoint is created"
+    ],
+    "passes": false
+  },
+  {
+    "category": "chat-flow",
+    "description": "Tattoo-friendly suggestion only shows when custom code exists",
+    "steps": [
+      "Step 1: Navigate to create page with fresh session",
+      "Step 2: Open AI tab",
+      "Step 3: Verify 'Make my design more tattoo-friendly' is NOT shown",
+      "Step 4: Switch to Code tab and write custom code",
+      "Step 5: Switch back to AI tab",
+      "Step 6: Start a new chat or refresh",
+      "Step 7: Verify 'Make my design more tattoo-friendly' IS now shown"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "Create HistoryNavigation component with back/forward buttons",
+    "steps": [
+      "Step 1: Create features/create/HistoryNavigation.tsx file",
+      "Step 2: Add back button with left arrow icon",
+      "Step 3: Add forward button with right arrow icon",
+      "Step 4: Add position indicator displaying 'current / total'",
+      "Step 5: Accept currentIndex, totalCount, onBack, onForward props",
+      "Step 6: Disable back button when currentIndex is 0",
+      "Step 7: Disable forward button when at last position",
+      "Step 8: Apply design tokens for button sizing and colors",
+      "Step 9: Add aria-labels for accessibility"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "Implement useHistoryNav hook for navigation logic",
+    "steps": [
+      "Step 1: Create features/create/Session/useHistoryNav.ts file",
+      "Step 2: Read sessionDataAtom to get history array",
+      "Step 3: Read and write historyIndexAtom for current position",
+      "Step 4: Implement goBack function that decrements historyIndexAtom",
+      "Step 5: Implement goForward function that increments historyIndexAtom",
+      "Step 6: Update editorCodeAtom with code from history[index] on navigation",
+      "Step 7: Ensure navigation does NOT create new checkpoints",
+      "Step 8: Return currentIndex, totalCount, canGoBack, canGoForward, goBack, goForward"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "Place HistoryNavigation in editor header",
+    "steps": [
+      "Step 1: Open features/create/index.tsx",
+      "Step 2: Import HistoryNavigation component",
+      "Step 3: Import useHistoryNav hook",
+      "Step 4: Place HistoryNavigation in header area before algorithm name",
+      "Step 5: Wire up hook values to component props",
+      "Step 6: Verify back/forward buttons are visible",
+      "Step 7: Verify position indicator shows correct values"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "User can navigate back in history after AI applies code",
+    "steps": [
+      "Step 1: Start with fresh session showing initial code",
+      "Step 2: Send AI message to generate new code",
+      "Step 3: Verify code is applied and checkpoint created",
+      "Step 4: Verify position shows '2 / 2'",
+      "Step 5: Click back button",
+      "Step 6: Verify editor shows original initial code",
+      "Step 7: Verify position shows '1 / 2'",
+      "Step 8: Verify preview updates to show initial code output"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "User can navigate forward after going back",
+    "steps": [
+      "Step 1: Create session with 3 checkpoints via AI interactions",
+      "Step 2: Navigate back twice to checkpoint 1",
+      "Step 3: Click forward button",
+      "Step 4: Verify editor shows checkpoint 2 code",
+      "Step 5: Click forward button again",
+      "Step 6: Verify editor shows checkpoint 3 code",
+      "Step 7: Verify forward button is now disabled"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "AI receives code from current history position",
+    "steps": [
+      "Step 1: Create session with code A, then AI generates code B",
+      "Step 2: Navigate back to code A",
+      "Step 3: Send message 'Add more detail'",
+      "Step 4: Verify AI response references code A, not code B",
+      "Step 5: Verify new code C is applied and becomes checkpoint 3",
+      "Step 6: Verify history is now [A, B, C] not [A, B, C, C]"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "Session persists across page refresh",
+    "steps": [
+      "Step 1: Create new session on create page",
+      "Step 2: Generate 2 AI code responses creating checkpoints",
+      "Step 3: Verify localStorage contains session data",
+      "Step 4: Refresh the page",
+      "Step 5: Verify same session ID is used",
+      "Step 6: Verify history shows '3 / 3' (initial + 2 AI)",
+      "Step 7: Verify editor shows most recent code"
+    ],
+    "passes": false
+  },
+  {
+    "category": "history",
+    "description": "History is pruned at 100 checkpoints",
+    "steps": [
+      "Step 1: Create session with 100 checkpoints in localStorage",
+      "Step 2: Load the create page",
+      "Step 3: Send AI message to generate new code",
+      "Step 4: Verify history still contains exactly 100 entries",
+      "Step 5: Verify oldest checkpoint was removed (FIFO)",
+      "Step 6: Verify most recent 100 checkpoints are preserved"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Add attachment button and preview to Composer",
+    "steps": [
+      "Step 1: Add attach button (paperclip icon) to Composer",
+      "Step 2: Create file input triggered by attach button",
+      "Step 3: Accept only image/* file types in input",
+      "Step 4: Create AttachmentPreview section above input row",
+      "Step 5: Create features/create/Chat/AttachmentThumbnail.tsx",
+      "Step 6: Show thumbnail previews for pending attachments",
+      "Step 7: Add aria-label 'Attach file' to button"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Implement attachment validation",
+    "steps": [
+      "Step 1: Validate file type is image/* (PNG, JPG, GIF, WebP)",
+      "Step 2: Reject non-image files with toast 'Only image files are supported'",
+      "Step 3: Validate file size is under 10MB",
+      "Step 4: Reject large files with toast 'File size must be under 10MB'",
+      "Step 5: Validate attachment count is under 5",
+      "Step 6: Reject when limit reached with toast 'Maximum 5 attachments allowed'",
+      "Step 7: Show toast notifications for all validation errors"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Implement attachment reading and storage",
+    "steps": [
+      "Step 1: Read valid file as base64 using FileReader",
+      "Step 2: Create Attachment object with id, name, type, size, data",
+      "Step 3: Add attachment to attachmentsAtom",
+      "Step 4: Handle file read errors with toast 'Failed to load file'",
+      "Step 5: Verify thumbnail shows after successful read"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Create AttachmentThumbnail component with remove functionality",
+    "steps": [
+      "Step 1: Display thumbnail image preview (max 60x60px)",
+      "Step 2: Display truncated filename below image",
+      "Step 3: Add remove button (X icon) positioned top-right",
+      "Step 4: Handle remove click to filter attachment from attachmentsAtom",
+      "Step 5: Add aria-label 'Remove [filename]' to remove button",
+      "Step 6: Apply design tokens for thumbnail styling"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Support drag and drop file attachment",
+    "steps": [
+      "Step 1: Add drag-drop zone to Composer component",
+      "Step 2: Listen for dragover and drop events",
+      "Step 3: Prevent default browser behavior",
+      "Step 4: Extract files from drop event dataTransfer",
+      "Step 5: Run validation on dropped files",
+      "Step 6: Add valid files to attachmentsAtom",
+      "Step 7: Show visual feedback during drag over"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "User can send message with image attachment",
+    "steps": [
+      "Step 1: Open AI tab",
+      "Step 2: Click attach button and select an image file",
+      "Step 3: Verify thumbnail appears in composer",
+      "Step 4: Type 'Recreate this pattern' in composer",
+      "Step 5: Click send button",
+      "Step 6: Verify user message shows with attached image",
+      "Step 7: Verify AI response references details from the image",
+      "Step 8: Verify attachments are cleared from composer after send"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "User can send message with only attachment (no text)",
+    "steps": [
+      "Step 1: Open AI tab",
+      "Step 2: Attach an image file",
+      "Step 3: Leave message text empty",
+      "Step 4: Verify send button is enabled (attachment present)",
+      "Step 5: Click send button",
+      "Step 6: Verify message is sent with just the image",
+      "Step 7: Verify AI analyzes and responds to the image"
+    ],
+    "passes": false
+  },
+  {
+    "category": "attachments",
+    "description": "Display attachments in sent messages",
+    "steps": [
+      "Step 1: Send message with attachment",
+      "Step 2: Verify sent message shows image larger than thumbnail",
+      "Step 3: Implement click handler to open image in modal or new tab",
+      "Step 4: Verify multiple attachments display in a row/grid"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle network errors during AI request",
+    "steps": [
+      "Step 1: Send message to AI",
+      "Step 2: Simulate network failure (disconnect or timeout)",
+      "Step 3: Verify error message appears in chat: 'Failed to connect'",
+      "Step 4: Verify message includes option to retry",
+      "Step 5: Verify composer is re-enabled after error",
+      "Step 6: Verify original message text preserved for retry"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle rate limiting (429) response",
+    "steps": [
+      "Step 1: Trigger rate limit response from server",
+      "Step 2: Verify message shown: 'Too many requests. Please wait'",
+      "Step 3: Implement countdown display for retry",
+      "Step 4: Auto-retry request after delay",
+      "Step 5: Verify successful response after rate limit clears"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle structured output parse failure gracefully",
+    "steps": [
+      "Step 1: Trigger invalid JSON response from LLM",
+      "Step 2: Verify graceful degradation to text-only display",
+      "Step 3: Verify explanation text still shown in chat",
+      "Step 4: Verify code is not applied (no hasCode)",
+      "Step 5: Verify no crash or breaking error"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle AI-generated code with syntax errors",
+    "steps": [
+      "Step 1: Send message that triggers AI to return broken code",
+      "Step 2: Verify code is applied to editor anyway",
+      "Step 3: Verify script error appears in error panel",
+      "Step 4: Verify preview shows broken/empty state",
+      "Step 5: Verify user can navigate back to restore working code",
+      "Step 6: Verify user can ask AI 'Fix this error' and error is in context"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle localStorage corruption",
+    "steps": [
+      "Step 1: Corrupt session data in localStorage manually",
+      "Step 2: Load the create page",
+      "Step 3: Verify toast message: 'History could not be loaded. Starting fresh.'",
+      "Step 4: Verify new session is created",
+      "Step 5: Verify initial code saved as first checkpoint",
+      "Step 6: Verify user can continue normally"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error-handling",
+    "description": "Handle network failure mid-stream",
+    "steps": [
+      "Step 1: Send message to AI",
+      "Step 2: Wait for streaming to begin",
+      "Step 3: Simulate network disconnect mid-stream",
+      "Step 4: Verify partial response preserved in chat",
+      "Step 5: Verify error appended: 'Response interrupted. [Retry]'",
+      "Step 6: Click retry button",
+      "Step 7: Verify full request resent and new complete response streams"
+    ],
+    "passes": false
+  },
+  {
+    "category": "accessibility",
+    "description": "Implement keyboard navigation and ARIA labels",
+    "steps": [
+      "Step 1: Add ARIA labels to all interactive elements in chat",
+      "Step 2: Verify Tab key navigates through composer and buttons",
+      "Step 3: Verify Enter/Space activates suggestion buttons",
+      "Step 4: Verify focus moves to message list after send",
+      "Step 5: Add aria-live='polite' to history position indicator",
+      "Step 6: Add role='article' to message bubbles",
+      "Step 7: Verify screen reader announces new messages"
+    ],
+    "passes": false
+  },
+  {
+    "category": "polish",
+    "description": "Implement streaming text display with cursor indicator",
+    "steps": [
+      "Step 1: Show blinking cursor at end of streaming text",
+      "Step 2: Update text progressively as stream chunks arrive",
+      "Step 3: Remove cursor when streaming completes",
+      "Step 4: Apply messageFadeIn animation from design tokens"
+    ],
+    "passes": false
+  },
+  {
+    "category": "polish",
+    "description": "Implement proper empty and disabled states",
+    "steps": [
+      "Step 1: Show welcome message when chatMessagesAtom is empty",
+      "Step 2: Disable send button when composer is empty and no attachments",
+      "Step 3: Disable composer during AI response streaming",
+      "Step 4: Disable both history buttons when only 1 checkpoint exists"
+    ],
+    "passes": false
+  },
+  {
+    "category": "polish",
+    "description": "Add React error boundary for ChatTab",
+    "steps": [
+      "Step 1: Wrap ChatTab in React error boundary",
+      "Step 2: On error, display 'Chat encountered an error. [Reload]'",
+      "Step 3: Log error details to console",
+      "Step 4: Verify other tabs still function when chat crashes",
+      "Step 5: Implement reload button that resets chat state"
+    ],
+    "passes": false
+  },
+  {
+    "category": "integration",
+    "description": "Multi-turn conversation maintains context",
+    "steps": [
+      "Step 1: Send initial message to AI and receive code",
+      "Step 2: Send follow-up message 'Now add some color variation'",
+      "Step 3: Verify AI receives the updated code as context",
+      "Step 4: Verify AI builds upon the previous response",
+      "Step 5: Verify new code is applied and checkpoint created",
+      "Step 6: Verify preview shows incrementally improved algorithm"
+    ],
+    "passes": false
+  },
+  {
+    "category": "integration",
+    "description": "Full end-to-end workflow with attachments and history",
+    "steps": [
+      "Step 1: Start on create page with initial code",
+      "Step 2: Attach reference image to composer",
+      "Step 3: Send 'Create something like this'",
+      "Step 4: Verify AI generates code based on image",
+      "Step 5: Send follow-up 'Make the lines thicker'",
+      "Step 6: Verify second code version applied",
+      "Step 7: Navigate back in history to first AI version",
+      "Step 8: Verify editor shows first AI code",
+      "Step 9: Send 'Add some randomness' from history position",
+      "Step 10: Verify new checkpoint created building on first AI code"
+    ],
+    "passes": false
+  }
+]
