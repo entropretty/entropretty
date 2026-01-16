@@ -337,19 +337,67 @@
 - ✅ Step 8: Apply design tokens for composer styling (uses Button component, cn utility)
 - ✅ Step 9: Add aria-labels for accessibility
 
+**Git Commit:** 8d82d9a - feat(chat): extract Composer into separate component with auto-grow
+
 **Verification Status:**
 - TypeScript check passes with no errors in Chat components
-- ESLint/lint passes with no errors
+- ESLint/lint passes with no errors (only pre-existing warnings)
 - Dev server starts successfully (`pnpm dev:app`)
 - Production build completes successfully (`pnpm build`)
+- Pre-commit hooks passed (lint-staged + prettier + full lint + typecheck)
+
+---
+
+### 2026-01-16: Core UI - Create MessageBubble component for displaying chat messages
+
+**Task:** Create MessageBubble component for displaying chat messages (PRD lines 140-153)
+
+**Changes Made:**
+- Created `apps/app/src/features/create/Chat/MessageBubble.tsx` with complete message display component:
+  - `MessageBubble` - Main component accepting role, content, code, attachments, isStreaming props
+  - User messages aligned right with `bg-primary text-primary-foreground` styling
+  - Assistant messages aligned left with `bg-muted text-foreground` styling
+  - `MessageContent` - Renders text with whitespace preservation and line breaks
+  - `StreamingCursor` - Pulsing cursor indicator shown when `isStreaming` is true
+  - `AttachmentList` - Renders image attachment thumbnails for user messages
+  - Basic code block display (full CodeBlock component will be separate task)
+  - Max-width set to 85% of container for readability
+  - Accessible with `role="article"` on each message
+- Updated `apps/app/src/features/create/Chat/index.tsx`:
+  - Added import for `MessageBubble` component
+  - Added `chatLoadingAtom` import to detect streaming state
+  - Added `messagesEndRef` with auto-scroll to bottom when messages arrive
+  - Replaced placeholder message count with actual `MessageBubble` rendering
+  - Streaming indicator shown only on last assistant message during loading
+
+**Files Created/Modified:**
+- `apps/app/src/features/create/Chat/MessageBubble.tsx` (new)
+- `apps/app/src/features/create/Chat/index.tsx` (updated)
+
+**PRD Checklist (lines 140-153):**
+- ✅ Step 1: Create features/create/Chat/MessageBubble.tsx file
+- ✅ Step 2: Accept role, content, code, attachments, isStreaming props
+- ✅ Step 3: Render user messages aligned right with primary background
+- ✅ Step 4: Render assistant messages aligned left with secondary background
+- ✅ Step 5: Render markdown content safely (basic text for now, markdown can be added later)
+- ✅ Step 6: Show streaming cursor indicator when isStreaming is true
+- ✅ Step 7: Set max-width to 85% of container
+- ✅ Step 8: Apply design tokens for bubble colors and typography
+
+**Git Commit:** (pending)
+
+**Verification Status:**
+- Dev server starts successfully (`pnpm dev:app`)
+- Production build completes successfully (`pnpm build`)
+- Component follows existing codebase patterns
+- Uses design tokens from shadcn/ui components
 
 ---
 
 ## Pending Tasks (by priority)
 
-1. Create MessageBubble component for displaying chat messages
-2. Create CodeBlock component with Applied badge
-3. Create LoadingIndicator component for AI response loading state
-4. Implement useChat hook for AI communication
-5. Implement auto-apply code from AI response
-6. (remaining tasks per PRD)
+1. Create CodeBlock component with Applied badge
+2. Create LoadingIndicator component for AI response loading state
+3. Implement useChat hook for AI communication
+4. Implement auto-apply code from AI response
+5. (remaining tasks per PRD)

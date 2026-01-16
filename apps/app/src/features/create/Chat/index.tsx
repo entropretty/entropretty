@@ -4,10 +4,11 @@
  */
 
 import { useAtom } from 'jotai'
-import { useCallback, useState } from 'react'
-import { chatMessagesAtom } from '../Session/atoms'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { chatLoadingAtom, chatMessagesAtom } from '../Session/atoms'
 import { editorCodeAtom } from '../atoms'
 import { Composer } from './Composer'
+import { MessageBubble } from './MessageBubble'
 import { WelcomeMessage } from './WelcomeMessage'
 
 /**
@@ -33,12 +34,31 @@ const ThreadContainer = ({ onSuggestionClick }: ThreadContainerProps) => {
     )
   }
 
+  const [isLoading] = useAtom(chatLoadingAtom)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
-      {/* Messages will be rendered here in a later task */}
-      <div className="text-muted-foreground text-sm">
-        {messages.length} message(s)
-      </div>
+      {messages.map((message, index) => {
+        const isLastAssistant =
+          message.role === 'assistant' && index === messages.length - 1
+        return (
+          <MessageBubble
+            key={message.id}
+            role={message.role}
+            content={message.content}
+            code={message.code}
+            attachments={message.attachments}
+            isStreaming={isLastAssistant && isLoading}
+          />
+        )
+      })}
+      <div ref={messagesEndRef} />
     </div>
   )
 }
