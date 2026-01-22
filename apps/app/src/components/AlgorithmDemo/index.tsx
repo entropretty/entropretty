@@ -2,7 +2,7 @@ import { deriveSeedFamily, getSeed, seedToKey } from '@entropretty/utils'
 import { AnimatePresence, motion } from 'motion/react'
 import { useCallback, useEffect, useState } from 'react'
 import type { AlgorithmView } from '@/lib/helper.types'
-import { AlgorithmBitmap } from '@/features/create/AlgorithmBitmap'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 import { cn } from '@/lib/utils'
 
