@@ -1,7 +1,7 @@
 import { seedToKey } from '@entropretty/utils'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AlgorithmId } from '@entropretty/utils'
-import { cn } from '@/lib/utils'
+import { cn, downloadCanvasAsPng } from '@/lib/utils'
 import { useAlgorithmService } from '@/contexts/service-context'
 
 interface Props {
@@ -34,13 +34,7 @@ export const AlgorithmBitmap: React.FC<Props> = ({
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (e.altKey && canvasRef.current) {
-        const link = document.createElement('a')
-        link.download = `${algorithmId}_${seed.join('-')}.png`
-        link.href = canvasRef.current.toDataURL('image/png')
-        link.click()
-        setTimeout(() => {
-          link.remove()
-        }, 0)
+        downloadCanvasAsPng(canvasRef.current, algorithmId, seed)
       } else if (onClick) {
         onClick()
       }
