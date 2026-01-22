@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { AlgorithmBitmap } from './AlgorithmBitmap'
 import type { CheckMetadata } from '@entropretty/compliance/browser'
 import type { AlgorithmId } from '@entropretty/utils'
-import { cn } from '@/lib/utils'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useAlgorithmService } from '@/contexts/service-context'
+import { cn } from '@/lib/utils'
 
 // Extend the CheckMetadata type to include the details property with colors
 interface ExtendedCheckMetadata extends CheckMetadata {
