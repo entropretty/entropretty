@@ -37,7 +37,8 @@ export function AlgorithmHeroSkeleton() {
 
       {/* Right side - Preview Grid Skeleton */}
       <div className="relative flex w-full items-center justify-center p-6 lg:h-full lg:w-[65%] lg:p-8 xl:p-12">
-        <div className="flex flex-wrap content-center items-center justify-center gap-4 lg:gap-6">
+        {/* Desktop: 8 previews in flex wrap */}
+        <div className="hidden flex-wrap content-center items-center justify-center gap-6 lg:flex">
           {Array(8)
             .fill(0)
             .map((_, i) => (
@@ -49,6 +50,14 @@ export function AlgorithmHeroSkeleton() {
                   height: hero,
                 }}
               />
+            ))}
+        </div>
+        {/* Mobile: 4 full-width previews in column */}
+        <div className="flex w-full flex-col items-center gap-4 lg:hidden">
+          {Array(4)
+            .fill(0)
+            .map((_, i) => (
+              <Skeleton key={i} className="aspect-square w-full rounded-none" />
             ))}
         </div>
       </div>
