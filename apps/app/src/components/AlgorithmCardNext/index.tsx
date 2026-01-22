@@ -7,7 +7,7 @@ import type { AlgorithmView } from '@/lib/helper.types'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/auth-context'
-import { AlgorithmBitmap } from '@/features/create/AlgorithmBitmap'
+import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 
 export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
