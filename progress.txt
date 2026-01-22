@@ -1,0 +1,22 @@
+# Progress Log
+
+## 2026-01-22 - Fix mobile hero preview (Issue #70)
+
+### Task Completed
+- Implemented mobile-specific hero preview layout showing 4 full-width previews in a column
+- Desktop continues to show 8 previews in a flex wrap layout
+- Mobile arrow-down indicator now scrolls to the mobile previews section instead of infinite grid
+
+### Key Decisions
+- Used separate render paths for mobile (lg:hidden) and desktop (hidden lg:flex)
+- Mobile previews use 400px render size scaled via CSS to fill width
+- Added mobilePreviewsRef prop to allow parent component to control scroll target
+
+### Files Changed
+- apps/app/src/components/AlgorithmHero/index.tsx - Added mobile layout with 4 full-width previews
+- apps/app/src/components/AlgorithmHero/AlgorithmHeroSkeleton.tsx - Updated skeleton to match mobile layout
+- apps/app/src/routes/a.$algorithmId.tsx - Added scroll handler for mobile previews
+
+### Notes
+- Pre-existing TypeScript errors in codebase unrelated to this change
+- Build environment has rollup module issues (pre-existing)
