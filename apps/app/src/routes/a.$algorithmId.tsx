@@ -108,6 +108,7 @@ export const Route = createFileRoute('/a/$algorithmId')({
 function AlgorithmPage() {
   const { algorithmId } = Route.useParams()
   const gridRef = useRef<HTMLDivElement>(null)
+  const mobilePreviewsRef = useRef<HTMLDivElement>(null)
 
   const { infinite } = useDisplaySizes()
 
@@ -127,6 +128,10 @@ function AlgorithmPage() {
 
   const scrollToGrid = useCallback(() => {
     gridRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  const scrollToMobilePreviews = useCallback(() => {
+    mobilePreviewsRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
   if (isLoading) {
@@ -162,7 +167,12 @@ function AlgorithmPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section - Full screen cover */}
-      <AlgorithmHero algorithm={algorithm} onScrollDown={scrollToGrid} />
+      <AlgorithmHero
+        algorithm={algorithm}
+        onScrollDown={scrollToGrid}
+        onScrollToMobilePreviews={scrollToMobilePreviews}
+        mobilePreviewsRef={mobilePreviewsRef}
+      />
 
       {/* Infinite Grid Section */}
       <div ref={gridRef} className="min-h-screen p-0 sm:p-8">

@@ -13,6 +13,8 @@ import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
 interface AlgorithmHeroProps {
   algorithm: AlgorithmView
   onScrollDown?: () => void
+  onScrollToMobilePreviews?: () => void
+  mobilePreviewsRef?: React.RefObject<HTMLDivElement | null>
 }
 
 const getHeroSeeds = (kind: FamilyKind): Array<Array<number>> => {
@@ -29,7 +31,12 @@ const getHeroSeeds = (kind: FamilyKind): Array<Array<number>> => {
   return seeds
 }
 
-export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
+export function AlgorithmHero({
+  algorithm,
+  onScrollDown,
+  onScrollToMobilePreviews,
+  mobilePreviewsRef,
+}: AlgorithmHeroProps) {
   const { user } = useAuth()
   const { hero } = useDisplaySizes()
 
@@ -121,9 +128,9 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
             {user && <LikeButton algorithm={algorithm} />}
           </div>
         </div>
-        {/* Scroll indicator - only on mobile in info section */}
+        {/* Scroll indicator - only on mobile in info section, scrolls to mobile previews */}
         <button
-          onClick={onScrollDown}
+          onClick={onScrollToMobilePreviews}
           className="hover:cursor-pointer text-muted-foreground hover:text-foreground absolute bottom-4 left-1/2 -translate-x-1/2 p-4 transition-colors lg:hidden"
           aria-label="Scroll down to see more"
         >
@@ -143,9 +150,10 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
         </button>
       </div>
 
-      {/* Right side - Preview Grid */}
+      {/* Right side - Preview Grid (Desktop: 8 previews in flex wrap, Mobile: 4 full-width previews in column) */}
       <div className="relative flex w-full items-center justify-center p-6 lg:h-full lg:w-[65%] lg:p-8 xl:p-12">
-        <div className="flex flex-wrap content-center items-center justify-center gap-4 lg:gap-6">
+        {/* Desktop: 8 previews in flex wrap */}
+        <div className="hidden flex-wrap content-center items-center justify-center gap-6 lg:flex">
           {heroSeeds.map((seed) => (
             <div
               key={seedToKey(seed)}
@@ -160,6 +168,26 @@ export function AlgorithmHero({ algorithm, onScrollDown }: AlgorithmHeroProps) {
                 seed={seed}
                 size={hero}
                 scale={2}
+              />
+            </div>
+          ))}
+        </div>
+        {/* Mobile: 4 full-width previews in column */}
+        <div
+          ref={mobilePreviewsRef}
+          className="flex w-full flex-col items-center gap-4 lg:hidden"
+        >
+          {heroSeeds.slice(0, 4).map((seed) => (
+            <div
+              key={seedToKey(seed)}
+              className="aspect-square w-full bg-white"
+            >
+              <AlgorithmBitmap
+                algorithmId={algorithm.id}
+                seed={seed}
+                size={400}
+                scale={2}
+                className="h-full w-full"
               />
             </div>
           ))}
