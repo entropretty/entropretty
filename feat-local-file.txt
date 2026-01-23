@@ -1,0 +1,66 @@
+# Local File Feature - Progress Report
+
+## Completed
+
+### Core Infrastructure
+- [x] Added local file mode atoms to `atoms.ts`:
+  - `localFileModeAtom` - tracks whether local file mode is active
+  - `localFileHandleAtom` - stores the FileSystemFileHandle
+  - `localFilePathAtom` - stores the file name/path
+  - `localFileSyncStatusAtom` - tracks sync status (watching/synced/error)
+  - `LocalFileSyncStatus` type export
+
+### Components Created (`LocalFile/`)
+- [x] `useFileSystemSupport.ts` - Hook to detect browser support for File System Access API
+- [x] `useLocalFile.ts` - Main hook with:
+  - `createLocalFile()` - Creates new .js file with current editor content
+  - `openLocalFile()` - Opens existing .js file and loads content
+  - `disconnect()` - Disconnects from local file and cleans up observer
+  - FileSystemObserver integration for live file watching
+- [x] `LocalFileControls.tsx` - UI to create/open local files (shown in Settings tab)
+- [x] `LocalFileCodeTab.tsx` - Shows connected file info, sync status, and disconnect button
+- [x] `LocalFileDrawer.tsx` - Slide-out drawer for local file mode with tabs (Code, Check, Settings)
+- [x] `index.ts` - Barrel exports for all components and hooks
+
+### Integration
+- [x] Updated `SeedTools/index.tsx` to include LocalFileControls
+- [x] Updated main `create/index.tsx`:
+  - LocalFileDrawer component added
+  - Preview panel expands to full width in local file mode
+  - Editor panel hidden in local file mode (user edits in their IDE)
+
+### Convenience
+- [x] Added `build:all` script to root package.json
+
+## How It Works
+1. User clicks "Create Local File" or "Open Local File" in Settings tab
+2. Browser prompts user to select/save a .js file
+3. Editor content syncs to/from the file
+4. FileSystemObserver watches for external changes
+5. When user edits in their IDE, changes appear live in the preview
+6. Drawer provides access to settings, benchmarking, and posting
+
+## Up Next
+
+### High Priority
+- [ ] Test FileSystemObserver compatibility across browsers (currently Chrome-only)
+- [ ] Add fallback polling mechanism for browsers without FileSystemObserver
+- [ ] Handle permission revocation gracefully
+- [ ] Persist file handle across sessions using IndexedDB
+
+### Medium Priority
+- [ ] Add "Save to Local File" action to sync editor changes back to file
+- [ ] Show file path in a more prominent location when connected
+- [ ] Add keyboard shortcut to toggle drawer open/closed
+- [ ] Visual indicator in main UI when in local file mode
+
+### Low Priority
+- [ ] Support TypeScript files (.ts) with transpilation
+- [ ] Multiple file support (import/export between files)
+- [ ] Auto-detect algorithm name from file name
+- [ ] Remember recently used files
+
+## Browser Support Notes
+- File System Access API: Chrome/Edge 86+, Opera 72+
+- FileSystemObserver: Chrome 129+ (experimental)
+- Safari/Firefox: Not supported (feature gracefully hidden)

@@ -3,11 +3,12 @@ import { Suspense, lazy } from 'react'
 import { FamilyKindBadge } from '../../components/FamilyKindBadge'
 import { AlgorithmNameInput } from './AlgorithmNameInput'
 import { AlgorithmPreview } from './AlgorithmPreview'
-import { editorSeedTypeAtom, scriptErrorAtom } from './atoms'
+import { editorSeedTypeAtom, localFileModeAtom, scriptErrorAtom } from './atoms'
 import { Benchmarking } from './Benchmarking'
 import { PostButton } from './PostButton'
 import { RerollBadge } from './RerollBadge'
 import { SeedTools } from './SeedTools'
+import { LocalFileDrawer } from './LocalFile'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   ResizableHandle,
@@ -21,17 +22,19 @@ const MonacoEditor = lazy(() => import('./MonacoEditor'))
 export const CreateFeature = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
+  const [localFileMode] = useAtom(localFileModeAtom)
 
   return (
     <>
       <FeedbackDialog className="fixed bottom-4 right-4 z-50" />
+      <LocalFileDrawer />
       <ResizablePanelGroup
         direction="horizontal"
         className="h-screen w-screen"
         autoSave="editor-layout"
         autoSaveId="editor-layout-id"
       >
-        <ResizablePanel defaultSize={50}>
+        <ResizablePanel defaultSize={localFileMode ? 100 : 50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={90} className="h-full w-full">
               <div className="relative h-full w-full">
@@ -59,42 +62,54 @@ export const CreateFeature = () => {
           </ResizablePanelGroup>
         </ResizablePanel>
 
-        <ResizableHandle withHandle />
+        {!localFileMode && (
+          <>
+            <ResizableHandle withHandle />
 
-        <ResizablePanel
-          defaultSize={50}
-          minSize={10}
-          className="flex h-full flex-col"
-        >
-          <Tabs defaultValue="code" className="flex h-full flex-col">
-            <div className="flex flex-row items-center gap-4 border-b p-2">
-              <div className="flex w-full flex-row items-center gap-2">
-                <AlgorithmNameInput />
-                <PostButton />
-              </div>
-              {/* <Separator orientation="vertical" /> */}
-              <TabsList>
-                <TabsTrigger value="code">Code</TabsTrigger>
-                <TabsTrigger className="border-foreground border" value="check">
-                  Check
-                </TabsTrigger>
-                <TabsTrigger value="seed">Settings</TabsTrigger>
-              </TabsList>
-            </div>
-            <TabsContent value="code" className="flex-1">
-              <Suspense fallback={<div className="p-8">Loading code...</div>}>
-                <MonacoEditor />
-              </Suspense>
-            </TabsContent>
+            <ResizablePanel
+              defaultSize={50}
+              minSize={10}
+              className="flex h-full flex-col"
+            >
+              <Tabs defaultValue="code" className="flex h-full flex-col">
+                <div className="flex flex-row items-center gap-4 border-b p-2">
+                  <div className="flex w-full flex-row items-center gap-2">
+                    <AlgorithmNameInput />
+                    <PostButton />
+                  </div>
+                  {/* <Separator orientation="vertical" /> */}
+                  <TabsList>
+                    <TabsTrigger value="code">Code</TabsTrigger>
+                    <TabsTrigger
+                      className="border-foreground border"
+                      value="check"
+                    >
+                      Check
+                    </TabsTrigger>
+                    <TabsTrigger value="seed">Settings</TabsTrigger>
+                  </TabsList>
+                </div>
+                <TabsContent value="code" className="flex-1">
+                  <Suspense
+                    fallback={<div className="p-8">Loading code...</div>}
+                  >
+                    <MonacoEditor />
+                  </Suspense>
+                </TabsContent>
 
-            <TabsContent value="seed" className="flex-1 overflow-y-scroll">
-              <SeedTools />
-            </TabsContent>
-            <TabsContent value="check" className="flex-1 overflow-y-scroll p-4">
-              <Benchmarking />
-            </TabsContent>
-          </Tabs>
-        </ResizablePanel>
+                <TabsContent value="seed" className="flex-1 overflow-y-scroll">
+                  <SeedTools />
+                </TabsContent>
+                <TabsContent
+                  value="check"
+                  className="flex-1 overflow-y-scroll p-4"
+                >
+                  <Benchmarking />
+                </TabsContent>
+              </Tabs>
+            </ResizablePanel>
+          </>
+        )}
       </ResizablePanelGroup>
     </>
   )

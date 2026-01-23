@@ -6,6 +6,7 @@ import {
   formatOnSaveAtom,
   generateNewSeedAtom,
 } from '../atoms'
+import { LocalFileControls } from '../LocalFile/LocalFileControls'
 import { SeedManipulator } from './SeedManipulator'
 import { SeedRepresentation } from './SeedRepresentation'
 import type { SeedType } from '../atoms'
@@ -102,6 +103,8 @@ export const SeedTools = () => {
           </label>
         </div>
       </div>
+
+      <LocalFileControls />
     </div>
   )
 }

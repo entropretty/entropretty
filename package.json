@@ -8,6 +8,7 @@
     "build": "pnpm run --r --filter \"./packages/**\" build",
     "build:app": "pnpm --filter app build",
     "build:website": "pnpm --filter website build",
+    "build:all": "pnpm build && pnpm build:app && pnpm build:website",
     "lint": "pnpm run --r --filter \"./packages/**\" lint",
     "lint:all": "pnpm lint && pnpm --filter website lint && pnpm --filter app lint",
     "typecheck": "pnpm run --r --parallel --filter \"./packages/**\" --filter website typecheck",
