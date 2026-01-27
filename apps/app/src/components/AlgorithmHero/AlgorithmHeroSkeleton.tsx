@@ -52,12 +52,15 @@ export function AlgorithmHeroSkeleton() {
               />
             ))}
         </div>
-        {/* Mobile: 4 full-width previews in column */}
+        {/* Mobile: 4 centered previews in column */}
         <div className="flex w-full flex-col items-center gap-4 lg:hidden">
           {Array(4)
             .fill(0)
             .map((_, i) => (
-              <Skeleton key={i} className="aspect-square w-full rounded-none" />
+              <Skeleton
+                key={i}
+                className="aspect-square w-full max-w-sm rounded-none"
+              />
             ))}
         </div>
       </div>

@@ -172,7 +172,7 @@ export function AlgorithmHero({
             </div>
           ))}
         </div>
-        {/* Mobile: 4 full-width previews in column */}
+        {/* Mobile: 4 centered previews in column */}
         <div
           ref={mobilePreviewsRef}
           className="flex w-full flex-col items-center gap-4 lg:hidden"
@@ -180,7 +180,7 @@ export function AlgorithmHero({
           {heroSeeds.slice(0, 4).map((seed) => (
             <div
               key={seedToKey(seed)}
-              className="aspect-square w-full bg-white"
+              className="aspect-square w-full max-w-sm bg-white"
             >
               <AlgorithmBitmap
                 algorithmId={algorithm.id}
