@@ -20,3 +20,19 @@
 ### Notes
 - Pre-existing TypeScript errors in codebase unrelated to this change
 - Build environment has rollup module issues (pre-existing)
+
+## 2026-01-27 - Disconnect local file on post (Issue #78)
+
+### Task Completed
+- Local file connection is now disconnected when user posts their algorithm from the /create page
+- Ensures users start with a clean slate when returning to the create feature
+
+### Key Decisions
+- Called disconnect() from useLocalFile hook in PostButton's onSuccess callback
+- Disconnect happens before clearing the algorithm name and navigating away
+
+### Files Changed
+- apps/app/src/features/create/PostButton.tsx - Import useLocalFile hook and call disconnectLocalFile() on successful post
+
+### Notes
+- Pre-existing TypeScript errors and build issues still present (not related to this change)
