@@ -42,7 +42,10 @@ export function HelpMenu() {
           help
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-2 md:w-[300px] lg:w-[400px]">
+      <PopoverContent
+        align="start"
+        className="w-[300px] p-2 md:w-[300px] lg:w-[400px]"
+      >
         <div className="grid gap-1">
           <a href="https://entropretty.com/" target="_blank" rel="noreferrer">
             <ListItem
