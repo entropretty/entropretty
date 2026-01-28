@@ -11,6 +11,7 @@ import {
   remixAtom,
   scriptErrorAtom,
 } from './atoms'
+import { useLocalFile } from './LocalFile/useLocalFile'
 import { supabase } from '@/lib/supabase'
 import { FEATURES } from '@/lib/features'
 import {
@@ -48,6 +49,7 @@ export const PostButton = () => {
   const [remix] = useAtom(remixAtom)
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)
   const [hasPosted, setHasPosted] = useState(false)
+  const { disconnect: disconnectLocalFile } = useLocalFile()
 
   const nameValidation = validateAlgorithmName(algorithmName)
 
@@ -96,6 +98,7 @@ export const PostButton = () => {
     onSuccess: (data) => {
       console.info('Successfully created algorithm', data)
 
+      disconnectLocalFile()
       setAlgorithmName('')
       if (FEATURES.isCompetition) {
         queryClient
