@@ -14,6 +14,7 @@ export const remixAtom = atom<AlgorithmView | null>(null)
 export const scriptErrorAtom = atom<string | null>(null)
 
 export const algorithmNameAtom = atom<string>('')
+export const skipNavigationBlockAtom = atom<boolean>(false)
 export const formatOnSaveAtom = atomWithStorage<boolean>(
   'entropretty-format-on-save',
   true,

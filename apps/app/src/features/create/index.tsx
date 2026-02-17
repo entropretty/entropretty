@@ -1,31 +1,95 @@
 import { useAtom } from 'jotai'
 import { Suspense, lazy } from 'react'
+import { useBlocker } from '@tanstack/react-router'
 import { FamilyKindBadge } from '../../components/FamilyKindBadge'
 import { AlgorithmNameInput } from './AlgorithmNameInput'
 import { AlgorithmPreview } from './AlgorithmPreview'
-import { editorSeedTypeAtom, localFileModeAtom, scriptErrorAtom } from './atoms'
+import {
+  algorithmNameAtom,
+  editorCodeAtom,
+  editorSeedTypeAtom,
+  localFileModeAtom,
+  scriptErrorAtom,
+  skipNavigationBlockAtom,
+} from './atoms'
 import { Benchmarking } from './Benchmarking'
 import { PostButton } from './PostButton'
 import { RerollBadge } from './RerollBadge'
 import { SeedTools } from './SeedTools'
 import { LocalFileDrawer } from './LocalFile'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/button'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { FeedbackDialog } from '@/components/FeedbackDialog'
 
 const MonacoEditor = lazy(() => import('./MonacoEditor'))
 
-export const CreateFeature = () => {
+interface CreateFeatureProps {
+  initialCode: string
+}
+
+const CreateNavigationGuard = ({ initialCode }: CreateFeatureProps) => {
+  const [editorCode] = useAtom(editorCodeAtom)
+  const [algorithmName] = useAtom(algorithmNameAtom)
+  const [skipNavigationBlock] = useAtom(skipNavigationBlockAtom)
+  const shouldBlock =
+    !skipNavigationBlock &&
+    (editorCode !== initialCode || algorithmName.trim().length > 0)
+
+  const blocker = useBlocker({
+    shouldBlockFn: () => shouldBlock,
+    withResolver: true,
+    enableBeforeUnload: shouldBlock,
+  })
+  const isOpen = blocker.status === 'blocked'
+
+  return (
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open && isOpen) {
+          blocker.reset()
+        }
+      }}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Leave create page?</DialogTitle>
+          <DialogDescription>
+            You have unsaved changes. If you leave now, your edits will be lost.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={blocker.reset}>
+            Stay
+          </Button>
+          <Button onClick={blocker.proceed}>Leave page</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export const CreateFeature = ({ initialCode }: CreateFeatureProps) => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
   const [localFileMode] = useAtom(localFileModeAtom)
 
   return (
     <>
+      <CreateNavigationGuard initialCode={initialCode} />
       <FeedbackDialog className="fixed bottom-4 right-4 z-50" />
       <LocalFileDrawer />
       <ResizablePanelGroup

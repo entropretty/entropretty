@@ -10,6 +10,7 @@ import {
   editorSeedTypeAtom,
   generateNewSeedAtom,
   remixAtom,
+  skipNavigationBlockAtom,
 } from '@/features/create/atoms'
 import { supabase } from '@/lib/supabase'
 import RequireUser from '@/layouts/RequireUser'
@@ -53,42 +54,43 @@ function CreatePage() {
   const [data, setData] = useState<AlgorithmView | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const generateNewSeed = useSetAtom(generateNewSeedAtom)
+  const setSkipNavigationBlock = useSetAtom(skipNavigationBlockAtom)
 
   // Fetch remix algorithm if remixId is present
   useEffect(() => {
     if (remixId) {
       setIsLoading(true)
-      supabase
-        .from('algorithms_with_user_profile')
-        .select()
-        .eq('id', remixId)
-        .single()
-        .then(({ data, error }) => {
-          if (error) {
-            console.error('Error fetching algorithm:', error)
-          } else if (data) {
-            setData(data as AlgorithmView)
-          }
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
+      void (async () => {
+        const { data: remixData, error } = await supabase
+          .from('algorithms_with_user_profile')
+          .select()
+          .eq('id', remixId)
+          .single()
+
+        if (error) {
+          console.error('Error fetching algorithm:', error)
+        } else {
+          setData(remixData as AlgorithmView)
+        }
+        setIsLoading(false)
+      })()
     }
   }, [remixId])
 
   useEffect(() => {
     if (!data) {
       setEditorCode('')
-      setSeedType((seedTypeQuery as FamilyKind) || 'Procedural')
+      setSeedType(seedTypeQuery ? (seedTypeQuery as FamilyKind) : 'Procedural')
       generateNewSeed()
       setRemix(null)
     } else {
       setRemix(data)
 
-      setEditorCode(data.content || '')
-      setSeedType(data.family_kind || 'Procedural')
+      setEditorCode(data.content)
+      setSeedType(data.family_kind)
       generateNewSeed()
     }
+    setSkipNavigationBlock(false)
     setTimeout(() => setIsReady(true), 500)
   }, [
     data,
@@ -97,13 +99,14 @@ function CreatePage() {
     setSeedType,
     generateNewSeed,
     setEditorCode,
+    setSkipNavigationBlock,
   ])
 
   return (
     <>
       {!isLoading && isReady && (
         <Suspense fallback={<div className="p-8">Setting up editor...</div>}>
-          <CreateFeature />
+          <CreateFeature initialCode={data?.content || ''} />
         </Suspense>
       )}
     </>

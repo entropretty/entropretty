@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useAtom } from 'jotai'
 import { Loader2 } from 'lucide-react'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import {
   algorithmNameAtom,
@@ -10,6 +9,7 @@ import {
   editorSeedTypeAtom,
   remixAtom,
   scriptErrorAtom,
+  skipNavigationBlockAtom,
 } from './atoms'
 import { useLocalFile } from './LocalFile/useLocalFile'
 import { supabase } from '@/lib/supabase'
@@ -48,7 +48,7 @@ export const PostButton = () => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [remix] = useAtom(remixAtom)
   const [algorithmName, setAlgorithmName] = useAtom(algorithmNameAtom)
-  const [hasPosted, setHasPosted] = useState(false)
+  const [, setSkipNavigationBlock] = useAtom(skipNavigationBlockAtom)
   const { disconnect: disconnectLocalFile } = useLocalFile()
 
   const nameValidation = validateAlgorithmName(algorithmName)
@@ -115,15 +115,10 @@ export const PostButton = () => {
       }
     },
     onError: (error: Error) => {
+      setSkipNavigationBlock(false)
       toast.error(error.message)
     },
   })
-
-  // TODO: Re-enable navigation prompt when TanStack Router supports it
-  // unstable_usePrompt({
-  //   message: "Your code will be lost if you leave this page.",
-  //   when: !hasPosted,
-  // })
 
   return (
     <div className="flex flex-col gap-2">
@@ -132,7 +127,7 @@ export const PostButton = () => {
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
-                setHasPosted(true)
+                setSkipNavigationBlock(true)
                 setTimeout(() => {
                   createAlgorithm.mutate()
                 }, 0)
