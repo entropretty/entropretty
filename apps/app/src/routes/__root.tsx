@@ -120,7 +120,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 // Routes that should render without the HeaderLayout
-const HEADERLESS_ROUTES = ['/demo/', '/login', '/signup']
+const HEADERLESS_ROUTES = ['/demo/', '/login', '/signup', '/create']
 
 function shouldShowHeader(pathname: string): boolean {
   return !HEADERLESS_ROUTES.some(
@@ -135,9 +135,11 @@ function RootComponent() {
 
   if (!shouldShowHeader(location.pathname)) {
     return (
-      <main className="relative flex h-full w-full flex-col items-center">
-        <Outlet />
-      </main>
+      <div className="relative flex h-screen w-screen flex-col overflow-y-scroll">
+        <main className="relative flex h-full w-full flex-col items-center">
+          <Outlet />
+        </main>
+      </div>
     )
   }
 
