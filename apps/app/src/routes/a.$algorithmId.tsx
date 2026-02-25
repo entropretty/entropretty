@@ -69,8 +69,8 @@ export const Route = createFileRoute('/a/$algorithmId')({
       typeof window !== 'undefined'
         ? window.location.origin
         : process.env.VITE_APP_URL || 'https://app.entropretty.com'
-    const ogImageUrl = `https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/opengraph/${algorithmId}.png`
-    const twitterImageUrl = `https://sitgiqrjikarjzuizlbq.supabase.co/storage/v1/object/public/twitter/${algorithmId}.png`
+    const ogImageUrl = `${baseUrl}/api/og/${algorithmId}`
+    const twitterImageUrl = `${baseUrl}/api/twitter/${algorithmId}`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
 
     return {

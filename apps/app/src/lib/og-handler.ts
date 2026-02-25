@@ -36,10 +36,18 @@ export async function handleOGImageRequest(
       .exists(`${id}.png`)
 
     if (exists) {
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from(bucket).getPublicUrl(`${id}.png`)
-      return Response.redirect(publicUrl, 302)
+      const { data, error: downloadError } = await supabase.storage
+        .from(bucket)
+        .download(`${id}.png`)
+
+      if (data && !downloadError) {
+        return new Response(data, {
+          headers: {
+            'Content-Type': 'image/png',
+            'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+          },
+        })
+      }
     }
   }
 
