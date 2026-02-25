@@ -69,10 +69,10 @@ export interface OGImageConfig {
 
 export const OG_IMAGE_CONFIG: OGImageConfig = {
   width: 1200,
-  height: 630,
+  height: 628,
   rows: 2,
   columns: 3,
-  tileSize: 245,
+  tileSize: 244,
   padding: 40,
   gap: 12,
   backgroundColor: "#ffffff",
@@ -81,10 +81,10 @@ export const OG_IMAGE_CONFIG: OGImageConfig = {
 
 export const TWITTER_CARD_CONFIG: OGImageConfig = {
   width: 1200,
-  height: 600,
+  height: 628,
   rows: 2,
   columns: 3,
-  tileSize: 240,
+  tileSize: 244,
   padding: 40,
   gap: 12,
   backgroundColor: "#ffffff",

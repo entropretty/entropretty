@@ -75,8 +75,8 @@ export const Route = createFileRoute('/a/$algorithmId')({
       typeof window !== 'undefined'
         ? window.location.origin
         : process.env.VITE_APP_URL || 'https://app.entropretty.com'
-    const ogImageUrl = `${baseUrl}/api/og/${algorithmId}?v=2`
-    const twitterImageUrl = `${baseUrl}/api/twitter/${algorithmId}?v=2`
+    const ogImageUrl = `${baseUrl}/api/og/${algorithmId}?v=3`
+    const twitterImageUrl = `${baseUrl}/api/twitter/${algorithmId}?v=3`
     const pageUrl = `${baseUrl}/a/${algorithmId}`
 
     return {
@@ -91,7 +91,7 @@ export const Route = createFileRoute('/a/$algorithmId')({
         { property: 'og:description', content: description },
         { property: 'og:image', content: ogImageUrl },
         { property: 'og:image:width', content: '1200' },
-        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:height', content: '628' },
         { property: 'og:site_name', content: 'Entropretty' },
 
         // Twitter Card
@@ -103,7 +103,7 @@ export const Route = createFileRoute('/a/$algorithmId')({
           content: twitterImageUrl,
         },
         { name: 'twitter:image:width', content: '1200' },
-        { name: 'twitter:image:height', content: '600' },
+        { name: 'twitter:image:height', content: '628' },
         { name: 'twitter:site', content: '@entropretty' },
         { name: 'twitter:image:alt', content: description },
         { name: 'twitter:image:type', content: 'image/png' },
