@@ -41,6 +41,12 @@ const fetchAlgorithmMeta = createServerFn().handler(
 export const Route = createFileRoute('/a/$algorithmId')({
   component: AlgorithmPage,
 
+  // CDN caching so crawlers (Twitter, etc.) get fast responses
+  headers: () => ({
+    'Cache-Control':
+      'public, max-age=0, must-revalidate, s-maxage=300, stale-while-revalidate=3600',
+  }),
+
   // Load algorithm metadata for SEO
   loader: async ({ params }) => {
     try {
