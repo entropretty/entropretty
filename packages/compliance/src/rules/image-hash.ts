@@ -1,8 +1,6 @@
-import type { ComparisonRule, ComplianceResult } from "../types"
-import sharp from "sharp"
+import type { ComparisonRule, ComplianceResult, ImagePixelData } from "../types"
 import { getConfig } from "../config"
 
-// Calculate Hamming distance between two hashes
 function hammingDistance(hash1: number[], hash2: number[]): number {
   let distance = 0
   const len = Math.min(hash1.length, hash2.length)
@@ -13,10 +11,39 @@ function hammingDistance(hash1: number[], hash2: number[]): number {
     }
   }
 
-  // Add remaining length difference to distance if hashes are different lengths
   distance += Math.abs(hash1.length - hash2.length)
-
   return distance
+}
+
+// Pure-JS nearest-neighbor downscale to targetW x targetH grayscale
+function downscaleGrayscale(
+  image: ImagePixelData,
+  targetW: number,
+  targetH: number,
+): number[] {
+  const { data, width, height } = image
+  const channels = 4
+  const result: number[] = new Array(targetW * targetH)
+
+  for (let ty = 0; ty < targetH; ty++) {
+    const sy = Math.floor((ty * height) / targetH)
+    for (let tx = 0; tx < targetW; tx++) {
+      const sx = Math.floor((tx * width) / targetW)
+      const idx = (sy * width + sx) * channels
+      // Luminance approximation
+      result[ty * targetW + tx] = Math.round(
+        data[idx] * 0.299 + data[idx + 1] * 0.587 + data[idx + 2] * 0.114,
+      )
+    }
+  }
+
+  return result
+}
+
+function computePhash(image: ImagePixelData): number[] {
+  const pixels = downscaleGrayscale(image, 32, 32)
+  const mean = pixels.reduce((sum, val) => sum + val, 0) / pixels.length
+  return pixels.map((val) => (val > mean ? 1 : 0))
 }
 
 export const imageHashRule: ComparisonRule = {
@@ -24,48 +51,22 @@ export const imageHashRule: ComparisonRule = {
   description:
     "Compares perceptual hashes of two images to detect visual differences",
   type: "comparison",
+  browserCompatible: true,
   compare: async (
-    baseImage: Buffer,
-    compareImage: Buffer,
+    baseImage: ImagePixelData,
+    compareImage: ImagePixelData,
   ): Promise<ComplianceResult> => {
     try {
       const config = getConfig().rules.imageHash
 
-      // Generate pHashes for both images
-      const [baseHash, compareHash] = await Promise.all([
-        sharp(baseImage)
-          .resize(32, 32, { fit: "fill" })
-          .grayscale()
-          .raw()
-          .toBuffer()
-          .then((data): number[] => {
-            // Convert Uint8Array to regular array
-            const array = Array.from(data)
-            // Convert raw pixel data to binary hash array
-            const mean = array.reduce((sum, val) => sum + val, 0) / array.length
-            return array.map((val) => (val > mean ? 1 : 0))
-          }),
-        sharp(compareImage)
-          .resize(32, 32, { fit: "fill" })
-          .grayscale()
-          .raw()
-          .toBuffer()
-          .then((data): number[] => {
-            // Convert Uint8Array to regular array
-            const array = Array.from(data)
-            const mean = array.reduce((sum, val) => sum + val, 0) / array.length
-            return array.map((val) => (val > mean ? 1 : 0))
-          }),
-      ])
+      const baseHash = computePhash(baseImage)
+      const compareHash = computePhash(compareImage)
 
-      // Calculate hash distance
       const distance = hammingDistance(baseHash, compareHash)
 
-      // Store string representation for display
       const baseHashString = baseHash.join("")
       const compareHashString = compareHash.join("")
 
-      // Determine status based on thresholds
       let status: "pass" | "warn" | "error"
       if (distance <= config.warningThreshold) {
         status = "pass"
@@ -75,8 +76,7 @@ export const imageHashRule: ComparisonRule = {
         status = "error"
       }
 
-      // Calculate similarity percentage
-      const maxDistance = baseHash.length // Maximum possible distance
+      const maxDistance = baseHash.length
       const similarity = ((maxDistance - distance) / maxDistance) * 100
 
       return {
@@ -96,7 +96,7 @@ export const imageHashRule: ComparisonRule = {
               similarityPercentage: parseFloat(similarity.toFixed(2)),
               warningThreshold: config.warningThreshold,
               errorThreshold: config.errorThreshold,
-              baseHash: baseHashString.substring(0, 32) + "...", // Show truncated hash
+              baseHash: baseHashString.substring(0, 32) + "...",
               compareHash: compareHashString.substring(0, 32) + "...",
             },
           },

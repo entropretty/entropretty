@@ -1,7 +1,15 @@
+// Raw RGBA pixel data - platform-agnostic, maps to Rust &[u8] + dimensions
+export interface ImagePixelData {
+  data: Uint8Array
+  width: number
+  height: number
+}
+
 // Base interface for all rules
 export interface BaseRule {
   name: string
   description: string
+  browserCompatible: boolean
 }
 
 // Different possible outcomes for a check
@@ -27,22 +35,22 @@ export interface ComplianceResult {
 // For rules that check a single image
 export interface SingleImageRule extends BaseRule {
   type: "single"
-  check: (image: Buffer) => Promise<ComplianceResult>
+  check: (image: ImagePixelData) => Promise<ComplianceResult>
 }
 
 // For rules that compare two images
 export interface ComparisonRule extends BaseRule {
   type: "comparison"
   compare: (
-    baseImage: Buffer,
-    compareImage: Buffer,
+    baseImage: ImagePixelData,
+    compareImage: ImagePixelData,
   ) => Promise<ComplianceResult>
 }
 
 // For rules that work with multiple images
 export interface MultiImageRule extends BaseRule {
   type: "multi"
-  checkMultiple: (images: Buffer[]) => Promise<ComplianceResult>
+  checkMultiple: (images: ImagePixelData[]) => Promise<ComplianceResult>
 }
 
 // For rules that check source code

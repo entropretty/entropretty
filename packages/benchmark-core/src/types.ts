@@ -1,10 +1,17 @@
 import type { AlgorithmId, FamilyKind, Seed } from "@entropretty/utils"
 import type {
   CheckMetadata,
-  ComplianceResult as RuleComplianceResult,
+  ComplianceRule,
   SingleImageRule,
+  ComparisonRule,
+  MultiImageRule,
   CodeRule,
-} from "@entropretty/compliance/browser"
+  ImagePixelData,
+} from "@entropretty/compliance"
+import type { SeedStrategy } from "./seeds"
+import type { RuleRegistry } from "@entropretty/compliance"
+
+export type QualityTier = "S" | "A" | "B" | "C" | "F"
 
 export interface ComplianceResult {
   imageHash: string
@@ -20,6 +27,15 @@ export interface RuleCheckResult {
   metadata?: CheckMetadata[]
 }
 
+export interface RuleAggregateResult {
+  ruleName: string
+  ruleType: string
+  passCount: number
+  warnCount: number
+  errorCount: number
+  sampleMetadata?: CheckMetadata[]
+}
+
 export interface BenchmarkResultV1 {
   version: 1
   amount: number
@@ -33,7 +49,27 @@ export interface BenchmarkResultV1 {
   errorMessage?: string
 }
 
-export type BenchmarkResult = BenchmarkResultV1
+export interface BenchmarkResultV2 {
+  version: 2
+  algorithmId: AlgorithmId
+  amount: number
+  size: number
+  seedStrategy: string
+  ruleResults: RuleAggregateResult[]
+  failedTotal: number
+  collisionsTotal: number
+  errors: number
+  warningDistribution: Record<number, number>
+  errorMessage?: string
+}
+
+export type BenchmarkResult = BenchmarkResultV1 | BenchmarkResultV2
+
+export interface ScoredBenchmarkResult extends BenchmarkResultV2 {
+  qualityScore: number
+  qualityTier: QualityTier
+  ruleScores: Record<string, number>
+}
 
 export interface BenchmarkOptions {
   algorithmId: AlgorithmId
@@ -41,14 +77,19 @@ export interface BenchmarkOptions {
   kind: FamilyKind
   size?: number
   amount?: number
+  seedStrategy?: SeedStrategy
+  rules?: RuleRegistry
+  renderFn: (seed: Seed, size: number) => Promise<ImagePixelData>
   onProgress?: (progress: number) => void
 }
 
-export interface ScoredBenchmarkResult extends BenchmarkResult {
-  qualityScore: number
-}
-
 // Re-export types from compliance
-export type ComplianceRule = SingleImageRule | CodeRule
-export type ComplianceRuleResult = RuleComplianceResult
-export type { CheckMetadata as ComplianceCheckMetadata }
+export type {
+  ComplianceRule,
+  SingleImageRule,
+  ComparisonRule,
+  MultiImageRule,
+  CodeRule,
+  CheckMetadata as ComplianceCheckMetadata,
+  ImagePixelData,
+}

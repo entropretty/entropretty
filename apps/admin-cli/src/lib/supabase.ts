@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js"
 import { config } from "dotenv"
 import { fileURLToPath } from "url"
 import { dirname, join } from "path"
-import type { BenchmarkResultV1 } from "@entropretty/benchmark-core"
+import type { BenchmarkResult } from "@entropretty/benchmark-core"
 
 // Load environment variables
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -36,6 +36,6 @@ export interface Algorithm {
 export interface AlgorithmScore {
   algorithm_id: number
   quality_score: number
-  benchmark_results: BenchmarkResultV1
+  benchmark_results: BenchmarkResult
   updated_at?: string
 }

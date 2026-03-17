@@ -8,7 +8,7 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   minify: true,
-  target: "node18",
+  target: "es2020",
   outDir: "dist",
   treeshake: true,
 })

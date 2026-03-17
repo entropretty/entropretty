@@ -1,5 +1,9 @@
-import type { SingleImageRule, ComplianceResult, CheckMetadata } from "../types"
-import sharp from "sharp"
+import type {
+  SingleImageRule,
+  ComplianceResult,
+  CheckMetadata,
+  ImagePixelData,
+} from "../types"
 import { getConfig } from "../config"
 
 interface ContrastEdge {
@@ -16,32 +20,31 @@ export const colorContrastRule: SingleImageRule = {
   name: "color-contrast",
   description: "Checks for harsh color transitions between adjacent pixels",
   type: "single",
-  check: async (imageBuffer: Buffer): Promise<ComplianceResult> => {
+  browserCompatible: true,
+  check: async (image: ImagePixelData): Promise<ComplianceResult> => {
     try {
       const config = getConfig().rules.colorContrast
-      const image = sharp(imageBuffer)
-      const { width, height, channels } = await image.metadata()
-      const rawData = await image.raw().toBuffer()
+      const { data, width, height } = image
+      const channels = 4 // RGBA
 
       const contrastEdges: ContrastEdge[] = []
 
-      // Helper function to calculate color difference between two pixels
       const getColorDifference = (idx1: number, idx2: number): number => {
         let maxDiff = 0
-        for (let c = 0; c < channels!; c++) {
-          const diff = Math.abs(rawData[idx1 + c] - rawData[idx2 + c])
+        for (let c = 0; c < channels; c++) {
+          const diff = Math.abs(data[idx1 + c] - data[idx2 + c])
           maxDiff = Math.max(maxDiff, diff)
         }
         return maxDiff
       }
 
       // Check for vertical contrast edges
-      for (let x = 0; x < width! - config.samplingSteps; x++) {
+      for (let x = 0; x < width - config.samplingSteps; x++) {
         let currentEdge: ContrastEdge | null = null
 
-        for (let y = 0; y < height!; y++) {
-          const idx1 = (y * width! + x) * channels!
-          const idx2 = (y * width! + (x + config.samplingSteps)) * channels!
+        for (let y = 0; y < height; y++) {
+          const idx1 = (y * width + x) * channels
+          const idx2 = (y * width + (x + config.samplingSteps)) * channels
 
           const contrastDelta = getColorDifference(idx1, idx2)
 
@@ -81,12 +84,12 @@ export const colorContrastRule: SingleImageRule = {
       }
 
       // Check for horizontal contrast edges
-      for (let y = 0; y < height! - config.samplingSteps; y++) {
+      for (let y = 0; y < height - config.samplingSteps; y++) {
         let currentEdge: ContrastEdge | null = null
 
-        for (let x = 0; x < width!; x++) {
-          const idx1 = (y * width! + x) * channels!
-          const idx2 = ((y + config.samplingSteps) * width! + x) * channels!
+        for (let x = 0; x < width; x++) {
+          const idx1 = (y * width + x) * channels
+          const idx2 = ((y + config.samplingSteps) * width + x) * channels
 
           const contrastDelta = getColorDifference(idx1, idx2)
 
@@ -136,7 +139,6 @@ export const colorContrastRule: SingleImageRule = {
         }
       }
 
-      // Sort edges by contrast delta to report the most severe ones first
       contrastEdges.sort((a, b) => b.contrastDelta - a.contrastDelta)
 
       const metadata: CheckMetadata[] = contrastEdges.map((edge) => ({

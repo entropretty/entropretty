@@ -1,0 +1,7 @@
+export { colorCountRule } from "./color-count"
+export { colorIslandsRule } from "./color-islands"
+export { colorContrastRule } from "./color-contrast"
+export { nonEmptyImageRule } from "./non-empty-image"
+export { imageHashRule } from "./image-hash"
+export { imageSimilarityRule } from "./image-similarity"
+export { exampleCodeRule } from "./example-code"
