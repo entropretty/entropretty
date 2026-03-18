@@ -1,0 +1,73 @@
+# Benchmarking Overview
+
+The benchmarking system evaluates Entropretty algorithms for visual quality, uniqueness, and correctness. It provides automated, reproducible quality assessments that catch common problems like hash collisions, copy-pasted example code, and poor visual diversity.
+
+## Goals
+
+- **Determinism** — the same algorithm + seed must always produce the same image
+- **Visual quality** — images should use limited colors, avoid artifacts like tiny isolated regions or harsh transitions
+- **Uniqueness** — different seeds must produce visually distinct outputs
+- **Code originality** — algorithms must not be unmodified copies of example code
+
+## Architecture
+
+The system is split into two packages:
+
+- **`@entropretty/compliance`** — defines the rule type system, all 7 rule implementations, the rule registry, and configuration. Platform-agnostic.
+- **`@entropretty/benchmark-core`** — orchestrates the benchmark pipeline, seed generation, scoring, and result aggregation. Depends on the compliance package.
+
+## The 5-Phase Pipeline
+
+`BenchmarkCore.benchmark()` runs algorithms through 5 sequential phases:
+
+### Phase 1: Code Rules
+
+Static analysis of the algorithm source code. Currently checks for copy-pasted example code patterns. If a code rule returns an error, the benchmark **fails immediately** — no images are rendered.
+
+### Phase 2: Seed Generation
+
+Generates test seeds using a configurable `SeedStrategy`. The default `BitFlipStrategy` produces seeds with systematic bit variations. Seed length depends on the algorithm's `FamilyKind`:
+
+| Kind | Seed Length |
+| --- | --- |
+| `Procedural` | 4 bytes |
+| `ProceduralPersonal` | 8 bytes |
+| `ProceduralAccount` | 32 bytes |
+
+### Phase 3: Render + Single-Image Rules
+
+Each seed is rendered to an image via the provided `renderFn`. After rendering, single-image rules check each image individually for issues like empty content, excessive colors, small isolated regions, and harsh color transitions.
+
+Each rendered image is also hashed with BLAKE2b-256 for collision detection.
+
+### Phase 4: Comparison Rules
+
+Pairs of rendered images are compared using perceptual hashing and pixel-level similarity. For sets of 50 or fewer images, all pairs are checked. For larger sets, a sampled subset of pairs is compared.
+
+### Phase 5: Multi-Image Rules
+
+Rules that need access to the full set of rendered images run last. These can detect patterns that only emerge across the full output set.
+
+## Default Parameters
+
+| Parameter | Default Value |
+| --- | --- |
+| Seed count (`amount`) | 250 |
+| Image size (`size`) | 300x300 px |
+| Seed strategy | `BitFlipStrategy` |
+| Rule set | All browser-compatible rules |
+
+These can be overridden via `BenchmarkOptions`:
+
+```ts
+const result = await core.benchmark({
+  algorithmId: 1,
+  algorithm: source,
+  kind: "Procedural",
+  size: 512,
+  amount: 500,
+  seedStrategy: new RandomStrategy(),
+  rules: createServerRegistry(),
+  renderFn,
+})
+```

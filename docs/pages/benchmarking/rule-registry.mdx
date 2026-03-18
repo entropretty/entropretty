@@ -1,0 +1,137 @@
+# Rule Registry
+
+The `RuleRegistry` class manages which compliance rules are active during a benchmark run. It supports registering, enabling, disabling, configuring, and listing rules.
+
+## RuleRegistry API
+
+```ts
+import { RuleRegistry } from "@entropretty/compliance"
+
+const registry = new RuleRegistry()
+
+// Register a rule (enabled by default)
+registry.register(myRule)
+
+// Enable/disable by name
+registry.enable("color-count")
+registry.disable("color-islands")
+
+// Get all enabled rules
+registry.getEnabled()
+
+// Get enabled rules filtered by type
+registry.getEnabledByType("single")
+
+// Get only browser-compatible enabled rules
+registry.getBrowserCompatible()
+
+// List all registered rules with their status
+registry.list()
+// Returns: [{ name, type, enabled, browserCompatible }, ...]
+```
+
+## Factory Functions
+
+Three factory functions create pre-configured registries:
+
+### createBrowserRegistry()
+
+Registers only rules with `browserCompatible: true`. Use this when running benchmarks in the browser where Node.js APIs aren't available.
+
+```ts
+import { createBrowserRegistry } from "@entropretty/compliance"
+
+const registry = createBrowserRegistry()
+```
+
+Currently, all 7 built-in rules are browser-compatible, so this registers all of them.
+
+### createServerRegistry()
+
+Registers all rules regardless of browser compatibility. Use this for server-side benchmarking where the full Node.js environment is available.
+
+```ts
+import { createServerRegistry } from "@entropretty/compliance"
+
+const registry = createServerRegistry()
+```
+
+### createDefaultRegistry()
+
+Registers all rules and optionally applies a configuration object to enable/disable specific rules.
+
+```ts
+import { createDefaultRegistry } from "@entropretty/compliance"
+
+const registry = createDefaultRegistry({
+  "color-contrast": { enabled: false },
+  "image-hash": { enabled: true },
+})
+```
+
+## RuleRegistryConfig
+
+The configuration type for `configure()` and `createDefaultRegistry()`:
+
+```ts
+interface RuleRegistryConfig {
+  [ruleName: string]: {
+    enabled: boolean
+    config?: Record<string, unknown>
+  }
+}
+```
+
+Each key is a rule name, with `enabled` controlling whether the rule is active.
+
+## Browser vs Server Rules
+
+Rules declare their compatibility via the `browserCompatible` field:
+
+```ts
+interface BaseRule {
+  name: string
+  description: string
+  browserCompatible: boolean
+}
+```
+
+This separation exists because some analysis techniques may require Node.js-specific APIs (filesystem, native modules). The registry factories make it easy to get the right set of rules for your environment.
+
+## Built-in Rules
+
+All 7 rules registered by the factories:
+
+| Rule | Type | Browser Compatible |
+| --- | --- | --- |
+| `color-count` | single | yes |
+| `color-islands` | single | yes |
+| `color-contrast` | single | yes |
+| `non-empty-image` | single | yes |
+| `image-hash` | comparison | yes |
+| `image-similarity` | comparison | yes |
+| `example-code` | code | yes |
+
+## Usage with BenchmarkCore
+
+Pass a registry via the `rules` option:
+
+```ts
+import { BenchmarkCore } from "@entropretty/benchmark-core"
+import { createDefaultRegistry } from "@entropretty/compliance"
+
+const registry = createDefaultRegistry({
+  "color-contrast": { enabled: false },
+})
+
+const core = new BenchmarkCore()
+const result = await core.benchmark({
+  algorithmId: 1,
+  algorithm: source,
+  kind: "Procedural",
+  rules: registry,
+  renderFn,
+})
+```
+
+If no registry is provided, `BenchmarkCore` defaults to `createBrowserRegistry()`.

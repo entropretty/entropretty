@@ -1,0 +1,101 @@
+# Seed Strategies
+
+Seed strategies control how test inputs are generated for benchmarking. Different strategies exercise algorithms in different ways, helping uncover various classes of issues.
+
+## SeedStrategy Interface
+
+All strategies implement:
+
+```ts
+interface SeedStrategy {
+  name: string
+  generate(kind: FamilyKind, count: number): Seed[]
+}
+```
+
+Where `Seed` is a `number[]` (byte array) and `FamilyKind` determines the seed length:
+
+| FamilyKind | Seed Length |
+| --- | --- |
+| `Procedural` | 4 bytes |
+| `ProceduralPersonal` | 8 bytes |
+| `ProceduralAccount` | 32 bytes |
+
+## Built-in Strategies
+
+### BitFlipStrategy (default)
+
+```ts
+import { BitFlipStrategy } from "@entropretty/benchmark-core"
+```
+
+Generates seeds with systematic bit variations using `getSeedFamily()` from `@entropretty/utils`. This produces seeds that are closely related — differing by only a few bits — which is ideal for testing whether an algorithm responds to small input changes.
+
+This is the default strategy because it's the most effective at finding algorithms that ignore parts of their input.
+
+### RandomStrategy
+
+```ts
+import { RandomStrategy } from "@entropretty/benchmark-core"
+```
+
+Generates random byte sequences with deduplication. Each seed is independently random, providing broad coverage of the input space. Duplicates are automatically discarded and regenerated.
+
+Good for stress-testing algorithms across diverse inputs.
+
+### SequentialStrategy
+
+```ts
+import { SequentialStrategy } from "@entropretty/benchmark-core"
+```
+
+Generates seeds by incrementing from a starting point (obtained via `getSeed()`). Each subsequent seed increments by one, producing a sequential series.
+
+Useful for testing how algorithms handle gradually changing inputs.
+
+### MixedStrategy
+
+```ts
+import { MixedStrategy } from "@entropretty/benchmark-core"
+```
+
+Combines multiple strategies with configurable weights. Each strategy contributes a proportional share of seeds, with deduplication across all strategies.
+
+```ts
+const strategy = new MixedStrategy([
+  { strategy: new BitFlipStrategy(), weight: 0.6 },
+  { strategy: new RandomStrategy(), weight: 0.4 },
+])
+```
+
+If the weighted allocation doesn't produce enough seeds, remaining slots are filled from the first strategy.
+
+## Collision Detection
+
+During benchmarking, every rendered image is hashed with **BLAKE2b-256**. If two different seeds produce the same image hash, that's a collision — a sign the algorithm isn't using all its input bytes effectively.
+
+Any collision immediately sets the quality score to **0**.
+
+## Choosing a Strategy
+
+| Strategy | Best for |
+| --- | --- |
+| `BitFlipStrategy` | Default benchmarking, detecting ignored input bits |
+| `RandomStrategy` | Broad input coverage, stress testing |
+| `SequentialStrategy` | Testing gradual input changes |
+| `MixedStrategy` | Combining strengths of multiple approaches |
+
+## Usage
+
+```ts
+import { BenchmarkCore, RandomStrategy } from "@entropretty/benchmark-core"
+
+const core = new BenchmarkCore()
+const result = await core.benchmark({
+  algorithmId: 1,
+  algorithm: source,
+  kind: "Procedural",
+  seedStrategy: new RandomStrategy(),
+  renderFn,
+})
+```

@@ -1,0 +1,189 @@
+# Compliance Rules
+
+Compliance rules are the building blocks of the benchmarking system. Each rule checks a specific aspect of algorithm output quality.
+
+## Rule Type System
+
+All rules implement the `BaseRule` interface:
+
+```ts
+interface BaseRule {
+  name: string
+  description: string
+  browserCompatible: boolean
+}
+```
+
+There are four rule types:
+
+| Type | Interface | What it receives |
+| --- | --- | --- |
+| `single` | `SingleImageRule` | One rendered image |
+| `comparison` | `ComparisonRule` | Two rendered images |
+| `multi` | `MultiImageRule` | All rendered images |
+| `code` | `CodeRule` | Algorithm source code string |
+
+Each rule returns a `ComplianceResult` with a status (`pass`, `warn`, `error`, or `info`) and optional metadata describing what was found.
+
+## Rules Reference
+
+### non-empty-image
+
+**Type:** `single` | **Browser compatible:** yes
+
+Validates that the rendered image contains actual pixel data. Checks each RGBA channel for variance — if all channels have zero range, the image is considered empty.
+
+- **Pass:** At least one channel has variation
+- **Error:** All channels are flat (empty/blank image)
+
+No configurable thresholds.
+
+---
+
+### color-count
+
+**Type:** `single` | **Browser compatible:** yes
+
+Ensures the image uses a limited number of distinct colors. Entropretty patterns should be visually simple — too many colors suggests the algorithm is not following the design constraints.
+
+Colors are grouped by similarity (tolerance-based), and white/near-white pixels, transparent pixels, and colors below a frequency threshold are excluded.
+
+- **Pass:** Distinct color count ≤ `maxColors`
+- **Warn:** Distinct color count > `maxColors`
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `maxColors` | 3 | Maximum distinct colors allowed |
+| `tolerance` | 10 | RGB channel distance for grouping similar colors |
+| `whiteTolerance` | 10 | RGB distance from `(255,255,255)` to count as white |
+| `frequencyThreshold` | 0.01 | Minimum pixel ratio (1%) for a color to be counted |
+
+---
+
+### color-islands
+
+**Type:** `single` | **Browser compatible:** yes
+
+Detects small isolated color regions using flood-fill. Tiny "islands" of color often indicate rendering artifacts, anti-aliasing issues, or overly complex patterns.
+
+- **Pass:** No islands below `minIslandSize`
+- **Warn:** Islands found between `errorThreshold` and `minIslandSize`
+- **Error:** Islands found below `errorThreshold`
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `minIslandSize` | 50 | Pixel count below which a region is considered an island |
+| `warningThreshold` | 50 | Islands below this size trigger a warning |
+| `errorThreshold` | 100 | Islands below this size trigger an error |
+| `colorTolerance` | 50 | RGB distance for considering pixels the same color |
+
+---
+
+### color-contrast
+
+**Type:** `single` | **Browser compatible:** yes
+
+Finds harsh color transitions between adjacent pixels. Abrupt color changes can indicate aliasing problems or unintended visual artifacts.
+
+The rule scans both horizontal and vertical edges, looking for runs of consecutive high-contrast pixel pairs.
+
+- **Pass:** No harsh transitions found
+- **Warn:** One or more high-contrast edges detected
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `maxContrastDelta` | 100 | Maximum allowed color difference (0–255 per channel) |
+| `minContrastLength` | 3 | Minimum consecutive high-contrast pixels to trigger |
+| `samplingSteps` | 2 | Pixel distance to compare (detects harsh gradients) |
+
+---
+
+### image-hash
+
+**Type:** `comparison` | **Browser compatible:** yes
+
+Compares perceptual hashes (pHash) of two images using Hamming distance. Images are downscaled to 32x32 grayscale, then each pixel is classified as above or below the mean luminance to produce a 1024-bit hash.
+
+This detects when different seeds produce visually similar outputs — a sign the algorithm isn't using the seed effectively.
+
+- **Pass:** Hamming distance ≤ `warningThreshold`
+- **Warn:** Distance between `warningThreshold` and `errorThreshold`
+- **Error:** Distance > `errorThreshold`
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `warningThreshold` | 10 | Max Hamming distance for "pass" |
+| `errorThreshold` | 20 | Max Hamming distance before "error" |
+
+---
+
+### image-similarity
+
+**Type:** `comparison` | **Browser compatible:** yes
+
+Pixel-level comparison on 32x32 downscaled RGBA images. Counts pixels where the maximum channel difference exceeds 10% (0.1 threshold), then computes the percentage of differing pixels.
+
+Complements `image-hash` by catching differences that perceptual hashing might miss.
+
+- **Pass:** < 5% differing pixels
+- **Warn:** 5–10% differing pixels
+- **Error:** ≥ 10% differing pixels
+
+No configurable thresholds (hardcoded).
+
+---
+
+### example-code
+
+**Type:** `code` | **Browser compatible:** yes
+
+Detects copy-pasted example code patterns in the algorithm source. The algorithm source is normalized (whitespace collapsed, punctuation stripped) and checked against known forbidden patterns — specifically the default grid/cell drawing snippet from the example algorithm.
+
+- **Pass:** No forbidden patterns found
+- **Error:** Algorithm contains unmodified example code
+
+No configurable thresholds.
+
+## Default Configuration
+
+All configurable thresholds are defined in `packages/compliance/src/config.ts`:
+
+```ts
+{
+  rules: {
+    colorCount: {
+      maxColors: 3,
+      tolerance: 10,
+      whiteTolerance: 10,
+      frequencyThreshold: 0.01,
+    },
+    colorIslands: {
+      minIslandSize: 50,
+      warningThreshold: 50,
+      errorThreshold: 100,
+      colorTolerance: 50,
+    },
+    colorContrast: {
+      maxContrastDelta: 100,
+      minContrastLength: 3,
+      samplingSteps: 2,
+    },
+    imageHash: {
+      warningThreshold: 10,
+      errorThreshold: 20,
+    },
+  },
+}
+```
+
+You can modify the active configuration at runtime:
+
+```ts
+import { updateConfig } from "@entropretty/compliance"
+
+updateConfig({
+  rules: {
+    colorCount: { maxColors: 5, tolerance: 15, whiteTolerance: 10, frequencyThreshold: 0.01 },
+  },
+})
+```
