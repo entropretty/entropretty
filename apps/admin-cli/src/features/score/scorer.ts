@@ -1,53 +1,69 @@
-import { BenchmarkCore, addQualityScore } from "@entropretty/benchmark-core"
+import {
+  BenchmarkCore,
+  scoreBenchmarkResult,
+} from "@entropretty/benchmark-core"
+import {
+  createServerRegistry,
+  type ImagePixelData,
+} from "@entropretty/compliance"
+import { RenderCore } from "@entropretty/utils"
 import type { Algorithm, AlgorithmScore } from "../../lib/supabase"
 import { upsertAlgorithmScore } from "./queries"
 
-// Import compliance rules
-// Note: We need browser rules since we're using canvas/OffscreenCanvas
-import {
-  colorIslandsRule,
-  exampleCodeRule,
-} from "@entropretty/compliance/browser"
-
 const BENCHMARK_SIZE = 300
 const BENCHMARK_AMOUNT = 250
+const RENDER_TIMEOUT_MS = 300
 
 export async function scoreAlgorithm(
   algorithm: Algorithm,
   onProgress?: (progress: number) => void,
 ): Promise<{ success: boolean; score?: number; error?: string }> {
   try {
-    // Create benchmark instance
-    const benchmark = new BenchmarkCore(300)
-    benchmark.addRule(colorIslandsRule)
-    benchmark.addRule(exampleCodeRule)
+    const renderCore = new RenderCore(RENDER_TIMEOUT_MS)
+    renderCore.updateAlgorithm(
+      algorithm.id,
+      algorithm.content,
+      algorithm.family_kind,
+    )
 
-    // Run benchmark
-    const result = await benchmark.benchmark({
+    const registry = createServerRegistry()
+    const benchmarkCore = new BenchmarkCore()
+
+    const result = await benchmarkCore.benchmark({
       algorithmId: algorithm.id,
       algorithm: algorithm.content,
       kind: algorithm.family_kind,
       size: BENCHMARK_SIZE,
       amount: BENCHMARK_AMOUNT,
+      rules: registry,
+      renderFn: async (seed, size) => {
+        const imageData = await renderCore.renderImageData(
+          algorithm.id,
+          size,
+          seed,
+        )
+        return {
+          data: new Uint8Array(imageData.data.buffer),
+          width: imageData.width,
+          height: imageData.height,
+        } as ImagePixelData
+      },
       onProgress,
     })
 
-    // Calculate quality score
-    const scoredResult = addQualityScore(result)
+    const scoredResult = scoreBenchmarkResult(result)
 
-    // Store in database with full versioned results
     const algorithmScore: AlgorithmScore = {
       algorithm_id: algorithm.id,
       quality_score: scoredResult.qualityScore,
-      benchmark_results: result, // Store complete versioned result
+      benchmark_results: result,
     }
 
     await upsertAlgorithmScore(algorithmScore)
 
-    // Debug: log if all failed
     if (result.errors === result.amount) {
       console.log(
-        `\n  ⚠ Warning: All ${result.amount} iterations failed with errors`,
+        `\n  Warning: All ${result.amount} iterations failed with errors`,
       )
     }
 
@@ -56,19 +72,18 @@ export async function scoreAlgorithm(
       score: scoredResult.qualityScore,
     }
   } catch (error) {
-    // Log the full error for debugging
     console.error("\n  Error details:", error)
 
-    // If it's an execution error (algorithm fails), store 0 score
     if (error instanceof Error && error.message.includes("Runtime error")) {
       const algorithmScore: AlgorithmScore = {
         algorithm_id: algorithm.id,
         quality_score: 0,
         benchmark_results: {
-          version: 1,
+          version: 2,
           amount: BENCHMARK_AMOUNT,
           algorithmId: algorithm.id,
           size: BENCHMARK_SIZE,
+          seedStrategy: "bit-flip",
           failedTotal: BENCHMARK_AMOUNT,
           collisionsTotal: 0,
           errors: BENCHMARK_AMOUNT,
@@ -86,7 +101,6 @@ export async function scoreAlgorithm(
       }
     }
 
-    // For retrieval/network errors, don't store anything
     return {
       success: false,
       error: error instanceof Error ? error.message : String(error),

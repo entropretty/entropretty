@@ -1,8 +1,10 @@
 import { useCallback, useState } from 'react'
+import { scoreBenchmarkResult } from '@entropretty/benchmark-core'
 import { BenchmarkResults } from './BenchmarkResults'
+import type { ScoredBenchmarkResult } from '@entropretty/benchmark-core'
 import type { BenchmarkResult as BenchmarkResultType } from '@/workers/compliance'
-import { Button } from '@/components/ui/button'
 import { useAlgorithmService } from '@/contexts/service-context'
+import { Button } from '@/components/ui/button'
 
 export const Benchmarking = () => {
   const algorithmService = useAlgorithmService()
@@ -11,21 +13,21 @@ export const Benchmarking = () => {
   const [benchmarkDuration, setBenchmarkDuration] = useState<number | null>(
     null,
   )
-  const [benchmarkResult, setBenchmarkResult] =
-    useState<BenchmarkResultType | null>(null)
+  const [scoredResult, setScoredResult] =
+    useState<ScoredBenchmarkResult | null>(null)
 
   const doBenchmark = useCallback(
     (size: number, amount: number) => () => {
       setIsBenchmarking(true)
       setBenchmarkDuration(null)
-      setBenchmarkResult(null)
+      setScoredResult(null)
       setProgress(0)
       const startTime = performance.now()
 
       algorithmService
         .benchmark(0, size, amount, (p) => setProgress(p))
         .then((r) => {
-          setBenchmarkResult(r)
+          setScoredResult(scoreBenchmarkResult(r))
         })
         .finally(() => {
           const endTime = performance.now()
@@ -72,10 +74,13 @@ export const Benchmarking = () => {
         </div>
       )}
 
-      {benchmarkResult && benchmarkDuration !== null && (
+      {scoredResult && benchmarkDuration !== null && (
         <BenchmarkResults
-          benchmarkResult={benchmarkResult}
+          benchmarkResult={scoredResult}
           benchmarkDuration={benchmarkDuration}
+          qualityScore={scoredResult.qualityScore}
+          qualityTier={scoredResult.qualityTier}
+          ruleScores={scoredResult.ruleScores}
         />
       )}
     </div>

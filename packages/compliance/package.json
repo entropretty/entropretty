@@ -30,15 +30,12 @@
   "scripts": {
     "build": "tsup",
     "watch": "tsup --watch",
+    "test": "vitest run",
     "prepublishOnly": "pnpm run build"
   },
-  "dependencies": {
-    "pixelmatch": "^7.1.0",
-    "sharp": "^0.32.6"
-  },
   "devDependencies": {
-    "@types/sharp": "^0.31.1",
     "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^2.1.9"
   }
 }

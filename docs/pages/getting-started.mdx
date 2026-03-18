@@ -1,0 +1,67 @@
+# Getting Started
+
+This guide will help you get up and running with Entropretty.
+
+## Prerequisites
+
+- Node.js 18+
+- pnpm
+
+## Monorepo Setup
+
+Clone and install dependencies:
+
+```bash
+git clone https://github.com/nickvdao/entropretty.git
+cd entropretty
+pnpm install
+```
+
+Build all packages:
+
+```bash
+pnpm build
+```
+
+## Running Benchmarks
+
+### Browser Worker
+
+The primary way to run benchmarks is through the browser-based worker, which renders algorithms on a canvas:
+
+```bash
+pnpm dev:app
+```
+
+### Admin CLI
+
+For batch benchmarking from the command line:
+
+```bash
+pnpm dev:admin-cli
+```
+
+## Using BenchmarkCore
+
+`BenchmarkCore` is the engine that orchestrates the benchmark pipeline. Here's a minimal example:
+
+```ts
+import { BenchmarkCore } from "@entropretty/benchmark-core"
+import { createBrowserRegistry } from "@entropretty/compliance"
+
+const core = new BenchmarkCore()
+
+const result = await core.benchmark({
+  algorithmId: 1,
+  algorithm: algorithmSourceCode,
+  kind: "Procedural",
+  renderFn: async (seed, size) => {
+    // Your rendering logic — returns ImagePixelData
+    // { data: Uint8Array, width: number, height: number }
+  },
+})
+```
+
+By default this renders 250 seeds at 300x300 pixels using the `BitFlipStrategy` and all browser-compatible compliance rules.
+
+See [Benchmarking Overview](/benchmarking) for details on the full pipeline.

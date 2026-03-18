@@ -1,0 +1,90 @@
+# Quality Scoring
+
+After the benchmark pipeline completes, raw results are converted into a quality score and tier using `scoreBenchmarkResult()`.
+
+## Scoring Formula
+
+The overall quality score uses an **exponential decay curve** based on the percentage of seeds that produced warnings:
+
+```
+score = 10 + 90 * exp(-0.15 * warningPercentage)
+```
+
+Where `warningPercentage` is `(seeds with warnings / total seeds) * 100`.
+
+### Special Cases
+
+- **Collisions or render errors** → score = **0** instantly. Any hash collision or render failure means the algorithm is fundamentally broken.
+- **0% warnings** → score = **100**. A perfect run.
+
+### Score Curve Examples
+
+| Warning % | Score |
+| --- | --- |
+| 0% | 100 |
+| ~5% | ~57 |
+| ~15% | ~19 |
+| ~30% | ~11 |
+| 50%+ | ~10 |
+
+The curve drops quickly — even a small percentage of warnings significantly impacts the score. The floor is 10 (not 0) to distinguish "some warnings" from "completely broken."
+
+## Quality Tiers
+
+Scores map to letter tiers:
+
+| Tier | Score Range | Meaning |
+| --- | --- | --- |
+| **S** | ≥ 95 | Excellent — near-perfect output |
+| **A** | ≥ 80 | Good — minor issues on few seeds |
+| **B** | ≥ 60 | Acceptable — noticeable quality issues |
+| **C** | ≥ 40 | Poor — significant problems |
+| **F** | < 40 | Failing — needs major fixes |
+
+## Per-Rule Scores
+
+Each rule also gets its own score based on its pass/warn/error counts:
+
+```
+penalty = (warnCount + errorCount * 2) / totalChecks
+ruleScore = max(0, round((1 - penalty) * 100))
+```
+
+Errors count **double** compared to warnings. This means a rule with 10% errors scores the same as one with 20% warnings.
+
+## Result Structure
+
+`scoreBenchmarkResult()` returns a `ScoredBenchmarkResult`:
+
+```ts
+interface ScoredBenchmarkResult extends BenchmarkResultV2 {
+  qualityScore: number    // 0–100
+  qualityTier: QualityTier // "S" | "A" | "B" | "C" | "F"
+  ruleScores: Record<string, number> // per-rule scores
+}
+```
+
+## Warning Distribution
+
+The `warningDistribution` field in benchmark results is a histogram mapping issue counts to seed counts:
+
+```ts
+// Example: 200 seeds had 0 issues, 30 had 1, 15 had 2, 5 had 3+
+{ 0: 200, 1: 30, 2: 15, 3: 5 }
+```
+
+This helps identify whether warnings are concentrated on a few seeds or spread across many.
+
+## Usage
+
+```ts
+import { BenchmarkCore, scoreBenchmarkResult } from "@entropretty/benchmark-core"
+
+const core = new BenchmarkCore()
+const raw = await core.benchmark({ /* options */ })
+const scored = scoreBenchmarkResult(raw)
+
+console.log(scored.qualityScore) // e.g. 87
+console.log(scored.qualityTier)  // e.g. "A"
+console.log(scored.ruleScores)   // e.g. { "color-count": 95, "image-hash": 80, ... }
+```

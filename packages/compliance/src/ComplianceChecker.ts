@@ -5,6 +5,7 @@ import type {
   ComparisonRule,
   MultiImageRule,
   ComplianceResult,
+  ImagePixelData,
 } from "./types"
 
 export class ComplianceChecker {
@@ -14,7 +15,6 @@ export class ComplianceChecker {
     this._rules = rules
   }
 
-  // Expose rules for help documentation
   get rules(): ReadonlyArray<ComplianceRule> {
     return this._rules
   }
@@ -23,15 +23,14 @@ export class ComplianceChecker {
     this._rules.push(rule)
   }
 
-  // Check a single image against all single-image rules
-  async checkImage(imageBuffer: Buffer): Promise<ComplianceReport[]> {
+  async checkImage(image: ImagePixelData): Promise<ComplianceReport[]> {
     const reports: ComplianceReport[] = []
     const singleImageRules = this._rules.filter(
       (rule): rule is SingleImageRule => rule.type === "single",
     )
 
     for (const rule of singleImageRules) {
-      const result = await rule.check(imageBuffer)
+      const result = await rule.check(image)
       reports.push({
         ruleName: rule.name,
         result,
@@ -41,10 +40,9 @@ export class ComplianceChecker {
     return reports
   }
 
-  // Compare two images using comparison rules
   async compareImages(
-    baseImage: Buffer,
-    compareImage: Buffer,
+    baseImage: ImagePixelData,
+    compareImage: ImagePixelData,
   ): Promise<ComplianceReport[]> {
     const reports: ComplianceReport[] = []
     const comparisonRules = this._rules.filter(
@@ -62,8 +60,9 @@ export class ComplianceChecker {
     return reports
   }
 
-  // Check multiple images using multi-image rules
-  async checkMultipleImages(images: Buffer[]): Promise<ComplianceReport[]> {
+  async checkMultipleImages(
+    images: ImagePixelData[],
+  ): Promise<ComplianceReport[]> {
     const reports: ComplianceReport[] = []
     const multiImageRules = this._rules.filter(
       (rule): rule is MultiImageRule => rule.type === "multi",
@@ -80,10 +79,12 @@ export class ComplianceChecker {
     return reports
   }
 
-  // Check a single rule by name (supports all rule types)
   async checkSingleRule(
     ruleName: string,
-    images: Buffer | [Buffer, Buffer] | Buffer[],
+    images:
+      | ImagePixelData
+      | [ImagePixelData, ImagePixelData]
+      | ImagePixelData[],
   ): Promise<ComplianceReport | null> {
     const rule = this._rules.find((r) => r.name === ruleName)
     if (!rule) {
@@ -94,22 +95,24 @@ export class ComplianceChecker {
 
     switch (rule.type) {
       case "single":
-        if (!Buffer.isBuffer(images)) {
-          throw new Error("Single image rule requires one image buffer")
+        if (Array.isArray(images)) {
+          throw new Error("Single image rule requires one ImagePixelData")
         }
-        result = await rule.check(images)
+        result = await rule.check(images as ImagePixelData)
         break
 
       case "comparison":
         if (!Array.isArray(images) || images.length !== 2) {
-          throw new Error("Comparison rule requires exactly two image buffers")
+          throw new Error("Comparison rule requires exactly two ImagePixelData")
         }
         result = await rule.compare(images[0], images[1])
         break
 
       case "multi":
         if (!Array.isArray(images)) {
-          throw new Error("Multi-image rule requires an array of image buffers")
+          throw new Error(
+            "Multi-image rule requires an array of ImagePixelData",
+          )
         }
         result = await rule.checkMultiple(images)
         break

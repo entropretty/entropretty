@@ -1,7 +1,6 @@
 import type { CodeRule, ComplianceResult } from "../types"
 
 // Normalized version of the forbidden example code pattern
-// This is part of the default example algorithm and should score 0
 const FORBIDDEN_PATTERN = `const row = Math.floor(i / grid)
   const col = i % grid
   const x = col * cellSize
@@ -15,13 +14,10 @@ const FORBIDDEN_PATTERN = `const row = Math.floor(i / grid)
   ctx.fillStyle = "#000"
   ctx.fillText(n.toString(), x + cellSize / 2, y + cellSize / 2)`
 
-/**
- * Normalizes code by removing extra whitespace for comparison
- */
 function normalizeCode(code: string): string {
   return code
-    .replace(/\s+/g, " ") // Replace multiple whitespace with single space
-    .replace(/\s*([{}();,])\s*/g, "$1") // Remove space around punctuation
+    .replace(/\s+/g, " ")
+    .replace(/\s*([{}();,])\s*/g, "$1")
     .trim()
 }
 
@@ -30,6 +26,7 @@ export const exampleCodeRule: CodeRule = {
   description:
     "Checks if the algorithm contains forbidden example code patterns",
   type: "code",
+  browserCompatible: true,
   check: async (code: string): Promise<ComplianceResult> => {
     const normalizedCode = normalizeCode(code)
     const normalizedPattern = normalizeCode(FORBIDDEN_PATTERN)

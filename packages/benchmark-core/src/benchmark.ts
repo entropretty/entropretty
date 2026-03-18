@@ -1,12 +1,23 @@
 import { blake2b256 as blake2b256Hasher } from "@multiformats/blake2/blake2b"
 import { bytesToHex } from "@noble/hashes/utils"
-import { RenderCore, getSeedFamily } from "@entropretty/utils"
-import type { CheckMetadata, CodeRule } from "@entropretty/compliance/browser"
+import {
+  createBrowserRegistry,
+  type RuleRegistry,
+} from "@entropretty/compliance"
+import type {
+  CodeRule,
+  SingleImageRule,
+  ComparisonRule,
+  MultiImageRule,
+  ImagePixelData,
+} from "@entropretty/compliance"
+import { BitFlipStrategy } from "./seeds"
+import type { SeedStrategy } from "./seeds"
 import type {
   BenchmarkOptions,
-  BenchmarkResult,
+  BenchmarkResultV2,
   ComplianceResult,
-  ComplianceRule,
+  RuleAggregateResult,
   RuleCheckResult,
 } from "./types"
 
@@ -14,101 +25,132 @@ const BENCHMARK_REFERENCE_SIZE = 300
 const BENCHMARK_DEFAULT_AMOUNT = 250
 
 export class BenchmarkCore {
-  private renderCore: RenderCore
-  private rules: ComplianceRule[] = []
-
-  constructor(timeoutMs: number = 300) {
-    this.renderCore = new RenderCore(timeoutMs)
-  }
-
-  addRule(rule: ComplianceRule) {
-    this.rules.push(rule)
-  }
-
-  setRules(rules: ComplianceRule[]) {
-    this.rules = rules
-  }
-
-  async benchmark(options: BenchmarkOptions): Promise<BenchmarkResult> {
+  async benchmark(options: BenchmarkOptions): Promise<BenchmarkResultV2> {
     const {
       algorithmId,
       algorithm,
       kind,
       size = BENCHMARK_REFERENCE_SIZE,
       amount = BENCHMARK_DEFAULT_AMOUNT,
+      seedStrategy = new BitFlipStrategy(),
+      rules: registry = createBrowserRegistry(),
+      renderFn,
       onProgress,
     } = options
 
-    // Separate code rules from image rules
-    const codeRules = this.rules.filter((r): r is CodeRule => r.type === "code")
-    const imageRules = this.rules.filter((r) => r.type !== "code")
-    const allRuleResults: RuleCheckResult[] = []
+    const allRules = registry.getEnabled()
 
-    // Check code rules first (before rendering loop)
+    // Separate rule types
+    const codeRules = allRules.filter((r): r is CodeRule => r.type === "code")
+    const singleRules = allRules.filter(
+      (r): r is SingleImageRule => r.type === "single",
+    )
+    const comparisonRules = allRules.filter(
+      (r): r is ComparisonRule => r.type === "comparison",
+    )
+    const multiRules = allRules.filter(
+      (r): r is MultiImageRule => r.type === "multi",
+    )
+
+    // Per-rule aggregate tracking
+    const ruleAggregates: Map<string, RuleAggregateResult> = new Map()
+
+    const initAggregate = (name: string, type: string) => {
+      if (!ruleAggregates.has(name)) {
+        ruleAggregates.set(name, {
+          ruleName: name,
+          ruleType: type,
+          passCount: 0,
+          warnCount: 0,
+          errorCount: 0,
+        })
+      }
+    }
+
+    const recordResult = (
+      name: string,
+      type: string,
+      result: { status: string; metadata?: unknown[] },
+    ) => {
+      initAggregate(name, type)
+      const agg = ruleAggregates.get(name)!
+      if (result.status === "pass") agg.passCount++
+      else if (result.status === "warn") agg.warnCount++
+      else if (result.status === "error") {
+        agg.errorCount++
+        // Store first failure sample
+        if (!agg.sampleMetadata && result.metadata) {
+          agg.sampleMetadata =
+            result.metadata as RuleAggregateResult["sampleMetadata"]
+        }
+      }
+    }
+
+    // 1. Check code rules first (fail fast)
     for (const rule of codeRules) {
       const result = await rule.check(algorithm)
-      allRuleResults.push({
-        ruleName: rule.name,
-        ruleType: "code",
-        status: result.status,
-        metadata: result.metadata,
-      })
+      initAggregate(rule.name, "code")
+      recordResult(rule.name, "code", result)
 
-      // If code rule fails critically, return immediately
       if (result.status === "error") {
         return {
-          version: 1,
+          version: 2,
           amount,
           algorithmId,
           size,
+          seedStrategy: seedStrategy.name,
           failedTotal: amount,
           collisionsTotal: 0,
           errors: amount,
           warningDistribution: {},
-          ruleResults: allRuleResults,
+          ruleResults: Array.from(ruleAggregates.values()),
           errorMessage: result.metadata?.[0]?.message || "Code rule violation",
         }
       }
     }
 
-    // Update algorithm in render core
-    this.renderCore.updateAlgorithm(algorithmId, algorithm, kind)
+    // 2. Generate seeds
+    const seeds = seedStrategy.generate(kind, amount)
 
-    // Generate seeds for the family
-    const seeds = getSeedFamily(kind, amount)
-
-    const results: ComplianceResult[] = []
+    // 3. Render all seeds and run single-image rules
+    const renderedImages: ImagePixelData[] = []
     const hashes: Record<string, number[][]> = {}
-    const hashesSet: Set<string> = new Set()
+    const hashesSet = new Set<string>()
     let checked = 0
     let errors = 0
+    const issueCountsPerSeed: number[] = []
 
     for (const seed of seeds) {
       try {
-        const { compliance, ruleResults } = await this.checkCompliance(
-          algorithmId,
-          seed,
-          size,
-          imageRules,
-        )
-        results.push(compliance)
+        const image = await renderFn(seed, size)
+        renderedImages.push(image)
 
-        // Collect rule results from first iteration for aggregate reporting
-        if (checked === 0) {
-          allRuleResults.push(...ruleResults)
-        }
+        // Hash for collision detection
+        const digest = await blake2b256Hasher.digest(image.data)
+        const imageHash = bytesToHex(digest.digest)
 
-        const dupeSeeds = hashes[compliance.imageHash]
+        // Track collisions
+        const dupeSeeds = hashes[imageHash]
         if (dupeSeeds) {
-          hashes[compliance.imageHash] = [...dupeSeeds, [...seed]]
+          hashes[imageHash] = [...dupeSeeds, [...seed]]
         } else {
-          hashes[compliance.imageHash] = [[...seed]]
+          hashes[imageHash] = [[...seed]]
         }
-        if (!hashesSet.has(compliance.imageHash)) {
-          hashesSet.add(compliance.imageHash)
+        hashesSet.add(imageHash)
+
+        // Run single-image rules
+        let seedIssueCount = 0
+        for (const rule of singleRules) {
+          const result = await rule.check(image)
+          recordResult(rule.name, "single", result)
+          if (result.status !== "pass" && result.metadata) {
+            seedIssueCount += result.metadata.length
+          }
         }
+        issueCountsPerSeed.push(seedIssueCount)
       } catch (error) {
         errors++
+        issueCountsPerSeed.push(0)
       }
 
       checked++
@@ -117,29 +159,70 @@ export class BenchmarkCore {
       }
     }
 
-    // Post-process
+    // 4. Run comparison rules (all pairs)
+    if (comparisonRules.length > 0 && renderedImages.length >= 2) {
+      for (const rule of comparisonRules) {
+        initAggregate(rule.name, "comparison")
+      }
+      // Use phash-based O(N) approach for large sets, direct for small
+      if (renderedImages.length <= 50) {
+        for (let i = 0; i < renderedImages.length; i++) {
+          for (let j = i + 1; j < renderedImages.length; j++) {
+            for (const rule of comparisonRules) {
+              const result = await rule.compare(
+                renderedImages[i],
+                renderedImages[j],
+              )
+              recordResult(rule.name, "comparison", result)
+            }
+          }
+        }
+      } else {
+        // Sample comparison for large sets: compare first image with every Nth
+        const step = Math.max(1, Math.floor(renderedImages.length / 50))
+        for (let i = 0; i < renderedImages.length; i += step) {
+          for (let j = i + step; j < renderedImages.length; j += step) {
+            for (const rule of comparisonRules) {
+              const result = await rule.compare(
+                renderedImages[i],
+                renderedImages[j],
+              )
+              recordResult(rule.name, "comparison", result)
+            }
+          }
+        }
+      }
+    }
+
+    // 5. Run multi-image rules
+    if (multiRules.length > 0 && renderedImages.length > 0) {
+      for (const rule of multiRules) {
+        const result = await rule.checkMultiple(renderedImages)
+        recordResult(rule.name, "multi", result)
+      }
+    }
+
+    // 6. Post-process
     if (onProgress) {
       onProgress(1)
     }
 
-    const failed = results.filter((r) => !r.isCompliant).length
+    // Warning distribution
     const chartData: Record<number, number> = {}
-    for (const result of results) {
-      const amountOfIssues = result.issues.length
-      if (chartData[amountOfIssues]) {
-        chartData[amountOfIssues]++
-      } else {
-        chartData[amountOfIssues] = 1
-      }
+    for (const count of issueCountsPerSeed) {
+      chartData[count] = (chartData[count] || 0) + 1
     }
 
+    // Count failed seeds (any seed with issues)
+    const failed = issueCountsPerSeed.filter((c) => c > 0).length
+
+    // Collisions
     const collisions = Object.entries(hashes).filter(
       ([, seeds]) => seeds.length > 1,
     )
 
-    // Log collision details for debugging
     if (collisions.length > 0) {
-      console.log(`\n🔍 Found ${collisions.length} collision(s):`)
+      console.log(`\nFound ${collisions.length} collision(s):`)
       for (const [hash, seeds] of collisions) {
         console.log(`  Hash: ${hash.substring(0, 16)}...`)
         console.log(`  Seeds producing same hash:`)
@@ -150,7 +233,7 @@ export class BenchmarkCore {
     }
 
     return {
-      version: 1,
+      version: 2,
       warningDistribution: chartData,
       failedTotal: failed,
       collisionsTotal: collisions.length,
@@ -158,72 +241,9 @@ export class BenchmarkCore {
       amount,
       errors,
       algorithmId,
-      ruleResults: allRuleResults,
+      seedStrategy: seedStrategy.name,
+      ruleResults: Array.from(ruleAggregates.values()),
       errorMessage: errors === amount ? "All iterations failed" : undefined,
-    }
-  }
-
-  private async checkCompliance(
-    algorithmId: number,
-    seed: number[],
-    size: number,
-    imageRules: ComplianceRule[],
-  ): Promise<{ compliance: ComplianceResult; ruleResults: RuleCheckResult[] }> {
-    // Render the image data
-    const imageData = await this.renderCore.renderImageData(
-      algorithmId,
-      size,
-      seed,
-    )
-
-    // Create a proper ArrayBuffer from the image data
-    const buffer = new ArrayBuffer(imageData.data.length)
-    new Uint8Array(buffer).set(imageData.data)
-
-    const digest = await blake2b256Hasher.digest(new Uint8Array(buffer))
-    const imageHash = bytesToHex(digest.digest)
-
-    // Run all image compliance rules
-    const ruleResults = await Promise.all(
-      imageRules.map((rule) =>
-        rule.type === "single" ? rule.check(buffer) : null,
-      ),
-    )
-
-    // Extract all issues from rule results
-    const issues: ComplianceResult["issues"] = []
-    let isCompliant = true
-    const rulesWithIssues = new Set<string>()
-    const ruleCheckResults: RuleCheckResult[] = []
-
-    for (let i = 0; i < imageRules.length; i++) {
-      const rule = imageRules[i]
-      const result = ruleResults[i]
-
-      if (result) {
-        ruleCheckResults.push({
-          ruleName: rule.name,
-          ruleType: rule.type,
-          status: result.status,
-          metadata: result.metadata,
-        })
-
-        if (result.status !== "pass" && result.metadata) {
-          issues.push(...result.metadata)
-          isCompliant = false
-          rulesWithIssues.add(rule.type)
-        }
-      }
-    }
-
-    return {
-      compliance: {
-        isCompliant,
-        imageHash,
-        issues,
-        ruleTypesFailed: Array.from(rulesWithIssues),
-      },
-      ruleResults: ruleCheckResults,
     }
   }
 }

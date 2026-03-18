@@ -1,5 +1,6 @@
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
 import { WarningDistribution } from './WarningDistribution'
+import type { QualityTier } from '@entropretty/benchmark-core'
 import type { BenchmarkResult } from '@/workers/compliance'
 import {
   Tooltip,
@@ -11,11 +12,25 @@ import {
 interface BenchmarkResultsProps {
   benchmarkResult: BenchmarkResult
   benchmarkDuration: number
+  qualityScore: number
+  qualityTier: QualityTier
+  ruleScores: Record<string, number>
+}
+
+const tierColors: Record<QualityTier, string> = {
+  S: 'text-purple-600 dark:text-purple-400 border-purple-600',
+  A: 'text-green-600 dark:text-green-400 border-green-600',
+  B: 'text-blue-600 dark:text-blue-400 border-blue-600',
+  C: 'text-yellow-600 dark:text-yellow-400 border-yellow-600',
+  F: 'text-red-600 dark:text-red-400 border-red-600',
 }
 
 export const BenchmarkResults = ({
   benchmarkResult,
   benchmarkDuration,
+  qualityScore,
+  qualityTier,
+  ruleScores,
 }: BenchmarkResultsProps) => {
   const formatDuration = (milliseconds: number) => {
     const seconds = Math.floor(milliseconds / 1000)
@@ -40,6 +55,58 @@ export const BenchmarkResults = ({
     <TooltipProvider>
       <div className="border p-4">
         <h3 className="mb-6 text-lg">Benchmark Results</h3>
+
+        {/* Quality Score */}
+        <div className="mb-6 flex items-center gap-4">
+          <div
+            className={`flex h-16 w-16 items-center justify-center border-2 text-2xl font-bold ${tierColors[qualityTier]}`}
+          >
+            {qualityTier}
+          </div>
+          <div>
+            <div className="text-2xl font-bold">{qualityScore}/100</div>
+            <div className="text-muted-foreground text-sm">Quality Score</div>
+          </div>
+        </div>
+
+        {/* Per-rule breakdown */}
+        {benchmarkResult.ruleResults.length > 0 && (
+          <div className="mb-6 space-y-2">
+            <div className="text-sm font-medium">Rule Breakdown</div>
+            <div className="space-y-1">
+              {benchmarkResult.ruleResults.map((rule) => {
+                const score = ruleScores[rule.ruleName] ?? 100
+                const total = rule.passCount + rule.warnCount + rule.errorCount
+                return (
+                  <div
+                    key={rule.ruleName}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <span className="text-muted-foreground">
+                      {rule.ruleName}
+                    </span>
+                    <span>
+                      {rule.errorCount > 0 ? (
+                        <span className="text-red-600 dark:text-red-400">
+                          {rule.errorCount} errors
+                        </span>
+                      ) : rule.warnCount > 0 ? (
+                        <span className="text-yellow-600 dark:text-yellow-400">
+                          {rule.warnCount} warnings
+                        </span>
+                      ) : (
+                        <span className="text-green-600 dark:text-green-400">
+                          {rule.passCount}/{total} passed
+                        </span>
+                      )}{' '}
+                      ({score}%)
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Status Overview */}
         <div className="mb-6 space-y-1">
@@ -142,8 +209,12 @@ export const BenchmarkResults = ({
             <div className="flex justify-between">
               <span>Image Size:</span>
               <span>
-                {benchmarkResult.size}×{benchmarkResult.size}px
+                {benchmarkResult.size}x{benchmarkResult.size}px
               </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Seed Strategy:</span>
+              <span>{benchmarkResult.seedStrategy}</span>
             </div>
             <div className="flex justify-between">
               <span>Total Duration:</span>

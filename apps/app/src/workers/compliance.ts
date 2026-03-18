@@ -2,16 +2,17 @@ import { blake2b256 as blake2b256Hasher } from '@multiformats/blake2/blake2b'
 import { bytesToHex } from '@noble/hashes/utils'
 import * as Comlink from 'comlink'
 import { expose } from 'comlink'
-import { colorIslandsRule } from '@entropretty/compliance/browser'
-import { RenderCore } from '@entropretty/utils'
 import { BenchmarkCore } from '@entropretty/benchmark-core'
-import type { AlgorithmId, FamilyKind, Seed } from '@entropretty/utils'
-import type { BenchmarkResult } from '@entropretty/benchmark-core'
+import { createDefaultRegistry } from '@entropretty/compliance'
+import { RenderCore } from '@entropretty/utils'
+import type { BenchmarkResultV2 } from '@entropretty/benchmark-core'
 import type {
   CheckMetadata,
-  ComplianceResult as RuleComplianceResult,
+  ImagePixelData,
+  RuleRegistry,
   SingleImageRule,
-} from '@entropretty/compliance/browser'
+} from '@entropretty/compliance'
+import type { AlgorithmId, FamilyKind, Seed } from '@entropretty/utils'
 
 const COMPLIANCE_TIMEOUT_MS = 300
 const COMPLIANCE_REFERENCE_SIZE = 300
@@ -39,7 +40,7 @@ export interface ComplianceResult {
 }
 
 // Re-export BenchmarkResult for use in other files
-export type { BenchmarkResult }
+export type BenchmarkResult = BenchmarkResultV2
 
 export interface ComplianceRequest {
   algorithmId: AlgorithmId
@@ -49,17 +50,29 @@ export interface ComplianceRequest {
   reject: (error: Error) => void
 }
 
-// Centralized registry of all compliance rules
-const complianceRules: Array<SingleImageRule> = [
-  // colorCountRule,
-  colorIslandsRule,
-  // Add new rules here
-]
+// Use registry for all rules
+const registry: RuleRegistry = createDefaultRegistry({
+  'color-count': { enabled: true },
+  'color-islands': { enabled: true },
+  'example-code': { enabled: true },
+  'color-contrast': { enabled: false },
+  'non-empty-image': { enabled: false },
+  'image-hash': { enabled: false },
+  'image-similarity': { enabled: false },
+})
 
 const renderCore = new RenderCore(COMPLIANCE_TIMEOUT_MS)
 const complianceQueue: Array<ComplianceJob> = []
 let isProcessing = false
 let progressCallback: ((progress: number) => void) | undefined = undefined
+
+function imageDataToPixelData(imageData: ImageData): ImagePixelData {
+  return {
+    data: new Uint8Array(imageData.data.buffer),
+    width: imageData.width,
+    height: imageData.height,
+  }
+}
 
 const workerAPI = {
   async updateAlgorithm(
@@ -113,15 +126,12 @@ const workerAPI = {
       throw new Error(`No algorithm meta found for algorithm ${algorithmId}`)
     }
 
-    // Get the algorithm script from renderCore
     const algorithm = renderCore.getAlgorithm(algorithmId)
     if (!algorithm) {
       throw new Error(`No algorithm found for algorithm ${algorithmId}`)
     }
 
-    // Use BenchmarkCore for the actual benchmarking
-    const benchmarkCore = new BenchmarkCore(COMPLIANCE_TIMEOUT_MS)
-    benchmarkCore.setRules(complianceRules)
+    const benchmarkCore = new BenchmarkCore()
 
     const result = await benchmarkCore.benchmark({
       algorithmId,
@@ -129,6 +139,15 @@ const workerAPI = {
       kind: meta.kind,
       size,
       amount,
+      rules: registry,
+      renderFn: async (seed, renderSize) => {
+        const imageData = await renderCore.renderImageData(
+          algorithmId,
+          renderSize,
+          seed,
+        )
+        return imageDataToPixelData(imageData)
+      },
       onProgress: (progress: number) => {
         progressCallback?.(progress)
       },
@@ -172,39 +191,35 @@ async function processQueue() {
   } = complianceQueue.shift()!
 
   try {
-    // Use RenderCore to render the image data for compliance checking
     const imageData = await renderCore.renderImageData(
       algorithmId,
       referenceSize,
       seed,
     )
 
-    // Create a proper ArrayBuffer from the image data
-    const buffer = new ArrayBuffer(imageData.data.length)
-    new Uint8Array(buffer).set(imageData.data)
+    const pixelData = imageDataToPixelData(imageData)
 
-    const digest = await blake2b256Hasher.digest(new Uint8Array(buffer))
+    const digest = await blake2b256Hasher.digest(pixelData.data)
     const imageHash = bytesToHex(digest.digest)
 
-    // Run all compliance rules
-    const ruleResults = await runAllComplianceRules(buffer)
+    // Run all single-image rules from registry
+    const singleRules = registry.getEnabledByType(
+      'single',
+    ) as Array<SingleImageRule>
+    const ruleResults = await Promise.all(
+      singleRules.map((rule) => rule.check(pixelData)),
+    )
 
-    // Extract all issues from rule results
     const issues: Array<CheckMetadata> = []
     let isCompliant = true
-
-    // Keep track of rule types with issues
     const rulesWithIssues = new Set<string>()
 
-    for (const result of ruleResults) {
+    for (let i = 0; i < singleRules.length; i++) {
+      const result = ruleResults[i]
       if (result.status !== 'pass' && result.metadata) {
         issues.push(...result.metadata)
         isCompliant = false
-
-        // Record which rule type had issues
-        if (result.type) {
-          rulesWithIssues.add(result.type)
-        }
+        rulesWithIssues.add(singleRules[i].name)
       }
     }
 
@@ -222,35 +237,25 @@ async function processQueue() {
         issues.length > 0 &&
         issues.some((issue) => issue.location)
       ) {
-        // Create a new canvas for the overlay with the target size
         const overlayCanvas = new OffscreenCanvas(overlaySize, overlaySize)
         const overlayCtx = overlayCanvas.getContext('2d')
 
         if (overlayCtx) {
-          // Set up the context for drawing red rectangles
-          overlayCtx.fillStyle = 'rgba(0, 0, 0, 0)' // Transparent background
-          overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height) // Clear the canvas
-          overlayCtx.strokeStyle = 'rgba(255, 0, 0, 0.7)' // Red with some transparency
+          overlayCtx.fillStyle = 'rgba(0, 0, 0, 0)'
+          overlayCtx.fillRect(0, 0, overlayCanvas.width, overlayCanvas.height)
+          overlayCtx.strokeStyle = 'rgba(255, 0, 0, 0.7)'
           overlayCtx.lineWidth = 4
 
-          // Calculate scaling factor from reference size to target size
           const scaleFactor = overlayCanvas.width / COMPLIANCE_REFERENCE_SIZE
-
-          // Add padding to make rectangles a bit bigger (in pixels)
           const paddingPixels = 5
 
-          // Draw each issue with location data
           for (const issue of issues) {
             if (issue.location) {
               const { x, y, width, height } = issue.location
-
-              // Scale the coordinates to the target size
               const scaledX = x * scaleFactor
               const scaledY = y * scaleFactor
               const scaledWidth = width * scaleFactor
               const scaledHeight = height * scaleFactor
-
-              // Apply padding to make the rectangle bigger
               const paddedX = Math.max(0, scaledX - paddingPixels)
               const paddedY = Math.max(0, scaledY - paddingPixels)
               const paddedWidth = Math.min(
@@ -261,13 +266,10 @@ async function processQueue() {
                 overlaySize - paddedY,
                 scaledHeight + paddingPixels * 2,
               )
-
-              // Draw the rectangle with padding
               overlayCtx.strokeRect(paddedX, paddedY, paddedWidth, paddedHeight)
             }
           }
 
-          // Get the image data from the overlay canvas
           issueOverlayImageData = overlayCtx.getImageData(
             0,
             0,
@@ -294,17 +296,6 @@ async function processQueue() {
 
   isProcessing = false
   processQueue()
-}
-
-/**
- * Runs all compliance rules on the given image buffer
- * @param buffer The image buffer to check
- * @returns Array of compliance results from all rules
- */
-async function runAllComplianceRules(
-  buffer: ArrayBuffer,
-): Promise<Array<RuleComplianceResult>> {
-  return Promise.all(complianceRules.map((rule) => rule.check(buffer)))
 }
 
 function compareNumberArrays(a: Seed, b: Seed): boolean {
