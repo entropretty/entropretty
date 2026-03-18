@@ -3,7 +3,7 @@ import { bytesToHex } from '@noble/hashes/utils'
 import * as Comlink from 'comlink'
 import { expose } from 'comlink'
 import { BenchmarkCore } from '@entropretty/benchmark-core'
-import { createBrowserRegistry } from '@entropretty/compliance'
+import { createDefaultRegistry } from '@entropretty/compliance'
 import { RenderCore } from '@entropretty/utils'
 import type { BenchmarkResultV2 } from '@entropretty/benchmark-core'
 import type {
@@ -51,7 +51,15 @@ export interface ComplianceRequest {
 }
 
 // Use registry for all rules
-const registry: RuleRegistry = createBrowserRegistry()
+const registry: RuleRegistry = createDefaultRegistry({
+  'color-count': { enabled: true },
+  'color-islands': { enabled: true },
+  'example-code': { enabled: true },
+  'color-contrast': { enabled: false },
+  'non-empty-image': { enabled: false },
+  'image-hash': { enabled: false },
+  'image-similarity': { enabled: false },
+})
 
 const renderCore = new RenderCore(COMPLIANCE_TIMEOUT_MS)
 const complianceQueue: Array<ComplianceJob> = []
