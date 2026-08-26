@@ -15,11 +15,11 @@ interface SeedStrategy {
 
 Where `Seed` is a `number[]` (byte array) and `FamilyKind` determines the seed length:
 
-| FamilyKind | Seed Length |
-| --- | --- |
-| `Procedural` | 4 bytes |
-| `ProceduralPersonal` | 8 bytes |
-| `ProceduralAccount` | 32 bytes |
+| FamilyKind           | Seed Length |
+| -------------------- | ----------- |
+| `Procedural`         | 4 bytes     |
+| `ProceduralPersonal` | 8 bytes     |
+| `ProceduralAccount`  | 32 bytes    |
 
 ## Built-in Strategies
 
@@ -78,12 +78,12 @@ Any collision immediately sets the quality score to **0**.
 
 ## Choosing a Strategy
 
-| Strategy | Best for |
-| --- | --- |
-| `BitFlipStrategy` | Default benchmarking, detecting ignored input bits |
-| `RandomStrategy` | Broad input coverage, stress testing |
-| `SequentialStrategy` | Testing gradual input changes |
-| `MixedStrategy` | Combining strengths of multiple approaches |
+| Strategy             | Best for                                           |
+| -------------------- | -------------------------------------------------- |
+| `BitFlipStrategy`    | Default benchmarking, detecting ignored input bits |
+| `RandomStrategy`     | Broad input coverage, stress testing               |
+| `SequentialStrategy` | Testing gradual input changes                      |
+| `MixedStrategy`      | Combining strengths of multiple approaches         |
 
 ## Usage
 

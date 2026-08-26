@@ -42,7 +42,7 @@ const HeroBlock = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.88, delay: 1.5 }}
       >
-        <p className="font-jersey z-50 text-6xl text-white md:text-7xl">
+        <p className="z-50 font-jersey text-6xl text-white md:text-7xl">
           Entropretty
         </p>
         <a href="https://app.entropretty.com/">

@@ -19,7 +19,7 @@ const resources = [
 
 export function VideoSection() {
   return (
-    <section id="learn-more" className="border-border border-b">
+    <section id="learn-more" className="border-b border-border">
       <div className="mx-auto max-w-6xl py-16 sm:py-24 lg:px-8">
         {/* Header */}
         <motion.div
@@ -30,7 +30,7 @@ export function VideoSection() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">Learn More</h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl">
+          <p className="mt-4 max-w-2xl text-muted-foreground">
             Discover how Entropretty powers Polkadot&apos;s Project
             Individuality—three years of research into proving personhood
             without compromising privacy. Learn about DIMs, Proof of Ink, and
@@ -40,7 +40,7 @@ export function VideoSection() {
 
         {/* Large Video - edge to edge on mobile */}
         <motion.div
-          className="border-border relative aspect-video w-full overflow-hidden border-y sm:mx-6 sm:w-auto sm:border lg:mx-0 lg:border"
+          className="relative aspect-video w-full overflow-hidden border-y border-border sm:mx-6 sm:w-auto sm:border lg:mx-0 lg:border"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -65,7 +65,7 @@ export function VideoSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h3 className="text-muted-foreground text-sm uppercase tracking-wider">
+          <h3 className="text-sm uppercase tracking-wider text-muted-foreground">
             Related Resources
           </h3>
           <ul className="mt-4 space-y-3">
@@ -75,7 +75,7 @@ export function VideoSection() {
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground hover:text-muted-foreground group flex items-start gap-2 transition-colors"
+                  className="group flex items-start gap-2 text-foreground transition-colors hover:text-muted-foreground"
                 >
                   <span className="text-muted-foreground">→</span>
                   <span className="underline-offset-4 group-hover:underline">

@@ -61,10 +61,7 @@ export interface CodeRule extends BaseRule {
 
 // Union type for all possible rules
 export type ComplianceRule =
-  | SingleImageRule
-  | ComparisonRule
-  | MultiImageRule
-  | CodeRule
+  SingleImageRule | ComparisonRule | MultiImageRule | CodeRule
 
 export interface ComplianceReport {
   ruleName: string

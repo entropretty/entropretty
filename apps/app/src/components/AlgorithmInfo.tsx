@@ -9,7 +9,8 @@ export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
           {`${algorithm.name || 'Untitled'} `}
           <Link
             className="text-muted-foreground underline"
-            to={`/a/${algorithm.id}`}
+            to="/a/$algorithmId"
+            params={{ algorithmId: String(algorithm.id) }}
           >{`/a/${algorithm.id}`}</Link>
         </span>
 
@@ -18,7 +19,8 @@ export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
             {` remix of `}
             <Link
               className="text-muted-foreground underline"
-              to={`/a/${algorithm.remix_of}`}
+              to="/a/$algorithmId"
+              params={{ algorithmId: String(algorithm.remix_of) }}
             >{`/a/${algorithm.remix_of}`}</Link>
           </>
         )}
@@ -27,7 +29,8 @@ export const AlgorithmInfo = ({ algorithm }: { algorithm: AlgorithmView }) => {
         {`by `}
         <Link
           className="text-muted-foreground underline"
-          to={`/u/${algorithm.username || 'Anonymous'}`}
+          to="/u/$username"
+          params={{ username: algorithm.username || 'Anonymous' }}
         >
           {algorithm.username || 'Anonymous'}
         </Link>

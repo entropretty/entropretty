@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="border-border bg-secondary/30 border-t">
+    <footer className="bg-secondary/30 border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -12,7 +12,7 @@ export function Footer() {
             <Link href="/" className="font-jersey text-2xl tracking-tight">
               Entropretty
             </Link>
-            <p className="text-muted-foreground mt-2 text-sm">
+            <p className="mt-2 text-sm text-muted-foreground">
               Powering Polkadot&apos;s Proof of Ink.
             </p>
           </div>
@@ -20,13 +20,13 @@ export function Footer() {
           {/* Links */}
           <div>
             <h4 className="text-sm font-medium">Resources</h4>
-            <ul className="text-muted-foreground mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>
                 <a
                   href="https://app.entropretty.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Launch App
                 </a>
@@ -34,7 +34,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/rules"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Competition Rules
                 </Link>
@@ -44,7 +44,7 @@ export function Footer() {
                   href="https://github.com/entropretty/entropretty"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   GitHub
                 </a>
@@ -54,13 +54,13 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-medium">Learn</h4>
-            <ul className="text-muted-foreground mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>
                 <a
                   href="https://www.youtube.com/watch?v=xJKjGjiJytA"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Introduction Video
                 </a>
@@ -70,7 +70,7 @@ export function Footer() {
                   href="https://www.youtube.com/watch?v=YRBgGEfelnk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Proof of Personhood Interview
                 </a>
@@ -80,7 +80,7 @@ export function Footer() {
                   href="https://www.youtube.com/watch?v=MrWioikibEI"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Web3 Citizenship
                 </a>
@@ -90,13 +90,13 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-medium">Community</h4>
-            <ul className="text-muted-foreground mt-4 space-y-2 text-sm">
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li>
                 <a
                   href="https://x.com/entropretty"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   X (Twitter)
                 </a>
@@ -106,7 +106,7 @@ export function Footer() {
                   href="https://bsky.app/profile/entropretty.bsky.social"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Bluesky
                 </a>
@@ -116,7 +116,7 @@ export function Footer() {
                   href="https://polkadot.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground transition-colors"
+                  className="transition-colors hover:text-foreground"
                 >
                   Polkadot
                 </a>
@@ -125,8 +125,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-border mt-12 border-t pt-8">
-          <p className="text-muted-foreground text-center text-sm">
+        <div className="mt-12 border-t border-border pt-8">
+          <p className="text-center text-sm text-muted-foreground">
             Web3 should serve people, not platforms
           </p>
         </div>

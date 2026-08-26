@@ -33,7 +33,7 @@ export function bytesToNibbles(bytes: Seed) {
 }
 
 export function bit(seed: Seed, i: number): number {
-  return (seed[Math.floor(i / 8) % seed.length] >> i % 8) & 1
+  return (seed[Math.floor(i / 8) % seed.length] >> (i % 8)) & 1
 }
 
 export function bits(seed: Seed, from = 0, to = 32): number {

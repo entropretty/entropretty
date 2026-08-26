@@ -83,7 +83,7 @@ export const AlgorithmCompliance: React.FC<Props> = ({
       })
       .then((result) => {
         if (result) {
-          setIssues(result.issues as Array<ExtendedCheckMetadata>)
+          setIssues(result.issues)
           if (result.issueOverlayImageData) {
             setOverlayImageData(result.issueOverlayImageData)
           } else {

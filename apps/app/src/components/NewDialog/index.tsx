@@ -1,5 +1,5 @@
 import { ArrowUpRight, PlusIcon } from 'lucide-react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import type { FamilyKind } from '@entropretty/utils'
 import { Button } from '@/components/ui/button'
 import {

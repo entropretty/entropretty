@@ -1,8 +1,8 @@
 export default function EntroprettyVideo() {
   return (
-    <div className="dark:bg-background flex min-h-screen w-full flex-col items-center justify-center bg-white">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-white dark:bg-background">
       <div className="flex h-full w-full flex-col items-center justify-center py-16 sm:px-4">
-        <h1 className="mb-8 text-2xl font-bold text-gray-900 sm:text-4xl dark:text-white">
+        <h1 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white sm:text-4xl">
           Why Entropretty?
         </h1>
         <div className="aspect-video w-full max-w-[1200px]">
@@ -17,7 +17,7 @@ export default function EntroprettyVideo() {
           ></iframe>
         </div>
         <div className="mt-8 flex w-full max-w-[960px] flex-col items-center justify-center gap-4">
-          <h2 className="text-lg font-bold text-gray-900 sm:text-2xl dark:text-white">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white sm:text-2xl">
             More about Proof of Personhood
           </h2>
           <ul className="w-full list-none space-y-4 pl-6 sm:w-1/2">

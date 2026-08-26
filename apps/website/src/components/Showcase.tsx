@@ -73,7 +73,7 @@ export function Showcase() {
   }
 
   return (
-    <section className="border-border bg-secondary/30 border-b">
+    <section className="bg-secondary/30 border-b border-border">
       <div className="py-16 sm:py-24">
         <motion.div
           className="mx-auto mb-12 max-w-6xl px-4 sm:mb-16 sm:px-6 lg:px-8"
@@ -85,20 +85,20 @@ export function Showcase() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">
             Community Designs
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl">
+          <p className="mt-4 max-w-2xl text-muted-foreground">
             Explore algorithms created by the community. Each design transforms
             entropy into unique, recognizable patterns.
           </p>
           <Link
             href="https://app.entropretty.com/explore"
-            className="text-foreground mt-4 inline-flex items-center gap-2 underline-offset-4 hover:underline"
+            className="mt-4 inline-flex items-center gap-2 text-foreground underline-offset-4 hover:underline"
           >
             Explore more designs
             <span>→</span>
           </Link>
         </motion.div>
 
-        <div className="border-border relative flex w-full flex-col items-center justify-center overflow-hidden border-y">
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden border-y border-border">
           <Marquee reverse pauseOnHover className="[--duration:90s]">
             {firstRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
@@ -106,14 +106,14 @@ export function Showcase() {
           </Marquee>
           <Marquee
             pauseOnHover
-            className="border-border border-t [--duration:90s]"
+            className="border-t border-border [--duration:90s]"
           >
             {secondRow.map((filename) => (
               <VideoCard key={filename} filename={filename} />
             ))}
           </Marquee>
-          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r to-transparent sm:w-1/4" />
-          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l to-transparent sm:w-1/4" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/6 bg-gradient-to-r from-background to-transparent sm:w-1/4" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/6 bg-gradient-to-l from-background to-transparent sm:w-1/4" />
         </div>
       </div>
     </section>

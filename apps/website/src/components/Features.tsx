@@ -27,7 +27,7 @@ const features = [
 
 export function Features() {
   return (
-    <section className="border-border border-b">
+    <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <motion.div
           className="mb-12 sm:mb-16"
@@ -37,7 +37,7 @@ export function Features() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">Why Entropretty?</h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl">
+          <p className="mt-4 max-w-2xl text-muted-foreground">
             Web3 should serve people, not platforms. Entropretty is the
             algorithmic art engine behind Polkadot&apos;s proof of
             personhood—creating visual identities that let you prove you&apos;re
@@ -49,14 +49,14 @@ export function Features() {
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              className="border-border border p-6 sm:p-8"
+              className="border border-border p-6 sm:p-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <h3 className="text-xl">{feature.title}</h3>
-              <p className="text-muted-foreground mt-2">
+              <p className="mt-2 text-muted-foreground">
                 {feature.description}
               </p>
             </motion.div>

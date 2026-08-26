@@ -34,8 +34,8 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
-    "tsup": "^8.0.2",
-    "typescript": "^5.3.3",
-    "vitest": "^2.1.9"
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
   }
 }

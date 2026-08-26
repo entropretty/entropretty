@@ -7,7 +7,7 @@ import dts from "vite-plugin-dts"
 export default defineConfig({
   plugins: [
     react(),
-    dts({ tsconfigPath: "./tsconfig.app.json", rollupTypes: true }),
+    dts({ tsconfigPath: "./tsconfig.app.json", bundleTypes: true }),
   ],
   base: "./",
   worker: {

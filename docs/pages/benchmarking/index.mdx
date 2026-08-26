@@ -28,11 +28,11 @@ Static analysis of the algorithm source code. Currently checks for copy-pasted e
 
 Generates test seeds using a configurable `SeedStrategy`. The default `BitFlipStrategy` produces seeds with systematic bit variations. Seed length depends on the algorithm's `FamilyKind`:
 
-| Kind | Seed Length |
-| --- | --- |
-| `Procedural` | 4 bytes |
-| `ProceduralPersonal` | 8 bytes |
-| `ProceduralAccount` | 32 bytes |
+| Kind                 | Seed Length |
+| -------------------- | ----------- |
+| `Procedural`         | 4 bytes     |
+| `ProceduralPersonal` | 8 bytes     |
+| `ProceduralAccount`  | 32 bytes    |
 
 ### Phase 3: Render + Single-Image Rules
 
@@ -50,12 +50,12 @@ Rules that need access to the full set of rendered images run last. These can de
 
 ## Default Parameters
 
-| Parameter | Default Value |
-| --- | --- |
-| Seed count (`amount`) | 250 |
-| Image size (`size`) | 300x300 px |
-| Seed strategy | `BitFlipStrategy` |
-| Rule set | All browser-compatible rules |
+| Parameter             | Default Value                |
+| --------------------- | ---------------------------- |
+| Seed count (`amount`) | 250                          |
+| Image size (`size`)   | 300x300 px                   |
+| Seed strategy         | `BitFlipStrategy`            |
+| Rule set              | All browser-compatible rules |
 
 These can be overridden via `BenchmarkOptions`:
 

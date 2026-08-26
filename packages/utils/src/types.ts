@@ -22,9 +22,7 @@ export type ProceduralPersonalSeed = Seed
 export type ProceduralAccountSeed = Seed
 
 export type FamilyKind =
-  | "Procedural"
-  | "ProceduralPersonal"
-  | "ProceduralAccount"
+  "Procedural" | "ProceduralPersonal" | "ProceduralAccount"
 
 export type DrawFn = (
   context: CanvasRenderingContext2D, // | OffscreenCanvasRenderingContext2D,

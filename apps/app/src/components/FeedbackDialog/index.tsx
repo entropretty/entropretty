@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button'
 const feedbackSchema = z.object({
   feedback: z.string().min(1, 'Please provide some feedback'),
   sentiment: z.enum(['negative', 'neutral', 'positive'], {
-    required_error: 'Please select a sentiment',
+    error: 'Please select a sentiment',
   }),
 })
 
