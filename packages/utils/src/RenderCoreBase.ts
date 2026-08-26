@@ -1,5 +1,5 @@
 import { blake2b256 as blake2b256Hasher } from "@multiformats/blake2/blake2b"
-import { bytesToHex } from "@noble/hashes/utils"
+import { bytesToHex } from "@noble/hashes/utils.js"
 import PQueue from "p-queue"
 import { preludeScriptString as preludeScript } from "./prelude/generatedScriptString"
 import type { FamilyKind, Seed } from "./types"

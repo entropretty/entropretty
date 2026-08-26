@@ -16,12 +16,12 @@ interface BaseRule {
 
 There are four rule types:
 
-| Type | Interface | What it receives |
-| --- | --- | --- |
-| `single` | `SingleImageRule` | One rendered image |
-| `comparison` | `ComparisonRule` | Two rendered images |
-| `multi` | `MultiImageRule` | All rendered images |
-| `code` | `CodeRule` | Algorithm source code string |
+| Type         | Interface         | What it receives             |
+| ------------ | ----------------- | ---------------------------- |
+| `single`     | `SingleImageRule` | One rendered image           |
+| `comparison` | `ComparisonRule`  | Two rendered images          |
+| `multi`      | `MultiImageRule`  | All rendered images          |
+| `code`       | `CodeRule`        | Algorithm source code string |
 
 Each rule returns a `ComplianceResult` with a status (`pass`, `warn`, `error`, or `info`) and optional metadata describing what was found.
 
@@ -51,12 +51,12 @@ Colors are grouped by similarity (tolerance-based), and white/near-white pixels,
 - **Pass:** Distinct color count ≤ `maxColors`
 - **Warn:** Distinct color count > `maxColors`
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `maxColors` | 3 | Maximum distinct colors allowed |
-| `tolerance` | 10 | RGB channel distance for grouping similar colors |
-| `whiteTolerance` | 10 | RGB distance from `(255,255,255)` to count as white |
-| `frequencyThreshold` | 0.01 | Minimum pixel ratio (1%) for a color to be counted |
+| Parameter            | Default | Description                                         |
+| -------------------- | ------- | --------------------------------------------------- |
+| `maxColors`          | 3       | Maximum distinct colors allowed                     |
+| `tolerance`          | 10      | RGB channel distance for grouping similar colors    |
+| `whiteTolerance`     | 10      | RGB distance from `(255,255,255)` to count as white |
+| `frequencyThreshold` | 0.01    | Minimum pixel ratio (1%) for a color to be counted  |
 
 ---
 
@@ -70,12 +70,12 @@ Detects small isolated color regions using flood-fill. Tiny "islands" of color o
 - **Warn:** Islands found between `errorThreshold` and `minIslandSize`
 - **Error:** Islands found below `errorThreshold`
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `minIslandSize` | 50 | Pixel count below which a region is considered an island |
-| `warningThreshold` | 50 | Islands below this size trigger a warning |
-| `errorThreshold` | 100 | Islands below this size trigger an error |
-| `colorTolerance` | 50 | RGB distance for considering pixels the same color |
+| Parameter          | Default | Description                                              |
+| ------------------ | ------- | -------------------------------------------------------- |
+| `minIslandSize`    | 50      | Pixel count below which a region is considered an island |
+| `warningThreshold` | 50      | Islands below this size trigger a warning                |
+| `errorThreshold`   | 100     | Islands below this size trigger an error                 |
+| `colorTolerance`   | 50      | RGB distance for considering pixels the same color       |
 
 ---
 
@@ -90,11 +90,11 @@ The rule scans both horizontal and vertical edges, looking for runs of consecuti
 - **Pass:** No harsh transitions found
 - **Warn:** One or more high-contrast edges detected
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `maxContrastDelta` | 100 | Maximum allowed color difference (0–255 per channel) |
-| `minContrastLength` | 3 | Minimum consecutive high-contrast pixels to trigger |
-| `samplingSteps` | 2 | Pixel distance to compare (detects harsh gradients) |
+| Parameter           | Default | Description                                          |
+| ------------------- | ------- | ---------------------------------------------------- |
+| `maxContrastDelta`  | 100     | Maximum allowed color difference (0–255 per channel) |
+| `minContrastLength` | 3       | Minimum consecutive high-contrast pixels to trigger  |
+| `samplingSteps`     | 2       | Pixel distance to compare (detects harsh gradients)  |
 
 ---
 
@@ -110,10 +110,10 @@ This detects when different seeds produce visually similar outputs — a sign th
 - **Warn:** Distance between `warningThreshold` and `errorThreshold`
 - **Error:** Distance > `errorThreshold`
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `warningThreshold` | 10 | Max Hamming distance for "pass" |
-| `errorThreshold` | 20 | Max Hamming distance before "error" |
+| Parameter          | Default | Description                         |
+| ------------------ | ------- | ----------------------------------- |
+| `warningThreshold` | 10      | Max Hamming distance for "pass"     |
+| `errorThreshold`   | 20      | Max Hamming distance before "error" |
 
 ---
 
@@ -183,7 +183,12 @@ import { updateConfig } from "@entropretty/compliance"
 
 updateConfig({
   rules: {
-    colorCount: { maxColors: 5, tolerance: 15, whiteTolerance: 10, frequencyThreshold: 0.01 },
+    colorCount: {
+      maxColors: 5,
+      tolerance: 15,
+      whiteTolerance: 10,
+      frequencyThreshold: 0.01,
+    },
   },
 })
 ```

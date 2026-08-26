@@ -10,7 +10,6 @@ import { AlgorithmBitmap } from '@/components/AlgorithmBitmap'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 import { LikeButton } from '@/components/AlgorithmCard/LikeButton'
 import { AlgorithmInfo } from '@/components/AlgorithmInfo'
-import { AutoScrollButton } from '@/components/AutoScrollButton'
 import { FamilyKindBadge } from '@/components/FamilyKindBadge'
 
 interface AlgorithmInfiniteGridProps {
@@ -107,7 +106,10 @@ const AlgorithmActions = ({ algorithm }: { algorithm: AlgorithmView }) => {
     <div className="flex w-auto flex-row items-center justify-end gap-2 md:w-auto">
       {/* <AutoScrollButton className="hidden md:block" scrollAmount={2000} /> */}
       <Button className="hidden md:block" asChild variant="link">
-        <Link to={`/demo/${algorithm.id}`}>{`DEMO`}</Link>
+        <Link
+          to="/demo/$algorithmId"
+          params={{ algorithmId: String(algorithm.id) }}
+        >{`DEMO`}</Link>
       </Button>
       {user && (
         <Button asChild variant="link">

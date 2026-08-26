@@ -88,7 +88,7 @@ export function bytesToBits(bytes: Seed): number[] {
  */
 export function bit(seed: Seed, i: number): 0 | 1 {
   const byte = getByte(seed, Math.floor(i / 8))
-  return ((byte >> i % 8) & 1) as 0 | 1
+  return ((byte >> (i % 8)) & 1) as 0 | 1
 }
 
 /**

@@ -45,7 +45,7 @@ function Exhibition({ schema }: Props) {
         mode === "families" &&
         families.map((family, f) => (
           <div key={family.toString()}>
-            <div className="grid-cols-16 relative grid">
+            <div className="relative grid grid-cols-16">
               {family.map((seed, index) => (
                 <div
                   key={seedToKey(seed)}

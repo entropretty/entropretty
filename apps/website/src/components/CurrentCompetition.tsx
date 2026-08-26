@@ -44,7 +44,7 @@ export default function CurrentCompetition() {
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Black & White Competition */}
-        <div className="border-foreground border p-4">
+        <div className="border border-foreground p-4">
           <h4 className="mb-3 text-center text-xl font-semibold">
             Black & White Tattoo
           </h4>
@@ -75,7 +75,7 @@ export default function CurrentCompetition() {
         </div>
 
         {/* Wild Competition */}
-        <div className="border-foreground flex-col space-y-2 border p-4">
+        <div className="flex-col space-y-2 border border-foreground p-4">
           <h4 className="mb-3 text-center text-xl font-semibold">
             Wild Tattoo
           </h4>

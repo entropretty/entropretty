@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai'
 import { Suspense, lazy } from 'react'
 import { useBlocker } from '@tanstack/react-router'
+import { useDefaultLayout } from 'react-resizable-panels'
 import { FamilyKindBadge } from '../../components/FamilyKindBadge'
 import { AlgorithmNameInput } from './AlgorithmNameInput'
 import { AlgorithmPreview } from './AlgorithmPreview'
@@ -86,6 +87,11 @@ export const CreateFeature = ({ initialCode }: CreateFeatureProps) => {
   const [scriptError] = useAtom(scriptErrorAtom)
   const [editorSeedType] = useAtom(editorSeedTypeAtom)
   const [localFileMode] = useAtom(localFileModeAtom)
+  // Persists the preview/editor split across reloads (replaces v2's `autoSaveId`).
+  const { defaultLayout, onLayoutChanged } = useDefaultLayout({
+    id: 'editor-layout-id',
+    panelIds: localFileMode ? ['preview'] : ['preview', 'editor'],
+  })
 
   return (
     <>
@@ -93,13 +99,13 @@ export const CreateFeature = ({ initialCode }: CreateFeatureProps) => {
       <FeedbackDialog className="fixed bottom-4 right-4 z-50" />
       <LocalFileDrawer />
       <ResizablePanelGroup
-        direction="horizontal"
+        orientation="horizontal"
         className="h-screen w-screen"
-        autoSave="editor-layout"
-        autoSaveId="editor-layout-id"
+        defaultLayout={defaultLayout}
+        onLayoutChanged={onLayoutChanged}
       >
-        <ResizablePanel defaultSize={localFileMode ? 100 : 50}>
-          <ResizablePanelGroup direction="vertical">
+        <ResizablePanel id="preview" defaultSize={localFileMode ? 100 : 50}>
+          <ResizablePanelGroup orientation="vertical">
             <ResizablePanel defaultSize={90} className="h-full w-full">
               <div className="relative h-full w-full">
                 <AlgorithmPreview />
@@ -131,6 +137,7 @@ export const CreateFeature = ({ initialCode }: CreateFeatureProps) => {
             <ResizableHandle withHandle />
 
             <ResizablePanel
+              id="editor"
               defaultSize={50}
               minSize={10}
               className="flex h-full flex-col"

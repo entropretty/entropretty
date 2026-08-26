@@ -3,3 +3,19 @@ packages:
   - "packages/*"
   - "lib/*"
   - "docs"
+
+# pnpm 10 skips dependency install scripts unless allowlisted. These need theirs:
+# canvas downloads its prebuilt native binary, puppeteer downloads Chrome.
+onlyBuiltDependencies:
+  - "@swc/core"
+  - canvas
+  - esbuild
+  - puppeteer
+  - unrs-resolver
+
+# Security patches that upstream pins below the fixed release (same major, safe to force):
+# seroval < 1.5.3 via @tanstack/react-devtools; minimatch < 10.2.3 and lodash < 4.18 via tsup.
+overrides:
+  seroval: ">=1.5.3"
+  "minimatch@10": ">=10.2.3"
+  "lodash@4": ">=4.18.0"

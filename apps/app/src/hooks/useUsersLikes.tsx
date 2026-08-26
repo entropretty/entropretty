@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@/contexts/auth-context'
-import { AlgorithmView } from '@/lib/helper.types'
 import { getSupabase } from '@/lib/supabase'
 
 export function useUsersLikes() {

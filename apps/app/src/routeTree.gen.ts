@@ -9,54 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as NewRouteImport } from './routes/new'
-import { Route as MineRouteImport } from './routes/mine'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HotRouteImport } from './routes/hot'
-import { Route as ExploreRouteImport } from './routes/explore'
-import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UUsernameRouteImport } from './routes/u.$username'
-import { Route as DemoAlgorithmIdRouteImport } from './routes/demo.$algorithmId'
+import { Route as CreateRouteImport } from './routes/create'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as HotRouteImport } from './routes/hot'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as MineRouteImport } from './routes/mine'
+import { Route as NewRouteImport } from './routes/new'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AAlgorithmIdRouteImport } from './routes/a.$algorithmId'
-import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
+import { Route as DemoAlgorithmIdRouteImport } from './routes/demo.$algorithmId'
+import { Route as UUsernameRouteImport } from './routes/u.$username'
 import { Route as ApiOgAlgorithmIdRouteImport } from './routes/api/og.$algorithmId'
+import { Route as ApiTwitterAlgorithmIdRouteImport } from './routes/api/twitter.$algorithmId'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewRoute = NewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MineRoute = MineRouteImport.update({
-  id: '/mine',
-  path: '/mine',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HotRoute = HotRouteImport.update({
-  id: '/hot',
-  path: '/hot',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreRoute = ExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateRoute = CreateRouteImport.update({
@@ -64,19 +34,39 @@ const CreateRoute = CreateRouteImport.update({
   path: '/create',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UUsernameRoute = UUsernameRouteImport.update({
-  id: '/u/$username',
-  path: '/u/$username',
+const HotRoute = HotRouteImport.update({
+  id: '/hot',
+  path: '/hot',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoAlgorithmIdRoute = DemoAlgorithmIdRouteImport.update({
-  id: '/demo/$algorithmId',
-  path: '/demo/$algorithmId',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MineRoute = MineRouteImport.update({
+  id: '/mine',
+  path: '/mine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewRoute = NewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
@@ -84,14 +74,24 @@ const AAlgorithmIdRoute = AAlgorithmIdRouteImport.update({
   path: '/a/$algorithmId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiTwitterAlgorithmIdRoute = ApiTwitterAlgorithmIdRouteImport.update({
-  id: '/api/twitter/$algorithmId',
-  path: '/api/twitter/$algorithmId',
+const DemoAlgorithmIdRoute = DemoAlgorithmIdRouteImport.update({
+  id: '/demo/$algorithmId',
+  path: '/demo/$algorithmId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UUsernameRoute = UUsernameRouteImport.update({
+  id: '/u/$username',
+  path: '/u/$username',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiOgAlgorithmIdRoute = ApiOgAlgorithmIdRouteImport.update({
   id: '/api/og/$algorithmId',
   path: '/api/og/$algorithmId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTwitterAlgorithmIdRoute = ApiTwitterAlgorithmIdRouteImport.update({
+  id: '/api/twitter/$algorithmId',
+  path: '/api/twitter/$algorithmId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -214,53 +214,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/new': {
-      id: '/new'
-      path: '/new'
-      fullPath: '/new'
-      preLoaderRoute: typeof NewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mine': {
-      id: '/mine'
-      path: '/mine'
-      fullPath: '/mine'
-      preLoaderRoute: typeof MineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/hot': {
-      id: '/hot'
-      path: '/hot'
-      fullPath: '/hot'
-      preLoaderRoute: typeof HotRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/explore': {
-      id: '/explore'
-      path: '/explore'
-      fullPath: '/explore'
-      preLoaderRoute: typeof ExploreRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create': {
@@ -270,25 +228,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/u/$username': {
-      id: '/u/$username'
-      path: '/u/$username'
-      fullPath: '/u/$username'
-      preLoaderRoute: typeof UUsernameRouteImport
+    '/hot': {
+      id: '/hot'
+      path: '/hot'
+      fullPath: '/hot'
+      preLoaderRoute: typeof HotRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/$algorithmId': {
-      id: '/demo/$algorithmId'
-      path: '/demo/$algorithmId'
-      fullPath: '/demo/$algorithmId'
-      preLoaderRoute: typeof DemoAlgorithmIdRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mine': {
+      id: '/mine'
+      path: '/mine'
+      fullPath: '/mine'
+      preLoaderRoute: typeof MineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/new': {
+      id: '/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof NewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a/$algorithmId': {
@@ -298,11 +284,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AAlgorithmIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/twitter/$algorithmId': {
-      id: '/api/twitter/$algorithmId'
-      path: '/api/twitter/$algorithmId'
-      fullPath: '/api/twitter/$algorithmId'
-      preLoaderRoute: typeof ApiTwitterAlgorithmIdRouteImport
+    '/demo/$algorithmId': {
+      id: '/demo/$algorithmId'
+      path: '/demo/$algorithmId'
+      fullPath: '/demo/$algorithmId'
+      preLoaderRoute: typeof DemoAlgorithmIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/u/$username': {
+      id: '/u/$username'
+      path: '/u/$username'
+      fullPath: '/u/$username'
+      preLoaderRoute: typeof UUsernameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/og/$algorithmId': {
@@ -310,6 +303,13 @@ declare module '@tanstack/react-router' {
       path: '/api/og/$algorithmId'
       fullPath: '/api/og/$algorithmId'
       preLoaderRoute: typeof ApiOgAlgorithmIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/twitter/$algorithmId': {
+      id: '/api/twitter/$algorithmId'
+      path: '/api/twitter/$algorithmId'
+      fullPath: '/api/twitter/$algorithmId'
+      preLoaderRoute: typeof ApiTwitterAlgorithmIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

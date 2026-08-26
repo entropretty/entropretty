@@ -51,7 +51,7 @@ export const Controls = () => {
     <>
       <nav
         className={cn(
-          "bg-background/95 supports-[backdrop-filter]:bg-background/30 fixed bottom-4 left-4 flex flex-row items-center justify-center overflow-hidden rounded-md border text-sm backdrop-blur transition-all duration-300 ease-in-out",
+          "fixed bottom-4 left-4 flex flex-row items-center justify-center overflow-hidden rounded-md border bg-background/95 text-sm backdrop-blur transition-all duration-300 ease-in-out supports-[backdrop-filter]:bg-background/30",
           { hidden: !showControls },
         )}
       >
@@ -98,7 +98,7 @@ export const Controls = () => {
         <Button
           variant={"ghost"}
           onMouseDown={toggleControls}
-          className="text-muted-foreground fixed bottom-4 left-4 h-10 text-sm"
+          className="fixed bottom-4 left-4 h-10 text-sm text-muted-foreground"
         >
           show
         </Button>

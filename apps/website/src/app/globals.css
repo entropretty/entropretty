@@ -6,8 +6,9 @@
 
 :root {
   /* IBM Plex Mono font-family with system monospace fallback */
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 
   /* Brand Colors */
   --brand-blue: 230 18% 13%;

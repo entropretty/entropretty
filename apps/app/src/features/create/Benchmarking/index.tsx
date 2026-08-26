@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import { scoreBenchmarkResult } from '@entropretty/benchmark-core'
 import { BenchmarkResults } from './BenchmarkResults'
 import type { ScoredBenchmarkResult } from '@entropretty/benchmark-core'
-import type { BenchmarkResult as BenchmarkResultType } from '@/workers/compliance'
 import { useAlgorithmService } from '@/contexts/service-context'
 import { Button } from '@/components/ui/button'
 

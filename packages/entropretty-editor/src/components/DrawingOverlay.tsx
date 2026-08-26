@@ -28,7 +28,7 @@ export const DrawingOverlay: React.FC<Props> = ({
   return (
     <>
       {showDetails && (
-        <div className="bg-background/50 absolute bottom-0 left-0 flex h-full w-full whitespace-normal border text-[9px]">
+        <div className="absolute bottom-0 left-0 flex h-full w-full whitespace-normal border bg-background/50 text-[9px]">
           [{seed.join(", ")}]
         </div>
       )}

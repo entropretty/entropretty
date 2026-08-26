@@ -44,11 +44,14 @@ export function AlgorithmRow({ algorithm }: AlgorithmRowProps) {
 
       <div className="flex items-center gap-2">
         <Button asChild variant="link">
-          <Link to={`/a/${algorithm.id}`}>{`VIEW`}</Link>
+          <Link
+            to="/a/$algorithmId"
+            params={{ algorithmId: String(algorithm.id) }}
+          >{`VIEW`}</Link>
         </Button>
         {user && (
           <Button asChild variant="link">
-            <Link to={`/create?remix=${algorithm.id}`}>{`REMIX`}</Link>
+            <Link to="/create" search={{ remix: algorithm.id }}>{`REMIX`}</Link>
           </Button>
         )}
         <DeleteButton algorithm={algorithm} />

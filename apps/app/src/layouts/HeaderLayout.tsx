@@ -12,7 +12,7 @@ import { useUserProfile } from '@/hooks/useUserProfile'
 import { FEATURES } from '@/lib/features'
 import { cn } from '@/lib/utils'
 
-function HeaderLogo({ pathname }: { pathname: string }) {
+function HeaderLogo() {
   // const randomFavicon = useMemo(() => Math.floor(Math.random() * 45) + 1, [])
 
   return (
@@ -49,7 +49,7 @@ export default function HeaderLayout() {
         )}
       >
         <div className="flex flex-1 flex-row items-center justify-around md:justify-between gap-2">
-          <HeaderLogo pathname={location.pathname} />
+          <HeaderLogo />
           {!FEATURES.isCompetition && (
             <>
               <Button asChild variant={'link'}>

@@ -8,7 +8,7 @@ import { AssemblySummer2025EventCard } from "./AssemblySummer2025EventCard"
 
 export function EventsSection() {
   return (
-    <section className="border-border border-b">
+    <section className="border-b border-border">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <motion.div
           className="mb-12 sm:mb-16"
@@ -18,13 +18,13 @@ export function EventsSection() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl">Competitions</h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl">
+          <p className="mt-4 max-w-2xl text-muted-foreground">
             Join our competitions to showcase your algorithmic art skills. Win
             prizes and have your designs featured in the Entropretty ecosystem.
           </p>
           <Link
             href="/rules"
-            className="text-foreground mt-4 inline-flex items-center gap-2 underline-offset-4 hover:underline"
+            className="mt-4 inline-flex items-center gap-2 text-foreground underline-offset-4 hover:underline"
           >
             Read Competition Rules
             <span>→</span>

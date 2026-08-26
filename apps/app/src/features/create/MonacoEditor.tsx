@@ -1,4 +1,4 @@
-import Editor, { useMonaco } from '@monaco-editor/react'
+import Editor, { loader, useMonaco } from '@monaco-editor/react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
@@ -9,6 +9,12 @@ import { useFormatCode } from './useFormatCode'
 import type { editor } from 'monaco-editor'
 import { FEATURES } from '@/lib/features'
 import { useTheme } from '@/contexts/theme-context'
+
+// Load the same Monaco version our `monaco-editor` types are pinned to. The wrapper's
+// CDN default drifts (0.55 deprecates `languages.typescript`, which this file uses).
+loader.config({
+  paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' },
+})
 
 const MonacoEditor = () => {
   const monaco = useMonaco()

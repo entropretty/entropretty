@@ -27,7 +27,8 @@ const popoverContentVariants = cva(
 )
 
 interface PopoverContentProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
     VariantProps<typeof popoverContentVariants> {}
 
 const PopoverContent = React.forwardRef<

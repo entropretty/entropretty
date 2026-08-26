@@ -82,9 +82,7 @@ export class ComplianceChecker {
   async checkSingleRule(
     ruleName: string,
     images:
-      | ImagePixelData
-      | [ImagePixelData, ImagePixelData]
-      | ImagePixelData[],
+      ImagePixelData | [ImagePixelData, ImagePixelData] | ImagePixelData[],
   ): Promise<ComplianceReport | null> {
     const rule = this._rules.find((r) => r.name === ruleName)
     if (!rule) {

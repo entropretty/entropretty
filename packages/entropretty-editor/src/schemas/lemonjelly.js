@@ -51,7 +51,7 @@ function draw(t, a) {
       m = !0,
       w = "function" == typeof l.v ? l.v : (t, a) => l.v[a]
     for (var y = new Uint8Array(e * r), p = {}, x = {}, $ = i; $ <= o; ++$)
-      (p[$] = {}), (x[$] = 0)
+      ((p[$] = {}), (x[$] = 0))
     for (var A = 0; A < r; ++A)
       for (var j = 0; j < e; ++j) {
         let t = z(j, A),
@@ -116,12 +116,12 @@ function draw(t, a) {
     function _(t, e = null) {
       for (var r = [], n = 0; n < t; ++n) {
         let t
-        null === e
+        ;(null === e
           ? (t = Math.floor(a() * M))
           : ((t = Math.floor(a() * (l.v.length - 1))),
             t === e && (t = l.v.length - 1)),
           r.push(t),
-          (e = t)
+          (e = t))
       }
       return r
     }
@@ -174,7 +174,7 @@ function draw(t, a) {
         n = 0,
         h = null
       for (let t = o; t >= i; t--)
-        (n += x[t]), 0 != n && (null == h && (h = t), (r[t] = n))
+        ((n += x[t]), 0 != n && (null == h && (h = t), (r[t] = n)))
       if (h < l.o) break
       if (l.p(h, t, 0) < i) break
       let f = null
@@ -184,7 +184,7 @@ function draw(t, a) {
         let M,
           d = o
         if (l.m(t)) M = Math.floor(a() * x[o])
-        else for (M = Math.floor(a() * r[o]); M >= x[d]; ) (M -= x[d]), d++
+        else for (M = Math.floor(a() * r[o]); M >= x[d];) ((M -= x[d]), d++)
         let b = Object.keys(p[d])[M],
           s = [b % e, Math.floor(b / e)]
         f = f || { U: [s[0], s[1]], rad: o }
@@ -196,16 +196,16 @@ function draw(t, a) {
         for (var G = v; G <= k; ++G) {
           let t = [s[0] - o - G, s[1] - o - G]
           if (!B(t, G)) break
-          ;(E = G), (F = t)
+          ;((E = G), (F = t))
         }
         for (G = E ? E + Math.floor(2 * a()) : v; G <= k; ++G) {
           let t = [s[0] + o + G, s[1] - o - G]
           if (!B(t, G)) break
-          ;(E = G), (F = t)
+          ;((E = G), (F = t))
         }
         if (null !== F) {
           let t = F[0] < s[0]
-          C(s, o + 2, t ? 0 : 1), C(F, E + 2, t ? 3 : 2), D(s, F, o, E, t)
+          ;(C(s, o + 2, t ? 0 : 1), C(F, E + 2, t ? 3 : 2), D(s, F, o, E, t))
           break
         }
         if (i > c) {
@@ -220,10 +220,10 @@ function draw(t, a) {
     }
     if (Array.isArray(g) && 2 == g.length) {
       let a = t.createLinearGradient(0, 0, 0, 1)
-      a.addColorStop(0, g[0]),
+      ;(a.addColorStop(0, g[0]),
         a.addColorStop(1, g[1]),
         (t.fillStyle = a),
-        t.fillRect(0, 0, 1, t.aspect)
+        t.fillRect(0, 0, 1, t.aspect))
     } else
       "string" == typeof g && ((t.fillStyle = g), t.fillRect(0, 0, 1, t.aspect))
     if (v)
@@ -234,10 +234,10 @@ function draw(t, a) {
             let n = (r - i) / (o - i + 1),
               f = 96 + 64 * (1 - (r % 2)),
               M = 96 + (r % 2) * 64
-            ;(t.fillStyle = `rgba(${((r - i) % 8) * 32}, ${M * (1 - n)}, ${
+            ;((t.fillStyle = `rgba(${((r - i) % 8) * 32}, ${M * (1 - n)}, ${
               f * (1 - n)
             }, 0.75)`),
-              t.fillRect(l / e, a / e, h, h)
+              t.fillRect(l / e, a / e, h, h))
           }
         }
     function H(a, l, n, h, f, i) {
@@ -262,7 +262,7 @@ function draw(t, a) {
         u = l / e,
         c = n / e,
         d = Math.min(u, c)
-      ;(t.fillStyle = w([o, M], f)),
+      ;((t.fillStyle = w([o, M], f)),
         t.save(),
         t.beginPath(),
         t.translate(o, M),
@@ -272,7 +272,7 @@ function draw(t, a) {
         t.arc(u + c, -u - c, c, Math.PI, Math.PI / 2, !1),
         t.arc(u + d, d - u, d, (3 * Math.PI) / 2, Math.PI, !0),
         t.fill(),
-        t.restore()
+        t.restore())
     }
     function I(a, l, n, h = l / n.length, f) {
       void 0 === f &&
@@ -296,11 +296,11 @@ function draw(t, a) {
         M = l / e,
         u = h / e
       n.forEach((a) => {
-        ;(t.fillStyle = w([i, o], a)),
+        ;((t.fillStyle = w([i, o], a)),
           t.beginPath(),
           t.arc(i, o, M, 0, 2 * Math.PI),
           (M -= u),
-          t.fill()
+          t.fill())
       })
     }
     if (
@@ -313,20 +313,21 @@ function draw(t, a) {
             let f = (a[0] + 0.5) / e,
               i = (a[1] + 0.5) / e,
               o = l / e
-            ;(t.lineWidth = 0.2 / e),
+            ;((t.lineWidth = 0.2 / e),
               (t.strokeStyle = style || "black"),
               t.beginPath(),
               t.arc(f, i, o, 0, 10),
               t.stroke(),
-              t.strokeRect(col / e, row / r, h, h)
+              t.strokeRect(col / e, row / r, h, h))
           })(a, l),
         ),
       k)
     ) {
-      ;(t.strokeStyle = "#0005"), (t.lineWidth = 7e-4), t.beginPath()
+      ;((t.strokeStyle = "#0005"), (t.lineWidth = 7e-4), t.beginPath())
       for (let a = 0; a < r; ++a)
-        t.moveTo(0, (a / r) * t.aspect), t.lineTo(1, (a / r) * t.aspect)
-      for (let a = 0; a < e; ++a) t.moveTo(a / e, 0), t.lineTo(a / e, t.aspect)
+        (t.moveTo(0, (a / r) * t.aspect), t.lineTo(1, (a / r) * t.aspect))
+      for (let a = 0; a < e; ++a)
+        (t.moveTo(a / e, 0), t.lineTo(a / e, t.aspect))
       t.stroke()
     }
   })(t, l, e)

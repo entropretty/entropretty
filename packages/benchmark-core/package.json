@@ -18,13 +18,13 @@
   "dependencies": {
     "@entropretty/compliance": "workspace:*",
     "@entropretty/utils": "workspace:*",
-    "@multiformats/blake2": "^2.0.2",
-    "@noble/hashes": "^1.8.0"
+    "@multiformats/blake2": "^2.0.3",
+    "@noble/hashes": "^2.3.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "tsup": "^8.0.0",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.9"
+    "@types/node": "^24.13.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
   }
 }

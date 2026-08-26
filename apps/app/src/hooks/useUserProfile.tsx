@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import type { Profile } from '@/lib/helper.types'
 import { useAuth } from '@/contexts/auth-context'
 import { getSupabase } from '@/lib/supabase'
 
@@ -20,7 +19,7 @@ export function useUserProfile() {
         .single()
 
       if (error) throw error
-      return data as Profile
+      return data
     },
     enabled: !!user && typeof window !== 'undefined',
   })

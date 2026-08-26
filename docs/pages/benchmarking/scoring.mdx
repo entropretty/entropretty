@@ -20,12 +20,12 @@ Where `warningPercentage` is `(seeds with warnings / total seeds) * 100`.
 ### Score Curve Examples
 
 | Warning % | Score |
-| --- | --- |
-| 0% | 100 |
-| ~5% | ~57 |
-| ~15% | ~19 |
-| ~30% | ~11 |
-| 50%+ | ~10 |
+| --------- | ----- |
+| 0%        | 100   |
+| ~5%       | ~57   |
+| ~15%      | ~19   |
+| ~30%      | ~11   |
+| 50%+      | ~10   |
 
 The curve drops quickly — even a small percentage of warnings significantly impacts the score. The floor is 10 (not 0) to distinguish "some warnings" from "completely broken."
 
@@ -33,13 +33,13 @@ The curve drops quickly — even a small percentage of warnings significantly im
 
 Scores map to letter tiers:
 
-| Tier | Score Range | Meaning |
-| --- | --- | --- |
-| **S** | ≥ 95 | Excellent — near-perfect output |
-| **A** | ≥ 80 | Good — minor issues on few seeds |
-| **B** | ≥ 60 | Acceptable — noticeable quality issues |
-| **C** | ≥ 40 | Poor — significant problems |
-| **F** | < 40 | Failing — needs major fixes |
+| Tier  | Score Range | Meaning                                |
+| ----- | ----------- | -------------------------------------- |
+| **S** | ≥ 95        | Excellent — near-perfect output        |
+| **A** | ≥ 80        | Good — minor issues on few seeds       |
+| **B** | ≥ 60        | Acceptable — noticeable quality issues |
+| **C** | ≥ 40        | Poor — significant problems            |
+| **F** | < 40        | Failing — needs major fixes            |
 
 ## Per-Rule Scores
 
@@ -58,7 +58,7 @@ Errors count **double** compared to warnings. This means a rule with 10% errors 
 
 ```ts
 interface ScoredBenchmarkResult extends BenchmarkResultV2 {
-  qualityScore: number    // 0–100
+  qualityScore: number // 0–100
   qualityTier: QualityTier // "S" | "A" | "B" | "C" | "F"
   ruleScores: Record<string, number> // per-rule scores
 }
@@ -78,13 +78,16 @@ This helps identify whether warnings are concentrated on a few seeds or spread a
 ## Usage
 
 ```ts
-import { BenchmarkCore, scoreBenchmarkResult } from "@entropretty/benchmark-core"
+import {
+  BenchmarkCore,
+  scoreBenchmarkResult,
+} from "@entropretty/benchmark-core"
 
 const core = new BenchmarkCore()
-const raw = await core.benchmark({ /* options */ })
+const raw = await core.benchmark({/* options */})
 const scored = scoreBenchmarkResult(raw)
 
 console.log(scored.qualityScore) // e.g. 87
-console.log(scored.qualityTier)  // e.g. "A"
-console.log(scored.ruleScores)   // e.g. { "color-count": 95, "image-hash": 80, ... }
+console.log(scored.qualityTier) // e.g. "A"
+console.log(scored.ruleScores) // e.g. { "color-count": 95, "image-hash": 80, ... }
 ```

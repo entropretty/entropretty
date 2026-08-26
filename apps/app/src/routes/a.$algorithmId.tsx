@@ -11,8 +11,9 @@ import { useAlgorithm } from '@/hooks/useAlgorithm'
 import { useDisplaySizes } from '@/hooks/useDisplaySizes'
 
 // Server function to fetch algorithm data for meta tags
-const fetchAlgorithmMeta = createServerFn().handler(
-  async ({ data }: { data: { algorithmId: string; baseUrl?: string } }) => {
+const fetchAlgorithmMeta = createServerFn()
+  .validator((data: { algorithmId: string; baseUrl?: string }) => data)
+  .handler(async ({ data }) => {
     const supabaseUrl =
       process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
     const supabaseKey =
@@ -35,8 +36,7 @@ const fetchAlgorithmMeta = createServerFn().handler(
     }
 
     return { ...algorithm, baseUrl: data.baseUrl }
-  },
-)
+  })
 
 export const Route = createFileRoute('/a/$algorithmId')({
   component: AlgorithmPage,
@@ -167,7 +167,8 @@ function AlgorithmPage() {
     )
   }
 
-  if (!algorithm && isFetched) {
+  if (!algorithm) {
+    if (!isFetched) return null
     return <div>Algorithm not found</div>
   }
 
